@@ -6,7 +6,6 @@
 [![GitHub Pull Requests](https://img.shields.io/github/issues-pr/eryajf/chatgpt-dingtalk)](https://github.com/eryajf/chatgpt-dingtalk/pulls)
 [![GitHub Pull Requests](https://img.shields.io/github/stars/eryajf/chatgpt-dingtalk)](https://github.com/eryajf/chatgpt-dingtalk/stargazers)
 [![HitCount](https://views.whatilearened.today/views/github/eryajf/chatgpt-dingtalk.svg)](https://github.com/eryajf/chatgpt-dingtalk)
-[![Docker Image Version (latest by date)](https://img.shields.io/docker/v/eryajf/chatgpt-dingtalk)](https://hub.docker.com/r/eryajf/chatgpt-dingtalk)
 [![Docker Image Size (latest by date)](https://img.shields.io/docker/image-size/eryajf/chatgpt-dingtalk)](https://hub.docker.com/r/eryajf/chatgpt-dingtalk)
 [![Docker Pulls](https://img.shields.io/docker/pulls/eryajf/chatgpt-dingtalk)](https://hub.docker.com/r/eryajf/chatgpt-dingtalk)
 [![GitHub license](https://img.shields.io/github/license/eryajf/chatgpt-dingtalk)](https://github.com/eryajf/chatgpt-dingtalk/blob/main/LICENSE)
