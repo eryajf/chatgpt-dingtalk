@@ -66,7 +66,7 @@
 
 ```sh
 # 运行项目
-$ docker run -itd --name chatgpt -e ApiKey=xxxx -e SessionTimeout=60s --restart=always docker.mirrors.sjtug.sjtu.edu.cn/eryajf/chatgpt-dingtalk:latest
+$ docker run -itd --name chatgpt -p 8090:8090 -e ApiKey=xxxx -e SessionTimeout=60s --restart=always docker.mirrors.sjtug.sjtu.edu.cn/eryajf/chatgpt-dingtalk:latest
 ```
 
 运行命令中映射的配置文件参考下边的配置文件说明。
@@ -78,7 +78,7 @@ $ docker run -itd --name chatgpt -e ApiKey=xxxx -e SessionTimeout=60s --restart=
 $ cp config.dev.json config.json  # 其中 config.dev.json 从项目的根目录获取
 
 # 运行项目
-docker run -itd --name chatgpt -v ./config.json:/app/config.json --restart=always docker.mirrors.sjtug.sjtu.edu.cn/eryajf/chatgpt-dingtalk:latest
+docker run -itd --name chatgpt -p 8090:8090  -v ./config.json:/app/config.json --restart=always docker.mirrors.sjtug.sjtu.edu.cn/eryajf/chatgpt-dingtalk:latest
 ```
 
 其中配置文件参考下边的配置文件说明。
