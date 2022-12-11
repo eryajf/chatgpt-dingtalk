@@ -1,5 +1,5 @@
 <div align="center">
-<h1>Chatgpt Dingtalk</h1>
+<h1>ChatGPT Dingtalk</h1>
 
 [![Auth](https://img.shields.io/badge/Auth-eryajf-ff69b4)](https://github.com/eryajf)
 [![Go Version](https://img.shields.io/github/go-mod/go-version/eryajf/chatgpt-dingtalk)](https://github.com/eryajf/chatgpt-dingtalk)
@@ -10,7 +10,7 @@
 [![Docker Pulls](https://img.shields.io/docker/pulls/eryajf/chatgpt-dingtalk)](https://hub.docker.com/r/eryajf/chatgpt-dingtalk)
 [![GitHub license](https://img.shields.io/github/license/eryajf/chatgpt-dingtalk)](https://github.com/eryajf/chatgpt-dingtalk/blob/main/LICENSE)
 
-<p> 🌉 在钉钉群聊中添加chatGPT机器人 🌉</p>
+<p> 🌉 在钉钉群聊中添加ChatGPT机器人 🌉</p>
 
 <img src="https://camo.githubusercontent.com/82291b0fe831bfc6781e07fc5090cbd0a8b912bb8b8d4fec0696c881834f81ac/68747470733a2f2f70726f626f742e6d656469612f394575424971676170492e676966" width="800"  height="3">
 </div><br>
@@ -18,7 +18,7 @@
 
 ## 前言
 
-最近chatGPT异常火爆，本项目可以将GPT机器人集成到钉钉群聊中。
+最近ChatGPT异常火爆，本项目可以将GPT机器人集成到钉钉群聊中。
 
 `感谢：`这个项目借鉴了[wechatbot](https://github.com/869413421/wechatbot.git)，wechatbot是一个能够集成到个人微信的GPT机器人。
 
@@ -77,7 +77,7 @@ $ docker run -itd --name chatgpt -p 8090:8090 -e ApiKey=xxxx -e SessionTimeout=6
 $ cp config.dev.json config.json  # 其中 config.dev.json 从项目的根目录获取
 
 # 运行项目
-docker run -itd --name chatgpt -p 8090:8090  -v ./config.json:/app/config.json --restart=always docker.mirrors.sjtug.sjtu.edu.cn/eryajf/chatgpt-dingtalk:latest
+docker run -itd --name chatgpt -p 8090:8090  -v `pwd`/config.json:/app/config.json --restart=always docker.mirrors.sjtug.sjtu.edu.cn/eryajf/chatgpt-dingtalk:latest
 ```
 
 其中配置文件参考下边的配置文件说明。
