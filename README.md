@@ -108,6 +108,9 @@ server {
 
 ![image_20221209_163739](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20221209_163739.png)
 
+你也可以使用构建好的[二进制](https://github.com/eryajf/chatgpt-dingtalk/releases)在本地直接运行。
+
+
 ## 本地开发
 
 ````sh
