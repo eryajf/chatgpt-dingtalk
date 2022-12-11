@@ -20,7 +20,7 @@
 
 最近ChatGPT异常火爆，本项目可以将GPT机器人集成到钉钉群聊中。
 
-`感谢：`这个项目借鉴了[chatgpt-dingtalk](https://github.com/869413421/chatgpt-dingtalk.git)，chatgpt-dingtalk是一个能够集成到个人微信的GPT机器人。
+`感谢：`这个项目借鉴了[wechatbot](https://github.com/869413421/wechatbot.git)，wechatbot是一个能够集成到个人微信的GPT机器人，如果需要，可以前去体验。
 
 ### 功能简介
 
