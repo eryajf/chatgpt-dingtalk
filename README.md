@@ -20,7 +20,7 @@
 
 最近ChatGPT异常火爆，本项目可以将GPT机器人集成到钉钉群聊中。
 
-`感谢：`这个项目借鉴了[wechatbot](https://github.com/869413421/wechatbot.git)，wechatbot是一个能够集成到个人微信的GPT机器人。
+`感谢：`这个项目借鉴了[chatgpt-dingtalk](https://github.com/869413421/chatgpt-dingtalk.git)，chatgpt-dingtalk是一个能够集成到个人微信的GPT机器人。
 
 ### 功能简介
 
@@ -108,9 +108,23 @@ server {
 
 ![image_20221209_163739](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20221209_163739.png)
 
-你也可以使用构建好的[二进制](https://github.com/eryajf/chatgpt-dingtalk/releases)在本地直接运行。
+---
 
-选择适合自己的平台，下载并运行。
+如果你想通过命令行直接部署，可以直接下载release中的[压缩包](https://github.com/eryajf/chatgpt-dingtalk/releases) ，请根据自己系统以及架构选择合适的压缩包，下载之后直接解压运行。
+
+下载之后，在本地解压，即可看到可执行程序，与配置文件：
+
+```
+$ tar xf chatgpt-dingtalk-v0.0.2-darwin-arm64.tar.gz
+$ cd chatgpt-dingtalk-v0.0.2-darwin-arm64
+$ cp config.dev.json # 根据情况调整配置文件内容
+$ ./chatgpt-dingtalk  # 直接运行
+
+# 如果要守护在后台运行
+$ nohup ./chatgpt-dingtalk &> run.log &
+$ tail -f run.log
+```
+
 
 ## 本地开发
 

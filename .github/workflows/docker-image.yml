@@ -60,16 +60,6 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/chatgpt-dingtalk:${{ steps.date.outputs.today }}
             ${{ secrets.DOCKERHUB_USERNAME }}/chatgpt-dingtalk:latest
 
-  update_release_draft:
-    permissions:
-      contents: write  # for release-drafter/release-drafter to create a github release
-      pull-requests: write  # for release-drafter/release-drafter to add label to PR
-    runs-on: ubuntu-latest
-    steps:
-      - uses: release-drafter/release-drafter@v5
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
   build-go-binary:
     runs-on: ubuntu-latest
     strategy:
