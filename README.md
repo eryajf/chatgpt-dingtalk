@@ -110,6 +110,7 @@ server {
 
 你也可以使用构建好的[二进制](https://github.com/eryajf/chatgpt-dingtalk/releases)在本地直接运行。
 
+选择适合自己的平台，下载并运行。
 
 ## 本地开发
 
