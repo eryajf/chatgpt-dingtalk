@@ -115,8 +115,8 @@ server {
 下载之后，在本地解压，即可看到可执行程序，与配置文件：
 
 ```
-$ tar xf chatgpt-dingtalk-v0.0.2-darwin-arm64.tar.gz
-$ cd chatgpt-dingtalk-v0.0.2-darwin-arm64
+$ tar xf chatgpt-dingtalk-v0.0.4-darwin-arm64.tar.gz
+$ cd chatgpt-dingtalk-v0.0.4-darwin-arm64
 $ cp config.dev.json # 根据情况调整配置文件内容
 $ ./chatgpt-dingtalk  # 直接运行
 
