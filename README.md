@@ -77,7 +77,7 @@ $ docker run -itd --name chatgpt -p 8090:8090 -e APIKEY=换成你的key -e SESSI
 $ cp config.dev.json config.json  # 其中 config.dev.json 从项目的根目录获取
 
 # 运行项目
-docker run -itd --name chatgpt -p 8090:8090  -v `pwd`/config.json:/app/config.json --restart=always docker.mirrors.sjtug.sjtu.edu.cn/eryajf/chatgpt-dingtalk:latest
+$ docker run -itd --name chatgpt -p 8090:8090  -v `pwd`/config.json:/app/config.json --restart=always docker.mirrors.sjtug.sjtu.edu.cn/eryajf/chatgpt-dingtalk:latest
 ```
 
 其中配置文件参考下边的配置文件说明。
@@ -107,7 +107,7 @@ server {
 Nginx配置完毕之后，可以先手动请求一下，通过服务日志输出判断服务是否正常可用：
 
 ```sh
-curl --location --request POST 'http://chat.eryajf.net/' \
+$ curl --location --request POST 'http://chat.eryajf.net/' \
   --header 'Content-type: application/json' \
   --data-raw '{
     "conversationId": "xxx",
