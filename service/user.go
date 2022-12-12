@@ -3,7 +3,6 @@ package service
 import (
 	"strings"
 	"time"
-	"unicode/utf8"
 
 	"github.com/eryajf/chatgpt-dingtalk/config"
 	"github.com/patrickmn/go-cache"
@@ -24,9 +23,10 @@ type UserService struct {
 	cache *cache.Cache
 }
 
-// ClearUserSessionContext 清空GTP上下文，接收文本中包含`我要问下一个问题`，并且Unicode 字符数量不超过20就清空
+// ClearUserSessionContext 清空GTP上下文，接收文本中包含 SessionClearToken
 func (s *UserService) ClearUserSessionContext(userId string, msg string) bool {
-	if strings.Contains(msg, "我要问下一个问题") && utf8.RuneCountInString(msg) < 20 {
+	// 清空会话
+	if strings.Contains(msg, config.LoadConfig().SessionClearToken) {
 		s.cache.Delete(userId)
 		return true
 	}

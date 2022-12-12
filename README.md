@@ -65,7 +65,7 @@
 
 ```sh
 # 运行项目
-$ docker run -itd --name chatgpt -p 8090:8090 -e ApiKey=xxxx -e SessionTimeout=60s --restart=always docker.mirrors.sjtug.sjtu.edu.cn/eryajf/chatgpt-dingtalk:latest
+$ docker run -itd --name chatgpt -p 8090:8090 -e APIKEY=换成你的key -e SESSIONTIMEOUT=60s -e MODEL=text-davinci-003 -e MAX_TOKENS=512 -e TEMPREATURE=0.9 -e SESSION_CLEAR_TOKEN=清空会话 --restart=always docker.mirrors.sjtug.sjtu.edu.cn/eryajf/chatgpt-dingtalk:latest
 ```
 
 运行命令中映射的配置文件参考下边的配置文件说明。
@@ -103,6 +103,42 @@ server {
 ```
 
 部署完成之后，就可以在群里艾特机器人进行体验了。
+
+Nginx配置完毕之后，可以先手动请求一下，通过服务日志输出判断服务是否正常可用：
+
+```sh
+curl --location --request POST 'http://chat.eryajf.net/' \
+  --header 'Content-type: application/json' \
+  --data-raw '{
+    "conversationId": "xxx",
+    "atUsers": [
+        {
+            "dingtalkId": "xxx",
+            "staffId":"xxx"
+        }
+    ],
+    "chatbotCorpId": "dinge8a565xxxx",
+    "chatbotUserId": "$:LWCP_v1:$Cxxxxx",
+    "msgId": "msg0xxxxx",
+    "senderNick": "eryajf",
+    "isAdmin": true,
+    "senderStaffId": "user123",
+    "sessionWebhookExpiredTime": 1613635652738,
+    "createAt": 1613630252678,
+    "senderCorpId": "dinge8a565xxxx",
+    "conversationType": "2",
+    "senderId": "$:LWCP_v1:$Ff09GIxxxxx",
+    "conversationTitle": "机器人测试-TEST",
+    "isInAtList": true,
+    "sessionWebhook": "https://oapi.dingtalk.com/robot/sendBySession?session=xxxxx",
+    "text": {
+        "content": " 你好"
+    },
+    "msgtype": "text"
+}'
+```
+
+如果手动请求没有问题，那么就可以在钉钉群里与机器人进行对话了。
 
 效果如下：
 
@@ -146,6 +182,10 @@ $ go run main.go
 ````json
 {
     "api_key": "xxxxxxxxx",  // openai api_key
-    "session_timeout": 60    // 会话超时时间,默认60秒,在会话时间内所有发送给机器人的信息会作为上下文
+    "session_timeout": 60,   // 会话超时时间,默认60秒,在会话时间内所有发送给机器人的信息会作为上下文
+    "max_tokens": 1024,      // GPT响应字符数，最大2048，默认值512。值大小会影响接口响应速度，越大响应越慢。
+    "model": "text-davinci-003", // GPT选用模型，默认text-davinci-003，具体选项参考官网训练场
+    "temperature": 0.9, // GPT热度，0到1，默认0.9。数字越大创造力越强，但更偏离训练事实，越低越接近训练事实
+    "session_clear_token": "清空会话" // 会话清空口令，默认`清空会话`
 }
 ````

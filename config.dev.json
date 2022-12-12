@@ -1,4 +1,8 @@
 {
     "api_key": "xxxxxxxxx",
-    "session_timeout": 60
+    "session_timeout": 60,
+    "max_tokens": 1024,
+    "model": "text-davinci-003",
+    "temperature": 0.9,
+    "session_clear_token": "清空会话"
 }
