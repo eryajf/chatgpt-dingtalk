@@ -6,7 +6,6 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"time"
 
@@ -90,7 +89,6 @@ func Completions(msg string) (string, error) {
 	logger.Info(fmt.Sprintf("response gtp json string : %v", string(body)))
 
 	gptResponseBody := &ChatGPTResponseBody{}
-	log.Println(string(body))
 	err = json.Unmarshal(body, gptResponseBody)
 	if err != nil {
 		return "", err
@@ -100,6 +98,5 @@ func Completions(msg string) (string, error) {
 	if len(gptResponseBody.Choices) > 0 {
 		reply = gptResponseBody.Choices[0].Text
 	}
-	logger.Info(fmt.Sprintf("gpt response text: %s ", reply))
 	return reply, nil
 }
