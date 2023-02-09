@@ -110,7 +110,6 @@ func getRequestText(rmsg public.ReceiveMsg) string {
 	// 1.去除空格以及换行
 	requestText := strings.TrimSpace(rmsg.Text.Content)
 	requestText = strings.Trim(rmsg.Text.Content, "\n")
-
 	// 2.替换掉当前用户名称
 	replaceText := "@" + rmsg.SenderNick
 	requestText = strings.TrimSpace(strings.ReplaceAll(rmsg.Text.Content, replaceText, ""))
