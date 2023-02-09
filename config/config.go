@@ -34,13 +34,7 @@ var once sync.Once
 func LoadConfig() *Configuration {
 	once.Do(func() {
 		// 从文件中读取
-		config = &Configuration{
-			SessionTimeout:    60,
-			MaxTokens:         512,
-			Model:             "text-davinci-003",
-			Temperature:       0.9,
-			SessionClearToken: "下一个问题",
-		}
+		config = &Configuration{}
 		f, err := os.Open("config.json")
 		if err != nil {
 			logger.Danger("open config err: %v", err)
@@ -55,7 +49,6 @@ func LoadConfig() *Configuration {
 		}
 
 		// 如果环境变量有配置，读取环境变量
-		// 有环境变量使用环境变量
 		ApiKey := os.Getenv("APIKEY")
 		SessionTimeout := os.Getenv("SESSION_TIMEOUT")
 		Model := os.Getenv("MODEL")
@@ -66,12 +59,14 @@ func LoadConfig() *Configuration {
 			config.ApiKey = ApiKey
 		}
 		if SessionTimeout != "" {
-			duration, err := time.ParseDuration(SessionTimeout)
+			duration, err := strconv.ParseInt(SessionTimeout, 10, 64)
 			if err != nil {
 				logger.Danger(fmt.Sprintf("config session timeout err: %v ,get is %v", err, SessionTimeout))
 				return
 			}
-			config.SessionTimeout = duration
+			config.SessionTimeout = time.Duration(duration) * time.Second
+		} else {
+			config.SessionTimeout = time.Duration(config.SessionTimeout) * time.Second
 		}
 		if Model != "" {
 			config.Model = Model

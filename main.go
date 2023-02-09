@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/eryajf/chatgpt-dingtalk/gtp"
+	"github.com/eryajf/chatgpt-dingtalk/gpt"
 	"github.com/eryajf/chatgpt-dingtalk/public"
 	"github.com/eryajf/chatgpt-dingtalk/public/logger"
 	"github.com/eryajf/chatgpt-dingtalk/service"
@@ -33,7 +33,6 @@ func Start() {
 			return
 		}
 		// TODO: 校验请求
-		// fmt.Println(r.Header)
 		if len(data) == 0 {
 			logger.Warning("回调参数为空,以至于无法正常解析,请检查原因")
 			return
@@ -76,9 +75,9 @@ func ProcessRequest(rmsg public.ReceiveMsg) error {
 	} else {
 		requestText := getRequestText(rmsg)
 		// 获取问题的答案
-		reply, err := gtp.Completions(requestText)
+		reply, err := gpt.Completions(requestText)
 		if err != nil {
-			logger.Info("gtp request error: %v \n", err)
+			logger.Info("gpt request error: %v \n", err)
 			_, err = rmsg.ReplyText("机器人太累了，让她休息会儿，过一会儿再来请求。")
 			if err != nil {
 				logger.Warning("send message error: %v \n", err)
