@@ -1,6 +1,7 @@
 package gpt
 
 import (
+	"crypto/tls"
 	"encoding/json"
 	"fmt"
 	"time"
@@ -56,7 +57,8 @@ func Completions(msg string) (string, error) {
 		SetRetryWaitTime(1*time.Second).
 		SetTimeout(cfg.SessionTimeout).
 		SetHeader("Content-Type", "application/json").
-		SetHeader("Authorization", "Bearer "+cfg.ApiKey)
+		SetHeader("Authorization", "Bearer "+cfg.ApiKey).
+		SetTLSClientConfig(&tls.Config{InsecureSkipVerify: true})
 
 	rsp, err := client.R().SetBody(requestBody).Post(BASEURL + "completions")
 	if err != nil {
