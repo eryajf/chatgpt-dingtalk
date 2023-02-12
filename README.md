@@ -199,3 +199,6 @@ $ go run main.go
   - A: 注意钉钉艾特群聊之后，会通过上文配置的回调IP与域名把请求发过来，如果这个环节有问题，那么是接收不到请求的，因此配置完成之后，建议通过curl验证下自己的服务。
 - Q: 一切配置完毕之后，群聊艾特机器人没有反应，看应用输出内容为：回调参数为空,以至于无法正常解析,请检查原因
   - A: 可能是创建的机器人有问题，建议重新走一遍创建机器人的流程，创建一个新的机器人再试试。
+
+
+> 本项目曾在[2022-12-12](https://github.com/bonfy/github-trending/blob/master/2022/2022-12-12.md#go),[2022-12-18](https://github.com/bonfy/github-trending/blob/master/2022/2022-12-18.md#go),[2022-12-19](https://github.com/bonfy/github-trending/blob/master/2022/2022-12-19.md#go),[2022-12-20](https://github.com/bonfy/github-trending/blob/master/2022/2022-12-20.md#go),[2023-02-09](https://github.com/bonfy/github-trending/blob/master/2023-02-09.md#go),[2023-02-10](https://github.com/bonfy/github-trending/blob/master/2023-02-10.md#go),[2023-02-11](https://github.com/bonfy/github-trending/blob/master/2023-02-11.md#go),[2023-02-12](https://github.com/bonfy/github-trending/blob/master/2023-02-12.md#go)，这些天里，登上GitHub Trending.
