@@ -18,18 +18,26 @@
 
 ## 前言
 
-最近ChatGPT异常火爆，本项目可以将GPT机器人集成到钉钉群聊中。
+最近ChatGPT异常火爆，本项目可以助你将GPT机器人集成到钉钉群聊中。
 
-`感谢：`这个项目借鉴了[wechatbot](https://github.com/869413421/wechatbot.git)，wechatbot是一个能够集成到个人微信的GPT机器人，如果需要，可以前去体验。
+
+> 🥳 **欢迎关注我的其他开源项目：**
+>
+> - [Go-Ldap-Admin](https://github.com/eryajf/go-ldap-admin)：🌉 基于Go+Vue实现的openLDAP后台管理项目。
+> - [learning-weekly](https://github.com/eryajf/learning-weekly)：📝 周刊内容以运维技术和Go语言周边为主，辅以GitHub上优秀项目或他人优秀经验。
+> - [HowToStartOpenSource](https://github.com/eryajf/HowToStartOpenSource)：🌈 GitHub开源项目维护协同指南。
+> - [read-list](https://github.com/eryajf/read-list)：📖 优质内容订阅，阅读方为根本
+> - [awesome-github-profile-readme-chinese](https://github.com/eryajf/awesome-github-profile-readme-chinese)：🦩 优秀的中文区个人主页搜集
+
 
 ## 功能简介
 
 * 支持在钉钉群聊中添加机器人，通过@机器人进行聊天交互。
-* 提问增加上下文(可能不太理想)，更接近官网效果。
+* 提问支持单聊与串聊两种模式，通过@机器人发关键字切换。
 
 ## 使用前提
 
-* 有openai账号，并且创建好api_key，注册相关事项可以参考[此文章](https://juejin.cn/post/7173447848292253704) 。访问[这里](https://beta.openai.com/account/api-keys)，申请个人秘钥。
+* 有Openai账号，并且创建好`api_key`，注册相关事项可以参考[此文章](https://juejin.cn/post/7173447848292253704) 。访问[这里](https://beta.openai.com/account/api-keys)，申请个人秘钥。
 * 在钉钉开发者后台创建机器人，配置应用程序回调。
 
 ## 使用教程
@@ -40,6 +48,8 @@
 
 1. 创建机器人。
    ![image_20221209_163616](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20221209_163616.png)
+
+   > `📢 注意：`可能现在创建机器人的时候名字为`chatgpt`会被钉钉限制，请用其他名字命名。
 
    步骤比较简单，这里就不赘述了。
 
@@ -65,7 +75,7 @@
 
 ```sh
 # 运行项目
-$ docker run -itd --name chatgpt -p 8090:8090 -e APIKEY=换成你的key -e SESSIONTIMEOUT=60s -e MODEL=text-davinci-003 -e MAX_TOKENS=512 -e TEMPREATURE=0.9 -e SESSION_CLEAR_TOKEN=清空会话 --restart=always docker.mirrors.sjtug.sjtu.edu.cn/eryajf/chatgpt-dingtalk:latest
+$ docker run -itd --name chatgpt -p 8090:8090 -e APIKEY=换成你的key -e SESSION_TIMEOUT=600 --restart=always  dockerproxy.com/eryajf/chatgpt-dingtalk:latest
 ```
 
 运行命令中映射的配置文件参考下边的配置文件说明。
@@ -77,7 +87,7 @@ $ docker run -itd --name chatgpt -p 8090:8090 -e APIKEY=换成你的key -e SESSI
 $ cp config.dev.json config.json  # 其中 config.dev.json 从项目的根目录获取
 
 # 运行项目
-$ docker run -itd --name chatgpt -p 8090:8090  -v `pwd`/config.json:/app/config.json --restart=always docker.mirrors.sjtug.sjtu.edu.cn/eryajf/chatgpt-dingtalk:latest
+$ docker run -itd --name chatgpt -p 8090:8090  -v `pwd`/config.json:/app/config.json --restart=always  dockerproxy.com/eryajf/chatgpt-dingtalk:latest
 ```
 
 其中配置文件参考下边的配置文件说明。
@@ -142,7 +152,21 @@ $ curl --location --request POST 'http://chat.eryajf.net/' \
 
 如果手动请求没有问题，那么就可以在钉钉群里与机器人进行对话了。
 
-效果如下：
+`帮助列表`
+
+> 艾特机器人发送空内容或者帮助，会返回帮助列表。
+
+![image_20230215_184402](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230215_184402.png)
+
+`切换模式`
+
+> 发送指定关键字，可以切换不同的模式。
+
+![image_20230215_184655](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230215_184655.png)
+
+> 注意默认对话模式为单聊，因此不必发送单聊即可进入单聊模式，而要进入串聊，则需要发送串聊关键字进行切换，当串聊内容超过最大限制的时候，你可以发送重置，然后再次进入串聊模式。
+
+`实际聊天效果如下`
 
 ![image_20221209_163739](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20221209_163739.png)
 
@@ -185,20 +209,15 @@ $ go run main.go
 ```json
 {
     "api_key": "xxxxxxxxx",  // openai api_key
-    "session_timeout": 60,   // 会话超时时间,默认60秒,在会话时间内所有发送给机器人的信息会作为上下文
-    "max_tokens": 1024,      // GPT响应字符数，最大2048，默认值512。值大小会影响接口响应速度，越大响应越慢。
-    "model": "text-davinci-003", // GPT选用模型，默认text-davinci-003，具体选项参考官网训练场
-    "temperature": 0.9, // GPT热度，0到1，默认0.9。数字越大创造力越强，但更偏离训练事实，越低越接近训练事实
-    "session_clear_token": "清空会话" // 会话清空口令，默认`清空会话`
+    "session_timeout": 600   // 会话超时时间,默认600秒,在会话时间内所有发送给机器人的信息会作为上下文
 }
 ```
 
 ## 常见问题
 
-- Q: 钉钉群聊艾特机器人之后，没有回应，应用也没有任何输出
-  - A: 注意钉钉艾特群聊之后，会通过上文配置的回调IP与域名把请求发过来，如果这个环节有问题，那么是接收不到请求的，因此配置完成之后，建议通过curl验证下自己的服务。
-- Q: 一切配置完毕之后，群聊艾特机器人没有反应，看应用输出内容为：回调参数为空,以至于无法正常解析,请检查原因
-  - A: 可能是创建的机器人有问题，建议重新走一遍创建机器人的流程，创建一个新的机器人再试试。
+一些常见的问题，我单独开issue放在这里：[点我](https://github.com/eryajf/chatgpt-dingtalk/issues/44)，可以查看这里辅助你解决问题，如果里边没有，请对历史issue进行搜索(不要提交重复的issue)，也欢迎大家补充。
 
+## 高光时刻
 
-> 本项目曾在[2022-12-12](https://github.com/bonfy/github-trending/blob/master/2022/2022-12-12.md#go),[2022-12-18](https://github.com/bonfy/github-trending/blob/master/2022/2022-12-18.md#go),[2022-12-19](https://github.com/bonfy/github-trending/blob/master/2022/2022-12-19.md#go),[2022-12-20](https://github.com/bonfy/github-trending/blob/master/2022/2022-12-20.md#go),[2023-02-09](https://github.com/bonfy/github-trending/blob/master/2023-02-09.md#go),[2023-02-10](https://github.com/bonfy/github-trending/blob/master/2023-02-10.md#go),[2023-02-11](https://github.com/bonfy/github-trending/blob/master/2023-02-11.md#go),[2023-02-12](https://github.com/bonfy/github-trending/blob/master/2023-02-12.md#go)，这些天里，登上GitHub Trending.
+> 本项目曾在[2022-12-12](https://github.com/bonfy/github-trending/blob/master/2022/2022-12-12.md#go),[2022-12-18](https://github.com/bonfy/github-trending/blob/master/2022/2022-12-18.md#go),[2022-12-19](https://github.com/bonfy/github-trending/blob/master/2022/2022-12-19.md#go),[2022-12-20](https://github.com/bonfy/github-trending/blob/master/2022/2022-12-20.md#go),[2023-02-09](https://github.com/bonfy/github-trending/blob/master/2023-02-09.md#go),[2023-02-10](https://github.com/bonfy/github-trending/blob/master/2023-02-10.md#go),[2023-02-11](https://github.com/bonfy/github-trending/blob/master/2023-02-11.md#go),[2023-02-12](https://github.com/bonfy/github-trending/blob/master/2023-02-12.md#go)，这些天里，登上GitHub Trending。而且还在持续登榜中，可见最近openai的热度。
+> ![image_20230215_094034](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230215_094034.png)

@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"strings"
 
-	"github.com/eryajf/chatgpt-dingtalk/gpt"
 	"github.com/eryajf/chatgpt-dingtalk/public"
 	"github.com/eryajf/chatgpt-dingtalk/public/logger"
 	"github.com/eryajf/chatgpt-dingtalk/service"
@@ -23,6 +23,18 @@ func main() {
 	Start()
 }
 
+var Welcome string = `Commands:
+=================================
+🙋 单聊 👉 单独聊天，缺省
+🗣 串聊 👉 带上下文聊天
+🔃 重置 👉 重置带上下文聊天
+🚀 帮助 👉 显示帮助信息
+=================================
+例：@我发送 空 或 帮助 将返回此帮助信息
+`
+
+// 💵 余额 👉 查看接口可调用额度
+
 func Start() {
 	// 定义一个处理器函数
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -32,16 +44,16 @@ func Start() {
 			logger.Warning("read request body failed: %v\n", err.Error())
 			return
 		}
+		var msgObj = new(public.ReceiveMsg)
+		err = json.Unmarshal(data, &msgObj)
+		if err != nil {
+			logger.Warning("unmarshal request body failed: %v\n", err)
+		}
 		// TODO: 校验请求
-		if len(data) == 0 {
-			logger.Warning("回调参数为空,以至于无法正常解析,请检查原因")
-			return
+		if len(msgObj.Text.Content) == 1 || msgObj.Text.Content == " 帮助" {
+			// 欢迎信息
+			msgObj.ReplyText(Welcome)
 		} else {
-			var msgObj = new(public.ReceiveMsg)
-			err = json.Unmarshal(data, &msgObj)
-			if err != nil {
-				logger.Warning("unmarshal request body failed: %v\n", err)
-			}
 			logger.Info(fmt.Sprintf("dingtalk callback parameters: %#v", msgObj))
 			err = ProcessRequest(*msgObj)
 			if err != nil {
@@ -64,65 +76,82 @@ func Start() {
 	}
 }
 
-func ProcessRequest(rmsg public.ReceiveMsg) error {
-	atText := "@" + rmsg.SenderNick + "\n" + " "
-	if UserService.ClearUserSessionContext(rmsg.SenderID, rmsg.Text.Content) {
-		_, err := rmsg.ReplyText(atText + "上下文已经清空了，你可以问下一个问题啦。")
-		if err != nil {
-			logger.Warning("response user error: %v \n", err)
-			return err
-		}
-	} else {
-		requestText := getRequestText(rmsg)
-		// 获取问题的答案
-		reply, err := gpt.Completions(requestText)
-		if err != nil {
-			logger.Info("gpt request error: %v \n", err)
-			_, err = rmsg.ReplyText("机器人太累了，让她休息会儿，过一会儿再来请求。")
-			if err != nil {
-				logger.Warning("send message error: %v \n", err)
-				return err
-			}
-			logger.Info("request openai error: %v\n", err)
-			return err
-		}
-		if reply == "" {
-			logger.Warning("get gpt result falied: %v\n", err)
-			return nil
-		}
-		// 回复@我的用户
-		reply = strings.TrimSpace(reply)
-		reply = strings.Trim(reply, "\n")
+func FirstCheck(rmsg public.ReceiveMsg) bool {
+	lc := UserService.GetUserMode(rmsg.SenderNick)
+	if lc != "" && strings.Contains(lc, "串聊") {
+		return true
+	}
+	return false
+}
 
-		UserService.SetUserSessionContext(rmsg.SenderID, requestText, reply)
-		replyText := atText + reply
-		_, err = rmsg.ReplyText(replyText)
-		if err != nil {
-			logger.Info("send message error: %v \n", err)
-			return err
+func ProcessRequest(rmsg public.ReceiveMsg) error {
+	switch rmsg.Text.Content {
+	case " 单聊":
+		UserService.SetUserMode(rmsg.SenderNick, rmsg.Text.Content)
+		rmsg.ReplyText(fmt.Sprintf("=====现在进入与👉%s👈单聊的模式 =====", rmsg.SenderNick))
+	case " 串聊":
+		UserService.SetUserMode(rmsg.SenderNick, rmsg.Text.Content)
+		rmsg.ReplyText(fmt.Sprintf("=====现在进入与👉%s👈串聊的模式 =====", rmsg.SenderNick))
+	case " 重置":
+		UserService.ClearUserMode(rmsg.SenderNick)
+		err := os.Remove("openaiCache/" + rmsg.SenderNick)
+		if err != nil && !strings.Contains(fmt.Sprintf("%s", err), "no such file or directory") {
+			rmsg.ReplyText(fmt.Sprintf("=====清理与👉%s👈的对话缓存失败，错误信息: %v\n请检查=====", rmsg.SenderNick, err))
+		} else {
+			rmsg.ReplyText(fmt.Sprintf("=====已重置与👉%s👈的对话模式，可以开始新的对话=====", rmsg.SenderNick))
+		}
+	default:
+		if FirstCheck(rmsg) {
+			cli, reply, err := public.ContextQa(rmsg.Text.Content, rmsg.SenderNick)
+			if err != nil {
+				logger.Info("gpt request error: %v \n", err)
+				_, err = rmsg.ReplyText(fmt.Sprintf("请求openai失败了，错误信息：%v", err))
+				if err != nil {
+					logger.Warning("send message error: %v \n", err)
+					return err
+				}
+			}
+			if reply == "" {
+				logger.Warning("get gpt result falied: %v\n", err)
+				return nil
+			} else {
+				reply = strings.TrimSpace(reply)
+				reply = strings.Trim(reply, "\n")
+				// 回复@我的用户
+				replyText := "@" + rmsg.SenderNick + "\n" + reply
+				_, err = rmsg.ReplyText(replyText)
+				if err != nil {
+					logger.Warning("send message error: %v \n", err)
+					return err
+				}
+				path := "openaiCache/" + rmsg.SenderNick
+				cli.ChatContext.SaveConversation(path)
+			}
+		} else {
+			reply, err := public.SingleQa(rmsg.Text.Content, rmsg.SenderNick)
+			if err != nil {
+				logger.Info("gpt request error: %v \n", err)
+				_, err = rmsg.ReplyText(fmt.Sprintf("请求openai失败了，错误信息：%v", err))
+				if err != nil {
+					logger.Warning("send message error: %v \n", err)
+					return err
+				}
+			}
+			if reply == "" {
+				logger.Warning("get gpt result falied: %v\n", err)
+				return nil
+			} else {
+				reply = strings.TrimSpace(reply)
+				reply = strings.Trim(reply, "\n")
+				// 回复@我的用户
+				replyText := "@" + rmsg.SenderNick + "\n" + reply
+				_, err = rmsg.ReplyText(replyText)
+				if err != nil {
+					logger.Warning("send message error: %v \n", err)
+					return err
+				}
+			}
 		}
 	}
 	return nil
-}
-
-// getRequestText 获取请求接口的文本，要做一些清洗
-func getRequestText(rmsg public.ReceiveMsg) string {
-	// 1.去除空格以及换行
-	requestText := strings.TrimSpace(rmsg.Text.Content)
-	requestText = strings.Trim(rmsg.Text.Content, "\n")
-	// 2.替换掉当前用户名称
-	replaceText := "@" + rmsg.SenderNick
-	requestText = strings.TrimSpace(strings.ReplaceAll(rmsg.Text.Content, replaceText, ""))
-	if requestText == "" {
-		return ""
-	}
-
-	// 3.获取上下文，拼接在一起，如果字符长度超出4000，截取为4000。（GPT按字符长度算）
-	requestText = UserService.GetUserSessionContext(rmsg.SenderID) + requestText
-	if len(requestText) >= 4000 {
-		requestText = requestText[:4000]
-	}
-
-	// 4.返回请求文本
-	return requestText
 }

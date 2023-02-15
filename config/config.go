@@ -17,14 +17,14 @@ type Configuration struct {
 	ApiKey string `json:"api_key"`
 	// 会话超时时间
 	SessionTimeout time.Duration `json:"session_timeout"`
-	// GPT请求最大字符数
-	MaxTokens uint `json:"max_tokens"`
-	// GPT模型
-	Model string `json:"model"`
-	// 热度
-	Temperature float64 `json:"temperature"`
-	// 自定义清空会话口令
-	SessionClearToken string `json:"session_clear_token"`
+	// // GPT请求最大字符数
+	// MaxTokens uint `json:"max_tokens"`
+	// // GPT模型
+	// Model string `json:"model"`
+	// // 热度
+	// Temperature float64 `json:"temperature"`
+	// // 自定义清空会话口令
+	// SessionClearToken string `json:"session_clear_token"`
 }
 
 var config *Configuration
@@ -51,10 +51,10 @@ func LoadConfig() *Configuration {
 		// 如果环境变量有配置，读取环境变量
 		ApiKey := os.Getenv("APIKEY")
 		SessionTimeout := os.Getenv("SESSION_TIMEOUT")
-		Model := os.Getenv("MODEL")
-		MaxTokens := os.Getenv("MAX_TOKENS")
-		Temperature := os.Getenv("TEMPREATURE")
-		SessionClearToken := os.Getenv("SESSION_CLEAR_TOKEN")
+		// Model := os.Getenv("MODEL")
+		// MaxTokens := os.Getenv("MAX_TOKENS")
+		// Temperature := os.Getenv("TEMPREATURE")
+		// SessionClearToken := os.Getenv("SESSION_CLEAR_TOKEN")
 		if ApiKey != "" {
 			config.ApiKey = ApiKey
 		}
@@ -68,28 +68,28 @@ func LoadConfig() *Configuration {
 		} else {
 			config.SessionTimeout = time.Duration(config.SessionTimeout) * time.Second
 		}
-		if Model != "" {
-			config.Model = Model
-		}
-		if MaxTokens != "" {
-			max, err := strconv.Atoi(MaxTokens)
-			if err != nil {
-				logger.Danger(fmt.Sprintf("config MaxTokens err: %v ,get is %v", err, MaxTokens))
-				return
-			}
-			config.MaxTokens = uint(max)
-		}
-		if Temperature != "" {
-			temp, err := strconv.ParseFloat(Temperature, 64)
-			if err != nil {
-				logger.Danger(fmt.Sprintf("config Temperature err: %v ,get is %v", err, Temperature))
-				return
-			}
-			config.Temperature = temp
-		}
-		if SessionClearToken != "" {
-			config.SessionClearToken = SessionClearToken
-		}
+		// if Model != "" {
+		// 	config.Model = Model
+		// }
+		// if MaxTokens != "" {
+		// 	max, err := strconv.Atoi(MaxTokens)
+		// 	if err != nil {
+		// 		logger.Danger(fmt.Sprintf("config MaxTokens err: %v ,get is %v", err, MaxTokens))
+		// 		return
+		// 	}
+		// 	config.MaxTokens = uint(max)
+		// }
+		// if Temperature != "" {
+		// 	temp, err := strconv.ParseFloat(Temperature, 64)
+		// 	if err != nil {
+		// 		logger.Danger(fmt.Sprintf("config Temperature err: %v ,get is %v", err, Temperature))
+		// 		return
+		// 	}
+		// 	config.Temperature = temp
+		// }
+		// if SessionClearToken != "" {
+		// 	config.SessionClearToken = SessionClearToken
+		// }
 	})
 	if config.ApiKey == "" {
 		logger.Danger("config err: api key required")
