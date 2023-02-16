@@ -30,7 +30,8 @@ var Welcome string = `Commands:
 🔃 重置 👉 重置带上下文聊天
 🚀 帮助 👉 显示帮助信息
 =================================
-例：@我发送 空 或 帮助 将返回此帮助信息
+🚜 例：@我发送 空 或 帮助 将返回此帮助信息
+💪 Power By https://github.com/eryajf/chatgpt-dingtalk
 `
 
 // 💵 余额 👉 查看接口可调用额度
@@ -48,6 +49,10 @@ func Start() {
 		err = json.Unmarshal(data, &msgObj)
 		if err != nil {
 			logger.Warning("unmarshal request body failed: %v\n", err)
+		}
+		if msgObj.Text.Content == "" || msgObj.ChatbotUserID == "" {
+			logger.Warning("从钉钉回调过来的内容为空，根据过往的经验，或许重新创建一下机器人，能解决这个问题")
+			return
 		}
 		// TODO: 校验请求
 		if len(msgObj.Text.Content) == 1 || msgObj.Text.Content == " 帮助" {
