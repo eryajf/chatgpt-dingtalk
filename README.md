@@ -156,7 +156,7 @@ $ curl --location --request POST 'http://chat.eryajf.net/' \
 
 > 艾特机器人发送空内容或者帮助，会返回帮助列表。
 
-![image_20230215_184402](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230215_184402.png)
+![image_20230216_221253](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230216_221253.png)
 
 `切换模式`
 
