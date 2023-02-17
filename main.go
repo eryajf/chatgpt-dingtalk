@@ -45,6 +45,10 @@ func Start() {
 			logger.Warning("read request body failed: %v\n", err.Error())
 			return
 		}
+		if len(data) == 0 {
+			logger.Warning("回调参数为空，以至于无法正常解析，请检查原因")
+			return
+		}
 		var msgObj = new(public.ReceiveMsg)
 		err = json.Unmarshal(data, &msgObj)
 		if err != nil {
