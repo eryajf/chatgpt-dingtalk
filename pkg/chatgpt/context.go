@@ -161,33 +161,31 @@ func (c *ChatGPT) ChatWithContext(question string) (answer string, err error) {
 	if len(prompt) > c.maxText-c.maxAnswerLen {
 		return "", OverMaxTextLength
 	}
-	req := gogpt.CompletionRequest{
-		Model:            gogpt.GPT3TextDavinci003,
-		MaxTokens:        c.maxAnswerLen,
-		Prompt:           prompt,
-		Temperature:      0.9,
-		TopP:             1,
-		N:                1,
-		FrequencyPenalty: 0,
-		PresencePenalty:  0.5,
-		User:             c.userId,
-		Stop:             []string{c.ChatContext.aiRole.Name + ":", c.ChatContext.humanRole.Name + ":"},
-	}
-	resp, err := c.client.CreateCompletion(c.ctx, req)
+	c1 := gogpt.ChatCompletionRequest{
+		Model: gogpt.GPT3Dot5Turbo,
+		Messages: []gogpt.ChatCompletionMessage{
+			{
+				Role:    "user",
+				Content: prompt,
+			},
+		}}
+	req := c1
+
+	resp, err := c.client.CreateChatCompletion(c.ctx, req)
 	if err != nil {
 		return "", err
 	}
-	resp.Choices[0].Text = formatAnswer(resp.Choices[0].Text)
+	resp.Choices[0].Message.Content = formatAnswer(resp.Choices[0].Message.Content)
 	c.ChatContext.old = append(c.ChatContext.old, conversation{
 		Role:   c.ChatContext.humanRole,
 		Prompt: question,
 	})
 	c.ChatContext.old = append(c.ChatContext.old, conversation{
 		Role:   c.ChatContext.aiRole,
-		Prompt: resp.Choices[0].Text,
+		Prompt: resp.Choices[0].Message.Content,
 	})
 	c.ChatContext.seqTimes++
-	return resp.Choices[0].Text, nil
+	return resp.Choices[0].Message.Content, nil
 }
 
 func WithMaxSeqTimes(times int) ChatContextOption {

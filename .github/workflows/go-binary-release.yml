@@ -2,7 +2,7 @@ name: build
 
 on:
   release:
-    types: [created] # 表示在创建新的 Release 时触发
+    types: [created,published] # 表示在创建新的 Release 时触发
 
 jobs:
   build-go-binary:

@@ -7,6 +7,8 @@ on:
   push:
     branches:
       - main
+  release:
+    types: [created,published] # 表示在创建新的 Release 时触发
 
 # Allows you to run this workflow manually from the Actions tab
   # 可以手动触发
@@ -26,9 +28,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Get current date
-        id: date
-        run: echo "::set-output name=today::$(date +'%Y-%m-%d_%H-%M')"
+      - name: Inject slug/short variables
+        uses: rlespinasse/github-slug-action@v4
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -57,5 +58,5 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           # 给清单打上多个标签
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/chatgpt-dingtalk:${{ steps.date.outputs.today }}
-            ${{ secrets.DOCKERHUB_USERNAME }}/chatgpt-dingtalk:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.GITHUB_REPOSITORY_NAME_PART }}:${{ env.GITHUB_REF_NAME }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.GITHUB_REPOSITORY_NAME_PART }}:latest
