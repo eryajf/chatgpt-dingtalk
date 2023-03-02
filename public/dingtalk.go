@@ -16,6 +16,7 @@ type ReceiveMsg struct {
 	MsgID                     string `json:"msgId"`
 	SenderNick                string `json:"senderNick"`
 	IsAdmin                   bool   `json:"isAdmin"`
+	SenderStaffId             string `json:"senderStaffId"`
 	SessionWebhookExpiredTime int64  `json:"sessionWebhookExpiredTime"`
 	CreateAt                  int64  `json:"createAt"`
 	ConversationType          string `json:"conversationType"`
@@ -28,10 +29,12 @@ type ReceiveMsg struct {
 	Msgtype                   string `json:"msgtype"`
 }
 
+
 // 发送的消息体
 type SendMsg struct {
 	Text    Text   `json:"text"`
 	Msgtype string `json:"msgtype"`
+	At 		At `json:"at"`
 }
 
 // 消息内容
@@ -39,10 +42,15 @@ type Text struct {
 	Content string `json:"content"`
 }
 
+// at 内容
+type At struct {
+	AtUserIds []string `json:"atUserIds"`
+}
+
 // 发消息给钉钉
-func (r ReceiveMsg) ReplyText(msg string) (statuscode int, err error) {
+func (r ReceiveMsg) ReplyText(msg string, staffId string) (statuscode int, err error) {
 	// 定义消息
-	msgtmp := &SendMsg{Text: Text{Content: msg}, Msgtype: "text"}
+	msgtmp := &SendMsg{Text: Text{Content: msg}, Msgtype: "text", At: At{AtUserIds: []string{staffId}}}
 	data, err := json.Marshal(msgtmp)
 	if err != nil {
 		return 0, err

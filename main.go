@@ -26,7 +26,7 @@ func main() {
 var Welcome string = `Commands:
 =================================
 🙋 单聊 👉 单独聊天，缺省
-🗣 串聊 👉 带上下文聊天
+📣 串聊 👉 带上下文聊天
 🔃 重置 👉 重置带上下文聊天
 🚀 帮助 👉 显示帮助信息
 =================================
@@ -59,9 +59,9 @@ func Start() {
 			return
 		}
 		// TODO: 校验请求
-		if len(msgObj.Text.Content) == 1 || msgObj.Text.Content == " 帮助" {
+		if len(msgObj.Text.Content) == 1 || strings.TrimSpace(msgObj.Text.Content) == "帮助" {
 			// 欢迎信息
-			msgObj.ReplyText(Welcome)
+			msgObj.ReplyText(Welcome, msgObj.SenderStaffId)
 		} else {
 			logger.Info(fmt.Sprintf("dingtalk callback parameters: %#v", msgObj))
 			err = ProcessRequest(*msgObj)
@@ -86,7 +86,7 @@ func Start() {
 }
 
 func FirstCheck(rmsg public.ReceiveMsg) bool {
-	lc := UserService.GetUserMode(rmsg.SenderNick)
+	lc := UserService.GetUserMode(rmsg.SenderStaffId)
 	if lc != "" && strings.Contains(lc, "串聊") {
 		return true
 	}
@@ -94,27 +94,28 @@ func FirstCheck(rmsg public.ReceiveMsg) bool {
 }
 
 func ProcessRequest(rmsg public.ReceiveMsg) error {
-	switch rmsg.Text.Content {
-	case " 单聊":
-		UserService.SetUserMode(rmsg.SenderNick, rmsg.Text.Content)
-		rmsg.ReplyText(fmt.Sprintf("=====现在进入与👉%s👈单聊的模式 =====", rmsg.SenderNick))
-	case " 串聊":
-		UserService.SetUserMode(rmsg.SenderNick, rmsg.Text.Content)
-		rmsg.ReplyText(fmt.Sprintf("=====现在进入与👉%s👈串聊的模式 =====", rmsg.SenderNick))
-	case " 重置":
-		UserService.ClearUserMode(rmsg.SenderNick)
-		err := os.Remove("openaiCache/" + rmsg.SenderNick)
+	content := strings.TrimSpace(rmsg.Text.Content)
+	switch content {
+	case "单聊":
+		UserService.SetUserMode(rmsg.SenderStaffId, rmsg.Text.Content)
+		rmsg.ReplyText(fmt.Sprintf("=====现在进入与👉%s👈单聊的模式 =====", rmsg.SenderNick), rmsg.SenderStaffId)
+	case "串聊":
+		UserService.SetUserMode(rmsg.SenderStaffId, rmsg.Text.Content)
+		rmsg.ReplyText(fmt.Sprintf("=====现在进入与👉%s👈串聊的模式 =====", rmsg.SenderNick), rmsg.SenderStaffId)
+	case "重置":
+		UserService.ClearUserMode(rmsg.SenderStaffId)
+		err := os.Remove("openaiCache/" + rmsg.SenderStaffId)
 		if err != nil && !strings.Contains(fmt.Sprintf("%s", err), "no such file or directory") {
-			rmsg.ReplyText(fmt.Sprintf("=====清理与👉%s👈的对话缓存失败，错误信息: %v\n请检查=====", rmsg.SenderNick, err))
+			rmsg.ReplyText(fmt.Sprintf("=====清理与👉%s👈的对话缓存失败，错误信息: %v\n请检查=====", rmsg.SenderNick, err), rmsg.SenderStaffId)
 		} else {
-			rmsg.ReplyText(fmt.Sprintf("=====已重置与👉%s👈的对话模式，可以开始新的对话=====", rmsg.SenderNick))
+			rmsg.ReplyText(fmt.Sprintf("=====已重置与👉%s👈的对话模式，可以开始新的对话=====", rmsg.SenderNick), rmsg.SenderStaffId)
 		}
 	default:
 		if FirstCheck(rmsg) {
-			cli, reply, err := public.ContextQa(rmsg.Text.Content, rmsg.SenderNick)
+			cli, reply, err := public.ContextQa(rmsg.Text.Content, rmsg.SenderStaffId)
 			if err != nil {
 				logger.Info("gpt request error: %v \n", err)
-				_, err = rmsg.ReplyText(fmt.Sprintf("请求openai失败了，错误信息：%v", err))
+				_, err = rmsg.ReplyText(fmt.Sprintf("请求openai失败了，错误信息：%v", err), rmsg.SenderStaffId)
 				if err != nil {
 					logger.Warning("send message error: %v \n", err)
 					return err
@@ -127,8 +128,7 @@ func ProcessRequest(rmsg public.ReceiveMsg) error {
 				reply = strings.TrimSpace(reply)
 				reply = strings.Trim(reply, "\n")
 				// 回复@我的用户
-				replyText := "@" + rmsg.SenderNick + "\n" + reply
-				_, err = rmsg.ReplyText(replyText)
+				_, err = rmsg.ReplyText(reply, rmsg.SenderStaffId)
 				if err != nil {
 					logger.Warning("send message error: %v \n", err)
 					return err
@@ -140,7 +140,7 @@ func ProcessRequest(rmsg public.ReceiveMsg) error {
 			reply, err := public.SingleQa(rmsg.Text.Content, rmsg.SenderNick)
 			if err != nil {
 				logger.Info("gpt request error: %v \n", err)
-				_, err = rmsg.ReplyText(fmt.Sprintf("请求openai失败了，错误信息：%v", err))
+				_, err = rmsg.ReplyText(fmt.Sprintf("请求openai失败了，错误信息：%v", err), rmsg.SenderStaffId)
 				if err != nil {
 					logger.Warning("send message error: %v \n", err)
 					return err
@@ -153,8 +153,7 @@ func ProcessRequest(rmsg public.ReceiveMsg) error {
 				reply = strings.TrimSpace(reply)
 				reply = strings.Trim(reply, "\n")
 				// 回复@我的用户
-				replyText := "@" + rmsg.SenderNick + "\n" + reply
-				_, err = rmsg.ReplyText(replyText)
+				_, err = rmsg.ReplyText(reply, rmsg.SenderStaffId)
 				if err != nil {
 					logger.Warning("send message error: %v \n", err)
 					return err
