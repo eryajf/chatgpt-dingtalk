@@ -133,7 +133,7 @@ func ProcessRequest(rmsg public.ReceiveMsg) error {
 					logger.Warning("send message error: %v \n", err)
 					return err
 				}
-				path := "openaiCache/" + rmsg.SenderNick
+				path := "openaiCache/" + rmsg.SenderStaffId
 				cli.ChatContext.SaveConversation(path)
 			}
 		} else {
