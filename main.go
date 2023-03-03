@@ -55,7 +55,6 @@ func Start() {
 			logger.Warning("从钉钉回调过来的内容为空，根据过往的经验，或许重新创建一下机器人，能解决这个问题")
 			return
 		}
-		logger.Info(fmt.Sprintf("当前对话模式为：%s", public.UserService.GetUserMode(msgObj.SenderStaffId)))
 		// TODO: 校验请求
 		if len(msgObj.Text.Content) == 1 || strings.TrimSpace(msgObj.Text.Content) == "帮助" {
 			// 欢迎信息
