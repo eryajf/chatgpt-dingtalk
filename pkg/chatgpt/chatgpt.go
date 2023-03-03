@@ -2,6 +2,8 @@ package chatgpt
 
 import (
 	"context"
+	"net/http"
+	"net/url"
 	"time"
 
 	gogpt "github.com/sashabaranov/go-gpt3"
@@ -21,7 +23,7 @@ type ChatGPT struct {
 	ChatContext *ChatContext
 }
 
-func New(ApiKey, UserId string, timeOut time.Duration) *ChatGPT {
+func New(apiKey, proxyUrl, userId string, timeOut time.Duration) *ChatGPT {
 	var ctx context.Context
 	var cancel func()
 	if timeOut == 0 {
@@ -34,10 +36,19 @@ func New(ApiKey, UserId string, timeOut time.Duration) *ChatGPT {
 		<-ctx.Done()
 		timeOutChan <- struct{}{} // 发送超时信号，或是提示结束，用于聊天机器人场景，配合GetTimeOutChan() 使用
 	}()
+
+	config := gogpt.DefaultConfig(apiKey)
+	if proxyUrl != "" {
+		config.HTTPClient.Transport = &http.Transport{
+			// 设置代理
+			Proxy: func(req *http.Request) (*url.URL, error) {
+				return url.Parse(proxyUrl)
+			}}
+	}
 	return &ChatGPT{
-		client:         gogpt.NewClient(ApiKey),
+		client:         gogpt.NewClientWithConfig(config),
 		ctx:            ctx,
-		userId:         UserId,
+		userId:         userId,
 		maxQuestionLen: 2048, // 最大问题长度
 		maxAnswerLen:   2048, // 最大答案长度
 		maxText:        4096, // 最大文本 = 问题 + 回答, 接口限制

@@ -13,7 +13,7 @@ func TestOfflineContext(t *testing.T) {
 	if key == "" {
 		t.Skip("CHATGPT_API_KEY is not set")
 	}
-	cli := New(key, "user1", time.Second*30)
+	cli := New(key, "", "user1", time.Second*30)
 	reply, err := cli.ChatWithContext("我叫老三，你是？")
 	if err != nil {
 		t.Fatal(err)
@@ -56,7 +56,7 @@ func TestMaintainContext(t *testing.T) {
 	if key == "" {
 		t.Skip("CHATGPT_API_KEY is not set")
 	}
-	cli := New(key, "user1", time.Second*30)
+	cli := New(key, "", "user1", time.Second*30)
 	cli.ChatContext = NewContext(
 		WithMaxSeqTimes(1),
 		WithMaintainSeqTimes(true),

@@ -7,7 +7,7 @@ import (
 )
 
 func TestChatGPT_ChatWithContext(t *testing.T) {
-	chat := New("CHATGPT_API_KEY", "", 10*time.Minute)
+	chat := New("CHATGPT_API_KEY", "", "", 10*time.Minute)
 	defer chat.Close()
 	//go func() {
 	//	select {
