@@ -22,7 +22,7 @@ func main() {
 
 var Welcome string = `Commands:
 =================================
-🙋 单聊 👉 单独聊天，缺省
+🙋 单聊 👉 单独聊天
 📣 串聊 👉 带上下文聊天
 🔃 重置 👉 重置带上下文聊天
 🚀 帮助 👉 显示帮助信息
@@ -122,7 +122,7 @@ func Do(mode string, rmsg public.ReceiveMsg) error {
 	public.UserService.SetUserMode(rmsg.SenderStaffId, mode)
 	switch mode {
 	case "单聊":
-		reply, err := SingleQa(rmsg.Text.Content, rmsg.SenderNick)
+		reply, err := SingleQa(rmsg.Text.Content, rmsg.SenderStaffId)
 		if err != nil {
 			logger.Info(fmt.Errorf("gpt request error: %v", err))
 			if strings.Contains(fmt.Sprintf("%v", err), "maximum text length exceeded") {
@@ -195,14 +195,14 @@ func Do(mode string, rmsg public.ReceiveMsg) error {
 
 func SingleQa(question, userId string) (answer string, err error) {
 	cfg := config.LoadConfig()
-	chat := chatgpt.New(cfg.ApiKey, userId, cfg.SessionTimeout)
+	chat := chatgpt.New(cfg.ApiKey, cfg.HttpProxy, userId, cfg.SessionTimeout)
 	defer chat.Close()
 	return chat.ChatWithContext(question)
 }
 
 func ContextQa(question, userId string) (chat *chatgpt.ChatGPT, answer string, err error) {
 	cfg := config.LoadConfig()
-	chat = chatgpt.New(cfg.ApiKey, userId, cfg.SessionTimeout)
+	chat = chatgpt.New(cfg.ApiKey, cfg.HttpProxy, userId, cfg.SessionTimeout)
 	if public.UserService.GetUserSessionContext(userId) != "" {
 		err = chat.ChatContext.LoadConversation(userId)
 		if err != nil {

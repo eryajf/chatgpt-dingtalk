@@ -1,5 +1,6 @@
 {
     "api_key": "xxxxxxxxx",
     "session_timeout": 600,
+    "http_proxy": "",
     "default_mode": "单聊"
 }

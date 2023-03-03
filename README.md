@@ -32,8 +32,10 @@
 
 ## 功能简介
 
-* 支持在钉钉群聊中添加机器人，通过@机器人进行聊天交互。
-* 提问支持单聊与串聊两种模式，通过@机器人发关键字切换。
+- 支持在钉钉群聊中添加机器人，通过@机器人进行聊天交互。
+- 提问支持单聊与串聊两种模式，通过@机器人发关键字切换。
+- 支持添加代理，通过配置化指定。
+- 支持自定义默认的聊天模式，通过配置化指定。
 
 ## 使用前提
 
@@ -76,7 +78,7 @@
 
 ```sh
 # 运行项目
-$ docker run -itd --name chatgpt -p 8090:8090 -e APIKEY=换成你的key -e SESSION_TIMEOUT=600 -e DEFAULT_MODE="单聊" --restart=always  dockerproxy.com/eryajf/chatgpt-dingtalk:latest
+$ docker run -itd --name chatgpt -p 8090:8090 -e APIKEY=换成你的key -e SESSION_TIMEOUT=600 -e HTTP_PROXY="" -e DEFAULT_MODE="单聊" --restart=always  dockerproxy.com/eryajf/chatgpt-dingtalk:latest
 ```
 
 运行命令中映射的配置文件参考下边的配置文件说明。
@@ -212,6 +214,7 @@ $ go run main.go
 {
     "api_key": "xxxxxxxxx",   // openai api_key
     "session_timeout": 600,   // 会话超时时间,默认600秒,在会话时间内所有发送给机器人的信息会作为上下文
+    "http_proxy": "",         // 指定请求时使用的代理，如果为空，则不使用代理
     "default_mode": "单聊"    // 默认对话模式，可根据实际场景自定义，如果不设置，默认为单聊
 }
 ```
@@ -224,3 +227,7 @@ $ go run main.go
 
 > 本项目曾在[2022-12-12](https://github.com/bonfy/github-trending/blob/master/2022/2022-12-12.md#go),[2022-12-18](https://github.com/bonfy/github-trending/blob/master/2022/2022-12-18.md#go),[2022-12-19](https://github.com/bonfy/github-trending/blob/master/2022/2022-12-19.md#go),[2022-12-20](https://github.com/bonfy/github-trending/blob/master/2022/2022-12-20.md#go),[2023-02-09](https://github.com/bonfy/github-trending/blob/master/2023-02-09.md#go),[2023-02-10](https://github.com/bonfy/github-trending/blob/master/2023-02-10.md#go),[2023-02-11](https://github.com/bonfy/github-trending/blob/master/2023-02-11.md#go),[2023-02-12](https://github.com/bonfy/github-trending/blob/master/2023-02-12.md#go)，这些天里，登上GitHub Trending。而且还在持续登榜中，可见最近openai的热度。
 > ![image_20230215_094034](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230215_094034.png)
+
+## 赞赏
+
+如果觉得这个项目对你有帮助，你可以请作者[喝杯咖啡 ☕️](https://wiki.eryajf.net/reward/)

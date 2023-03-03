@@ -19,6 +19,8 @@ type Configuration struct {
 	SessionTimeout time.Duration `json:"session_timeout"`
 	// 默认对话模式
 	DefaultMode string `json:"default_mode"`
+	// 代理地址
+	HttpProxy string `json:"http_proxy"`
 }
 
 var config *Configuration
@@ -45,10 +47,7 @@ func LoadConfig() *Configuration {
 		ApiKey := os.Getenv("APIKEY")
 		SessionTimeout := os.Getenv("SESSION_TIMEOUT")
 		defaultMode := os.Getenv("DEFAULT_MODE")
-		// Model := os.Getenv("MODEL")
-		// MaxTokens := os.Getenv("MAX_TOKENS")
-		// Temperature := os.Getenv("TEMPREATURE")
-		// SessionClearToken := os.Getenv("SESSION_CLEAR_TOKEN")
+		httpProxy := os.Getenv("HTTP_PROXY")
 		if ApiKey != "" {
 			config.ApiKey = ApiKey
 		}
@@ -64,6 +63,9 @@ func LoadConfig() *Configuration {
 		}
 		if defaultMode != "" {
 			config.DefaultMode = defaultMode
+		}
+		if httpProxy != "" {
+			config.HttpProxy = httpProxy
 		}
 	})
 	if config.DefaultMode == "" {
