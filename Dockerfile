@@ -1,4 +1,4 @@
-FROM golang:1.17.10 AS builder
+FROM golang:1.18.10-alpine3.16 AS builder
 
 # ENV GOPROXY      https://goproxy.io
 
@@ -7,10 +7,19 @@ ADD . /app/
 WORKDIR /app
 RUN go build -o chatgpt-dingtalk .
 
-FROM centos:centos7
-RUN mkdir /app
+FROM alpine:3.16
+
+ARG TZ="Asia/Shanghai"
+
+ENV TZ ${TZ}
+
+RUN mkdir /app && apk upgrade \
+    && apk add bash tzdata \
+    && ln -sf /usr/share/zoneinfo/${TZ} /etc/localtime \
+    && echo ${TZ} > /etc/timezone
+
 WORKDIR /app
 COPY --from=builder /app/ .
-RUN chmod +x chatgpt-dingtalk && cp config.dev.json config.json && yum -y install vim net-tools telnet wget curl && yum clean all
+RUN chmod +x chatgpt-dingtalk && cp config.dev.json config.json
 
 CMD ./chatgpt-dingtalk

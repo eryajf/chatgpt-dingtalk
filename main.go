@@ -5,20 +5,17 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"os"
 	"strings"
 
+	"github.com/eryajf/chatgpt-dingtalk/config"
 	"github.com/eryajf/chatgpt-dingtalk/public"
 	"github.com/eryajf/chatgpt-dingtalk/public/logger"
-	"github.com/eryajf/chatgpt-dingtalk/service"
+	"github.com/solywsh/chatgpt"
 )
 
-var UserService service.UserServiceInterface
-
 func init() {
-	UserService = service.NewUserService()
+	public.InitSvc()
 }
-
 func main() {
 	Start()
 }
@@ -42,7 +39,7 @@ func Start() {
 		data, err := ioutil.ReadAll(r.Body)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
-			logger.Warning("read request body failed: %v\n", err.Error())
+			logger.Warning(fmt.Sprintf("read request body failed: %v\n", err.Error()))
 			return
 		}
 		if len(data) == 0 {
@@ -52,21 +49,25 @@ func Start() {
 		var msgObj = new(public.ReceiveMsg)
 		err = json.Unmarshal(data, &msgObj)
 		if err != nil {
-			logger.Warning("unmarshal request body failed: %v\n", err)
+			logger.Warning(fmt.Errorf("unmarshal request body failed: %v", err))
 		}
 		if msgObj.Text.Content == "" || msgObj.ChatbotUserID == "" {
 			logger.Warning("从钉钉回调过来的内容为空，根据过往的经验，或许重新创建一下机器人，能解决这个问题")
 			return
 		}
+		logger.Info(fmt.Sprintf("当前对话模式为：%s", public.UserService.GetUserMode(msgObj.SenderStaffId)))
 		// TODO: 校验请求
 		if len(msgObj.Text.Content) == 1 || strings.TrimSpace(msgObj.Text.Content) == "帮助" {
 			// 欢迎信息
-			msgObj.ReplyText(Welcome, msgObj.SenderStaffId)
+			_, err := msgObj.ReplyText(Welcome, msgObj.SenderStaffId)
+			if err != nil {
+				logger.Warning(fmt.Errorf("send message error: %v", err))
+			}
 		} else {
 			logger.Info(fmt.Sprintf("dingtalk callback parameters: %#v", msgObj))
 			err = ProcessRequest(*msgObj)
 			if err != nil {
-				logger.Warning("process request failed: %v\n", err)
+				logger.Warning(fmt.Errorf("process request failed: %v", err))
 			}
 		}
 	}
@@ -85,81 +86,130 @@ func Start() {
 	}
 }
 
-func FirstCheck(rmsg public.ReceiveMsg) bool {
-	lc := UserService.GetUserMode(rmsg.SenderStaffId)
-	if lc != "" && strings.Contains(lc, "串聊") {
-		return true
-	}
-	return false
-}
-
 func ProcessRequest(rmsg public.ReceiveMsg) error {
 	content := strings.TrimSpace(rmsg.Text.Content)
 	switch content {
 	case "单聊":
-		UserService.SetUserMode(rmsg.SenderStaffId, rmsg.Text.Content)
-		rmsg.ReplyText(fmt.Sprintf("=====现在进入与👉%s👈单聊的模式 =====", rmsg.SenderNick), rmsg.SenderStaffId)
+		public.UserService.SetUserMode(rmsg.SenderStaffId, content)
+		_, err := rmsg.ReplyText(fmt.Sprintf("=====现在进入与👉%s👈单聊的模式 =====", rmsg.SenderNick), rmsg.SenderStaffId)
+		if err != nil {
+			logger.Warning(fmt.Errorf("send message error: %v", err))
+		}
 	case "串聊":
-		UserService.SetUserMode(rmsg.SenderStaffId, rmsg.Text.Content)
-		rmsg.ReplyText(fmt.Sprintf("=====现在进入与👉%s👈串聊的模式 =====", rmsg.SenderNick), rmsg.SenderStaffId)
+		public.UserService.SetUserMode(rmsg.SenderStaffId, content)
+		_, err := rmsg.ReplyText(fmt.Sprintf("=====现在进入与👉%s👈串聊的模式 =====", rmsg.SenderNick), rmsg.SenderStaffId)
+		if err != nil {
+			logger.Warning(fmt.Errorf("send message error: %v", err))
+		}
 	case "重置":
-		UserService.ClearUserMode(rmsg.SenderStaffId)
-		err := os.Remove("openaiCache/" + rmsg.SenderStaffId)
-		if err != nil && !strings.Contains(fmt.Sprintf("%s", err), "no such file or directory") {
-			rmsg.ReplyText(fmt.Sprintf("=====清理与👉%s👈的对话缓存失败，错误信息: %v\n请检查=====", rmsg.SenderNick, err), rmsg.SenderStaffId)
-		} else {
-			rmsg.ReplyText(fmt.Sprintf("=====已重置与👉%s👈的对话模式，可以开始新的对话=====", rmsg.SenderNick), rmsg.SenderStaffId)
+		public.UserService.ClearUserMode(rmsg.SenderStaffId)
+		public.UserService.ClearUserSessionContext(rmsg.SenderStaffId)
+		_, err := rmsg.ReplyText(fmt.Sprintf("=====已重置与👉%s👈的对话模式，可以开始新的对话=====", rmsg.SenderNick), rmsg.SenderStaffId)
+		if err != nil {
+			logger.Warning(fmt.Errorf("send message error: %v", err))
 		}
 	default:
-		if FirstCheck(rmsg) {
-			cli, reply, err := public.ContextQa(rmsg.Text.Content, rmsg.SenderStaffId)
-			if err != nil {
-				logger.Info("gpt request error: %v \n", err)
-				_, err = rmsg.ReplyText(fmt.Sprintf("请求openai失败了，错误信息：%v", err), rmsg.SenderStaffId)
-				if err != nil {
-					logger.Warning("send message error: %v \n", err)
-					return err
-				}
-			}
-			if reply == "" {
-				logger.Warning("get gpt result falied: %v\n", err)
-				return nil
-			} else {
-				reply = strings.TrimSpace(reply)
-				reply = strings.Trim(reply, "\n")
-				// 回复@我的用户
-				_, err = rmsg.ReplyText(reply, rmsg.SenderStaffId)
-				if err != nil {
-					logger.Warning("send message error: %v \n", err)
-					return err
-				}
-				path := "openaiCache/" + rmsg.SenderStaffId
-				cli.ChatContext.SaveConversation(path)
-			}
+		if public.FirstCheck(rmsg) {
+			return Do("串聊", rmsg)
 		} else {
-			reply, err := public.SingleQa(rmsg.Text.Content, rmsg.SenderNick)
-			if err != nil {
-				logger.Info("gpt request error: %v \n", err)
-				_, err = rmsg.ReplyText(fmt.Sprintf("请求openai失败了，错误信息：%v", err), rmsg.SenderStaffId)
-				if err != nil {
-					logger.Warning("send message error: %v \n", err)
-					return err
-				}
-			}
-			if reply == "" {
-				logger.Warning("get gpt result falied: %v\n", err)
-				return nil
-			} else {
-				reply = strings.TrimSpace(reply)
-				reply = strings.Trim(reply, "\n")
-				// 回复@我的用户
-				_, err = rmsg.ReplyText(reply, rmsg.SenderStaffId)
-				if err != nil {
-					logger.Warning("send message error: %v \n", err)
-					return err
-				}
-			}
+			return Do("单聊", rmsg)
 		}
 	}
 	return nil
+}
+
+func Do(mode string, rmsg public.ReceiveMsg) error {
+	// 先把模式注入
+	public.UserService.SetUserMode(rmsg.SenderStaffId, mode)
+	switch mode {
+	case "单聊":
+		reply, err := SingleQa(rmsg.Text.Content, rmsg.SenderNick)
+		if err != nil {
+			logger.Info(fmt.Errorf("gpt request error: %v", err))
+			if strings.Contains(fmt.Sprintf("%v", err), "maximum text length exceeded") {
+				public.UserService.ClearUserSessionContext(rmsg.SenderStaffId)
+				_, err = rmsg.ReplyText(fmt.Sprintf("请求openai失败了，错误信息：%v，看起来是超过最大对话限制了，已自动重置您的对话", err), rmsg.SenderStaffId)
+				if err != nil {
+					logger.Warning(fmt.Errorf("send message error: %v", err))
+					return err
+				}
+			} else {
+				_, err = rmsg.ReplyText(fmt.Sprintf("请求openai失败了，错误信息：%v", err), rmsg.SenderStaffId)
+				if err != nil {
+					logger.Warning(fmt.Errorf("send message error: %v", err))
+					return err
+				}
+			}
+		}
+		if reply == "" {
+			logger.Warning(fmt.Errorf("get gpt result falied: %v", err))
+			return nil
+		} else {
+			reply = strings.TrimSpace(reply)
+			reply = strings.Trim(reply, "\n")
+			// 回复@我的用户
+			// fmt.Println("单聊结果是：", reply)
+			_, err = rmsg.ReplyText(reply, rmsg.SenderStaffId)
+			if err != nil {
+				logger.Warning(fmt.Errorf("send message error: %v", err))
+				return err
+			}
+		}
+	case "串聊":
+		cli, reply, err := ContextQa(rmsg.Text.Content, rmsg.SenderStaffId)
+		if err != nil {
+			logger.Info(fmt.Sprintf("gpt request error: %v", err))
+			if strings.Contains(fmt.Sprintf("%v", err), "maximum text length exceeded") {
+				public.UserService.ClearUserSessionContext(rmsg.SenderStaffId)
+				_, err = rmsg.ReplyText(fmt.Sprintf("请求openai失败了，错误信息：%v，看起来是超过最大对话限制了，已自动重置您的对话", err), rmsg.SenderStaffId)
+				if err != nil {
+					logger.Warning(fmt.Errorf("send message error: %v", err))
+					return err
+				}
+			} else {
+				_, err = rmsg.ReplyText(fmt.Sprintf("请求openai失败了，错误信息：%v", err), rmsg.SenderStaffId)
+				if err != nil {
+					logger.Warning(fmt.Errorf("send message error: %v", err))
+					return err
+				}
+			}
+		}
+		if reply == "" {
+			logger.Warning(fmt.Errorf("get gpt result falied: %v", err))
+			return nil
+		} else {
+			reply = strings.TrimSpace(reply)
+			reply = strings.Trim(reply, "\n")
+			// 回复@我的用户
+			_, err = rmsg.ReplyText(reply, rmsg.SenderStaffId)
+			if err != nil {
+				logger.Warning(fmt.Errorf("send message error: %v", err))
+				return err
+			}
+			_ = cli.ChatContext.SaveConversation(rmsg.SenderStaffId)
+		}
+	default:
+
+	}
+	return nil
+}
+
+func SingleQa(question, userId string) (answer string, err error) {
+	cfg := config.LoadConfig()
+	chat := chatgpt.New(cfg.ApiKey, userId, cfg.SessionTimeout)
+	defer chat.Close()
+	return chat.ChatWithContext(question)
+}
+
+func ContextQa(question, userId string) (chat *chatgpt.ChatGPT, answer string, err error) {
+	cfg := config.LoadConfig()
+	chat = chatgpt.New(cfg.ApiKey, userId, cfg.SessionTimeout)
+	if public.UserService.GetUserSessionContext(userId) != "" {
+		err = chat.ChatContext.LoadConversation(userId)
+		if err != nil {
+			fmt.Printf("load station failed: %v\n", err)
+		}
+	}
+	answer, err = chat.ChatWithContext(question)
+	return
 }
