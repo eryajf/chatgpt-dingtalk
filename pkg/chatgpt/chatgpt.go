@@ -65,29 +65,29 @@ func (c *ChatGPT) SetMaxQuestionLen(maxQuestionLen int) int {
 	return c.maxQuestionLen
 }
 
-func (c *ChatGPT) Chat(question string) (answer string, err error) {
-	question = question + "."
-	if len(question) > c.maxQuestionLen {
-		return "", OverMaxQuestionLength
-	}
-	if len(question)+c.maxAnswerLen > c.maxText {
-		question = question[:c.maxText-c.maxAnswerLen]
-	}
-	req := gogpt.CompletionRequest{
-		Model:            gogpt.GPT3TextDavinci003,
-		MaxTokens:        c.maxAnswerLen,
-		Prompt:           question,
-		Temperature:      0.9,
-		TopP:             1,
-		N:                1,
-		FrequencyPenalty: 0,
-		PresencePenalty:  0.5,
-		User:             c.userId,
-		Stop:             []string{},
-	}
-	resp, err := c.client.CreateCompletion(c.ctx, req)
-	if err != nil {
-		return "", err
-	}
-	return formatAnswer(resp.Choices[0].Text), err
-}
+// func (c *ChatGPT) Chat(question string) (answer string, err error) {
+// 	question = question + "."
+// 	if len(question) > c.maxQuestionLen {
+// 		return "", OverMaxQuestionLength
+// 	}
+// 	if len(question)+c.maxAnswerLen > c.maxText {
+// 		question = question[:c.maxText-c.maxAnswerLen]
+// 	}
+// 	req := gogpt.CompletionRequest{
+// 		Model:            gogpt.GPT3TextDavinci003,
+// 		MaxTokens:        c.maxAnswerLen,
+// 		Prompt:           question,
+// 		Temperature:      0.9,
+// 		TopP:             1,
+// 		N:                1,
+// 		FrequencyPenalty: 0,
+// 		PresencePenalty:  0.5,
+// 		User:             c.userId,
+// 		Stop:             []string{},
+// 	}
+// 	resp, err := c.client.CreateCompletion(c.ctx, req)
+// 	if err != nil {
+// 		return "", err
+// 	}
+// 	return formatAnswer(resp.Choices[0].Text), err
+// }

@@ -18,7 +18,7 @@
 
 ## 前言
 
-最近ChatGPT异常火爆，本项目可以助你将GPT机器人集成到钉钉群聊中。
+本项目可以助你将GPT机器人集成到钉钉群聊当中。当前默认模型为 gpt-3.5。
 
 
 > 🥳 **欢迎关注我的其他开源项目：**
@@ -76,7 +76,7 @@
 
 ```sh
 # 运行项目
-$ docker run -itd --name chatgpt -p 8090:8090 -e APIKEY=换成你的key -e SESSION_TIMEOUT=600 --restart=always  dockerproxy.com/eryajf/chatgpt-dingtalk:latest
+$ docker run -itd --name chatgpt -p 8090:8090 -e APIKEY=换成你的key -e SESSION_TIMEOUT=600 -e DEFAULT_MODE="单聊" --restart=always  dockerproxy.com/eryajf/chatgpt-dingtalk:latest
 ```
 
 运行命令中映射的配置文件参考下边的配置文件说明。
@@ -210,8 +210,9 @@ $ go run main.go
 
 ```json
 {
-    "api_key": "xxxxxxxxx",  // openai api_key
-    "session_timeout": 600   // 会话超时时间,默认600秒,在会话时间内所有发送给机器人的信息会作为上下文
+    "api_key": "xxxxxxxxx",   // openai api_key
+    "session_timeout": 600,   // 会话超时时间,默认600秒,在会话时间内所有发送给机器人的信息会作为上下文
+    "default_mode": "单聊"    // 默认对话模式，可根据实际场景自定义，如果不设置，默认为单聊
 }
 ```
 

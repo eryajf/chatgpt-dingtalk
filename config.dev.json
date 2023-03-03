@@ -1,4 +1,5 @@
 {
     "api_key": "xxxxxxxxx",
-    "session_timeout": 600
+    "session_timeout": 600,
+    "default_mode": "单聊"
 }

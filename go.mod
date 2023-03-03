@@ -10,7 +10,6 @@ require (
 require (
 	github.com/joho/godotenv v1.5.1 // indirect
 	github.com/sashabaranov/go-gpt3 v1.3.0 // indirect
-	github.com/stretchr/testify v1.8.1 // indirect
 )
 
 replace github.com/solywsh/chatgpt => ./pkg/chatgpt

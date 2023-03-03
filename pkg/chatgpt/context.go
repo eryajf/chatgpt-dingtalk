@@ -4,9 +4,9 @@ import (
 	"bytes"
 	"encoding/gob"
 	"fmt"
-	"os"
 	"strings"
 
+	"github.com/eryajf/chatgpt-dingtalk/public"
 	gogpt "github.com/sashabaranov/go-gpt3"
 )
 
@@ -75,31 +75,26 @@ func (c *ChatContext) PollConversation() {
 }
 
 // ResetConversation 重置对话
-func (c *ChatContext) ResetConversation() {
-	c.old = []conversation{}
-	c.seqTimes = 0
+func (c *ChatContext) ResetConversation(userid string) {
+	public.UserService.ClearUserSessionContext(userid)
 }
 
 // SaveConversation 保存对话
-func (c *ChatContext) SaveConversation(path string) error {
+func (c *ChatContext) SaveConversation(userid string) error {
 	var buffer bytes.Buffer
 	enc := gob.NewEncoder(&buffer)
 	err := enc.Encode(c.old)
 	if err != nil {
 		return err
 	}
-	return WriteToFile(path, buffer.Bytes())
+	public.UserService.SetUserSessionContext(userid, buffer.String())
+	return nil
 }
 
 // LoadConversation 加载对话
-func (c *ChatContext) LoadConversation(path string) error {
-	data, err := os.ReadFile(path)
-	if err != nil {
-		return err
-	}
-	buffer := bytes.NewBuffer(data)
-	dec := gob.NewDecoder(buffer)
-	err = dec.Decode(&c.old)
+func (c *ChatContext) LoadConversation(userid string) error {
+	dec := gob.NewDecoder(strings.NewReader(public.UserService.GetUserSessionContext(userid)))
+	err := dec.Decode(&c.old)
 	if err != nil {
 		return err
 	}
@@ -195,9 +190,9 @@ func WithMaxSeqTimes(times int) ChatContextOption {
 }
 
 // WithOldConversation 从文件中加载对话
-func WithOldConversation(path string) ChatContextOption {
+func WithOldConversation(userid string) ChatContextOption {
 	return func(c *ChatContext) {
-		_ = c.LoadConversation(path)
+		_ = c.LoadConversation(userid)
 	}
 }
 
