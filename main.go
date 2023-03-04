@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/eryajf/chatgpt-dingtalk/config"
 	"github.com/eryajf/chatgpt-dingtalk/public"
@@ -25,6 +26,7 @@ var Welcome string = `Commands:
 🙋 单聊 👉 单独聊天
 📣 串聊 👉 带上下文聊天
 🔃 重置 👉 重置带上下文聊天
+💵 余额 👉 查询剩余额度
 🚀 帮助 👉 显示帮助信息
 =================================
 🚜 例：@我发送 空 或 帮助 将返回此帮助信息
@@ -104,6 +106,20 @@ func ProcessRequest(rmsg public.ReceiveMsg) error {
 		public.UserService.ClearUserMode(rmsg.SenderStaffId)
 		public.UserService.ClearUserSessionContext(rmsg.SenderStaffId)
 		_, err := rmsg.ReplyText(fmt.Sprintf("=====已重置与👉%s👈的对话模式，可以开始新的对话=====", rmsg.SenderNick), rmsg.SenderStaffId)
+		if err != nil {
+			logger.Warning(fmt.Errorf("send message error: %v", err))
+		}
+	case "余额":
+		rst, err := public.GetBalance()
+		if err != nil {
+			logger.Warning(fmt.Errorf("get balance error: %v", err))
+			return err
+		}
+		t1 := time.Unix(int64(rst.Grants.Data[0].EffectiveAt), 0)
+		t2 := time.Unix(int64(rst.Grants.Data[0].ExpiresAt), 0)
+		msg := fmt.Sprintf("💵 已用: 💲%v\n💵 剩余: 💲%v\n⏳ 有效时间: 从 %v 到 %v\n", fmt.Sprintf("%.2f", rst.TotalUsed), fmt.Sprintf("%.2f", rst.TotalAvailable), t1.Format("2006-01-02 15:04:05"), t2.Format("2006-01-02 15:04:05"))
+
+		_, err = rmsg.ReplyText(msg, rmsg.SenderStaffId)
 		if err != nil {
 			logger.Warning(fmt.Errorf("send message error: %v", err))
 		}
