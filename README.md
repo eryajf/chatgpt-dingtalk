@@ -81,6 +81,8 @@
 $ docker run -itd --name chatgpt -p 8090:8090 -e APIKEY=换成你的key -e SESSION_TIMEOUT=600 -e HTTP_PROXY="" -e DEFAULT_MODE="单聊" --restart=always  dockerproxy.com/eryajf/chatgpt-dingtalk:latest
 ```
 
+`📢 注意：`如果你使用docker部署，那么proxy指定地址的时候，请指定宿主机的IP，而不要写成127，以免代理不生效。
+
 运行命令中映射的配置文件参考下边的配置文件说明。
 
 `第二种：基于配置文件挂载运行`
