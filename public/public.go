@@ -12,6 +12,7 @@ var UserService service.UserServiceInterface
 func InitSvc() {
 	config.LoadConfig()
 	UserService = service.NewUserService()
+	_, _ = GetBalance()
 }
 
 func FirstCheck(rmsg ReceiveMsg) bool {
