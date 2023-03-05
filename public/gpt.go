@@ -10,7 +10,10 @@ import (
 )
 
 func InitAiCli() *resty.Client {
-	return resty.New().SetTimeout(30*time.Second).SetHeader("Authorization", fmt.Sprintf("Bearer %s", config.LoadConfig().ApiKey)).SetProxy(config.LoadConfig().HttpProxy)
+	if config.LoadConfig().HttpProxy != "" {
+		return resty.New().SetTimeout(30*time.Second).SetHeader("Authorization", fmt.Sprintf("Bearer %s", config.LoadConfig().ApiKey)).SetProxy(config.LoadConfig().HttpProxy).SetRetryCount(3).SetRetryWaitTime(5 * time.Second)
+	}
+	return resty.New().SetTimeout(30*time.Second).SetHeader("Authorization", fmt.Sprintf("Bearer %s", config.LoadConfig().ApiKey)).SetRetryCount(3).SetRetryWaitTime(5 * time.Second)
 }
 
 type Billing struct {
@@ -42,5 +45,10 @@ func GetBalance() (Billing, error) {
 	if err != nil {
 		return data, err
 	}
+	t1 := time.Unix(int64(data.Grants.Data[0].EffectiveAt), 0)
+	t2 := time.Unix(int64(data.Grants.Data[0].ExpiresAt), 0)
+	msg := fmt.Sprintf("💵 已用: 💲%v\n💵 剩余: 💲%v\n⏳ 有效时间: 从 %v 到 %v\n", fmt.Sprintf("%.2f", data.TotalUsed), fmt.Sprintf("%.2f", data.TotalAvailable), t1.Format("2006-01-02 15:04:05"), t2.Format("2006-01-02 15:04:05"))
+	// 放入缓存
+	UserService.SetUserMode("system_balance", msg)
 	return data, nil
 }

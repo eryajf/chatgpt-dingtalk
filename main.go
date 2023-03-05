@@ -110,16 +110,19 @@ func ProcessRequest(rmsg public.ReceiveMsg) error {
 			logger.Warning(fmt.Errorf("send message error: %v", err))
 		}
 	case "余额":
-		rst, err := public.GetBalance()
-		if err != nil {
-			logger.Warning(fmt.Errorf("get balance error: %v", err))
-			return err
+		cacheMsg := public.UserService.GetUserMode("system_balance")
+		if cacheMsg == "" {
+			rst, err := public.GetBalance()
+			if err != nil {
+				logger.Warning(fmt.Errorf("get balance error: %v", err))
+				return err
+			}
+			t1 := time.Unix(int64(rst.Grants.Data[0].EffectiveAt), 0)
+			t2 := time.Unix(int64(rst.Grants.Data[0].ExpiresAt), 0)
+			cacheMsg = fmt.Sprintf("💵 已用: 💲%v\n💵 剩余: 💲%v\n⏳ 有效时间: 从 %v 到 %v\n", fmt.Sprintf("%.2f", rst.TotalUsed), fmt.Sprintf("%.2f", rst.TotalAvailable), t1.Format("2006-01-02 15:04:05"), t2.Format("2006-01-02 15:04:05"))
 		}
-		t1 := time.Unix(int64(rst.Grants.Data[0].EffectiveAt), 0)
-		t2 := time.Unix(int64(rst.Grants.Data[0].ExpiresAt), 0)
-		msg := fmt.Sprintf("💵 已用: 💲%v\n💵 剩余: 💲%v\n⏳ 有效时间: 从 %v 到 %v\n", fmt.Sprintf("%.2f", rst.TotalUsed), fmt.Sprintf("%.2f", rst.TotalAvailable), t1.Format("2006-01-02 15:04:05"), t2.Format("2006-01-02 15:04:05"))
 
-		_, err = rmsg.ReplyText(msg, rmsg.SenderStaffId)
+		_, err := rmsg.ReplyText(cacheMsg, rmsg.SenderStaffId)
 		if err != nil {
 			logger.Warning(fmt.Errorf("send message error: %v", err))
 		}
