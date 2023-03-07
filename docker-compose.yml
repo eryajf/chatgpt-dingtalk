@@ -1,0 +1,14 @@
+version: '3.9'
+
+services:
+  chatgpt:
+    image: dockerproxy.com/eryajf/chatgpt-dingtalk:latest
+    container_name: chatgpt
+    environment:
+      - APIKEY=sk-XXXXXX
+      - SESSION_TIMEOUT=600
+      - HTTP_PROXY=
+      - DEFAULT_MODE="单聊"
+    ports:
+      - "8090:8090"
+    restart: always

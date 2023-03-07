@@ -97,6 +97,16 @@ $ docker run -itd --name chatgpt -p 8090:8090  -v `pwd`/config.json:/app/config.
 
 其中配置文件参考下边的配置文件说明。
 
+`第三种：使用 docker compose 运行`
+
+```sh
+$ wget https://raw.githubusercontent.com/eryajf/chatgpt-dingtalk/main/docker-compose.yml
+
+$ nano docker-compose.yml # 编辑 APIKEY 等信息
+
+$ docker compose up -d
+```
+
 注意，不论通过上边哪种docker方式部署，都需要配置Nginx代理，当然你直接通过服务器外网IP也可以。
 
 部署完成之后，通过Nginx代理本服务：
