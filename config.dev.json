@@ -1,5 +1,6 @@
 {
     "api_key": "xxxxxxxxx",
+    "model": "gpt-3.5-turbo",
     "session_timeout": 600,
     "http_proxy": "",
     "default_mode": "单聊"

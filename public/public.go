@@ -8,9 +8,10 @@ import (
 )
 
 var UserService service.UserServiceInterface
+var Config *config.Configuration
 
 func InitSvc() {
-	config.LoadConfig()
+	Config = config.LoadConfig()
 	UserService = service.NewUserService()
 	_, _ = GetBalance()
 }
@@ -18,7 +19,7 @@ func InitSvc() {
 func FirstCheck(rmsg ReceiveMsg) bool {
 	lc := UserService.GetUserMode(rmsg.SenderStaffId)
 	if lc == "" {
-		if config.LoadConfig().DefaultMode == "串聊" {
+		if Config.DefaultMode == "串聊" {
 			return true
 		} else {
 			return false

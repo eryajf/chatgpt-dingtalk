@@ -8,7 +8,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/eryajf/chatgpt-dingtalk/config"
 	"github.com/eryajf/chatgpt-dingtalk/public"
 	"github.com/eryajf/chatgpt-dingtalk/public/logger"
 	"github.com/solywsh/chatgpt"
@@ -213,15 +212,13 @@ func Do(mode string, rmsg public.ReceiveMsg) error {
 }
 
 func SingleQa(question, userId string) (answer string, err error) {
-	cfg := config.LoadConfig()
-	chat := chatgpt.New(cfg.ApiKey, cfg.HttpProxy, userId, cfg.SessionTimeout)
+	chat := chatgpt.New(public.Config.ApiKey, public.Config.HttpProxy, userId, public.Config.SessionTimeout)
 	defer chat.Close()
 	return chat.ChatWithContext(question)
 }
 
 func ContextQa(question, userId string) (chat *chatgpt.ChatGPT, answer string, err error) {
-	cfg := config.LoadConfig()
-	chat = chatgpt.New(cfg.ApiKey, cfg.HttpProxy, userId, cfg.SessionTimeout)
+	chat = chatgpt.New(public.Config.ApiKey, public.Config.HttpProxy, userId, public.Config.SessionTimeout)
 	if public.UserService.GetUserSessionContext(userId) != "" {
 		err = chat.ChatContext.LoadConversation(userId)
 		if err != nil {

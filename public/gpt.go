@@ -5,15 +5,14 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/eryajf/chatgpt-dingtalk/config"
 	"github.com/go-resty/resty/v2"
 )
 
 func InitAiCli() *resty.Client {
-	if config.LoadConfig().HttpProxy != "" {
-		return resty.New().SetTimeout(30*time.Second).SetHeader("Authorization", fmt.Sprintf("Bearer %s", config.LoadConfig().ApiKey)).SetProxy(config.LoadConfig().HttpProxy).SetRetryCount(3).SetRetryWaitTime(5 * time.Second)
+	if Config.HttpProxy != "" {
+		return resty.New().SetTimeout(30*time.Second).SetHeader("Authorization", fmt.Sprintf("Bearer %s", Config.ApiKey)).SetProxy(Config.HttpProxy).SetRetryCount(3).SetRetryWaitTime(5 * time.Second)
 	}
-	return resty.New().SetTimeout(30*time.Second).SetHeader("Authorization", fmt.Sprintf("Bearer %s", config.LoadConfig().ApiKey)).SetRetryCount(3).SetRetryWaitTime(5 * time.Second)
+	return resty.New().SetTimeout(30*time.Second).SetHeader("Authorization", fmt.Sprintf("Bearer %s", Config.ApiKey)).SetRetryCount(3).SetRetryWaitTime(5 * time.Second)
 }
 
 type Billing struct {
