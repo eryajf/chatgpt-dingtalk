@@ -79,10 +79,10 @@
 
 ```sh
 # 运行项目
-$ docker run -itd --name chatgpt -p 8090:8090 -e APIKEY=换成你的key -e MODEL="gpt-3.5-turbo" -e SESSION_TIMEOUT=600 -e HTTP_PROXY="" -e DEFAULT_MODE="单聊" --restart=always  dockerproxy.com/eryajf/chatgpt-dingtalk:latest
+$ docker run -itd --name chatgpt -p 8090:8090 --add-host="host.docker.internal:host-gateway" -e APIKEY=换成你的key -e MODEL="gpt-3.5-turbo" -e SESSION_TIMEOUT=600 -e HTTP_PROXY="http://host.docker.internal:15732" -e DEFAULT_MODE="单聊" --restart=always  dockerproxy.com/eryajf/chatgpt-dingtalk:latest
 ```
 
-`📢 注意：`如果你使用docker部署，那么proxy指定地址的时候，请指定宿主机的IP，而不要写成127，以免代理不生效。
+`📢 注意：`如果使用docker部署，那么proxy地址可以直接使用如上方式部署，`host.docker.internal`会指向容器所在宿主机的IP，只需要更改端口为你的代理端口即可。参见：[Docker容器如何优雅地访问宿主机网络](https://wiki.eryajf.net/pages/674f53/)
 
 运行命令中映射的配置文件参考下边的配置文件说明。
 
