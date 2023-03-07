@@ -15,6 +15,8 @@ import (
 type Configuration struct {
 	// gtp apikey
 	ApiKey string `json:"api_key"`
+	// 使用模型
+	Model string `json:"model"`
 	// 会话超时时间
 	SessionTimeout time.Duration `json:"session_timeout"`
 	// 默认对话模式
@@ -45,6 +47,7 @@ func LoadConfig() *Configuration {
 		}
 		// 如果环境变量有配置，读取环境变量
 		ApiKey := os.Getenv("APIKEY")
+		model := os.Getenv("MODEL")
 		SessionTimeout := os.Getenv("SESSION_TIMEOUT")
 		defaultMode := os.Getenv("DEFAULT_MODE")
 		httpProxy := os.Getenv("HTTP_PROXY")
@@ -66,6 +69,9 @@ func LoadConfig() *Configuration {
 		}
 		if httpProxy != "" {
 			config.HttpProxy = httpProxy
+		}
+		if model != "" {
+			config.Model = model
 		}
 	})
 	if config.DefaultMode == "" {

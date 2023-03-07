@@ -35,6 +35,7 @@
 - 支持在钉钉群聊中添加机器人，通过@机器人进行聊天交互。
 - 提问支持单聊与串聊两种模式，通过@机器人发关键字切换。
 - 支持添加代理，通过配置化指定。
+- 支持自定义指定的模型，通过配置化指定。
 - 支持自定义默认的聊天模式，通过配置化指定。
 
 ## 使用前提
@@ -78,7 +79,7 @@
 
 ```sh
 # 运行项目
-$ docker run -itd --name chatgpt -p 8090:8090 -e APIKEY=换成你的key -e SESSION_TIMEOUT=600 -e HTTP_PROXY="" -e DEFAULT_MODE="单聊" --restart=always  dockerproxy.com/eryajf/chatgpt-dingtalk:latest
+$ docker run -itd --name chatgpt -p 8090:8090 -e APIKEY=换成你的key -e MODEL="gpt-3.5-turbo" -e SESSION_TIMEOUT=600 -e HTTP_PROXY="" -e DEFAULT_MODE="单聊" --restart=always  dockerproxy.com/eryajf/chatgpt-dingtalk:latest
 ```
 
 `📢 注意：`如果你使用docker部署，那么proxy指定地址的时候，请指定宿主机的IP，而不要写成127，以免代理不生效。
@@ -231,6 +232,7 @@ $ go run main.go
 ```json
 {
     "api_key": "xxxxxxxxx",   // openai api_key
+    "model": "gpt-3.5-turbo", // 指定模型，默认为 gpt-3.5-turbo ,具体选项参考官网训练场
     "session_timeout": 600,   // 会话超时时间,默认600秒,在会话时间内所有发送给机器人的信息会作为上下文
     "http_proxy": "",         // 指定请求时使用的代理，如果为空，则不使用代理
     "default_mode": "单聊"    // 默认对话模式，可根据实际场景自定义，如果不设置，默认为单聊
