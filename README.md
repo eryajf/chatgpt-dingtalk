@@ -29,6 +29,7 @@
 > - [read-list](https://github.com/eryajf/read-list)：📖 优质内容订阅，阅读方为根本
 > - [awesome-github-profile-readme-chinese](https://github.com/eryajf/awesome-github-profile-readme-chinese)：🦩 优秀的中文区个人主页搜集
 
+🚜 我还创建了一个项目[awesome-chatgpt-answer](https://github.com/eryajf/awesome-chatgpt-answer)：记录那些问得好，答得妙的时刻，欢迎提交你与ChatGPT交互过程中遇到的那些精妙对话。
 
 ## 功能简介
 
