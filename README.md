@@ -241,6 +241,8 @@ $ go run main.go
 
 ## 常见问题
 
+如何更好地使用ChatGPT：这里有[许多案例](https://github.com/f/awesome-chatgpt-prompts)可供参考。
+
 一些常见的问题，我单独开issue放在这里：[点我](https://github.com/eryajf/chatgpt-dingtalk/issues/44)，可以查看这里辅助你解决问题，如果里边没有，请对历史issue进行搜索(不要提交重复的issue)，也欢迎大家补充。
 
 ## 高光时刻
