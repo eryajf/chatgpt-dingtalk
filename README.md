@@ -191,7 +191,7 @@ $ curl --location --request POST 'http://chat.eryajf.net/' \
 ```
 $ tar xf chatgpt-dingtalk-v0.0.4-darwin-arm64.tar.gz
 $ cd chatgpt-dingtalk-v0.0.4-darwin-arm64
-$ cp config.dev.json # 根据情况调整配置文件内容
+$ cp config.dev.json  config.json # 然后根据情况调整配置文件内容
 $ ./chatgpt-dingtalk  # 直接运行
 
 # 如果要守护在后台运行
