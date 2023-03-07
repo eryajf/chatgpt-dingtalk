@@ -4,13 +4,3 @@ repos:
     hooks:
     - id: check-yaml
     - id: check-added-large-files
--   repo: https://github.com/golangci/golangci-lint # golangci-lint hook repo
-    rev: v1.47.3 # golangci-lint hook repo revision
-    hooks:
-    - id: golangci-lint
-      name: golangci-lint
-      description: Fast linters runner for Go.
-      entry: golangci-lint run --fix
-      types: [go]
-      language: golang
-      pass_filenames: false
