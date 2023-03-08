@@ -31,6 +31,8 @@
 
 🚜 我还创建了一个项目[awesome-chatgpt-answer](https://github.com/eryajf/awesome-chatgpt-answer)：记录那些问得好，答得妙的时刻，欢迎提交你与ChatGPT交互过程中遇到的那些精妙对话。
 
+⚗️ openai官方提供了一个[状态页](https://status.openai.com/)来呈现当前openAI服务的状态，同时如果有问题发布公告也会在这个页面，如果你感觉它有问题了，可以在这个页面看看。
+
 ## 功能简介
 
 - 支持在钉钉群聊中添加机器人，通过@机器人进行聊天交互。
