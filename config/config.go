@@ -74,6 +74,9 @@ func LoadConfig() *Configuration {
 			config.Model = model
 		}
 	})
+	if config.Model == "" {
+		config.DefaultMode = "gpt-3.5-turbo"
+	}
 	if config.DefaultMode == "" {
 		config.DefaultMode = "单聊"
 	}
