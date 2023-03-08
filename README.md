@@ -169,6 +169,10 @@ $ curl --location --request POST 'http://chat.eryajf.net/' \
 
 如果手动请求没有问题，那么就可以在钉钉群里与机器人进行对话了。
 
+`2023-03-08`补充，我发现也可以不在群里艾特机器人聊天，还可点击机器人，然后点击发消息，通过与机器人直接对话进行聊天：
+
+![image](https://user-images.githubusercontent.com/33259379/223607306-2ac836a2-7ce5-4a12-a16e-bec40b22d8d6.png)
+
 `帮助列表`
 
 > 艾特机器人发送空内容或者帮助，会返回帮助列表。
