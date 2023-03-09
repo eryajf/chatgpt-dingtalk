@@ -7,10 +7,10 @@ services:
     restart: always
     environment:
       APIKEY: xxxxxx  # 你的 api_key
-      MODEL: "gpt-3.5-turbo" # 指定模型
+      MODEL: gpt-3.5-turbo # 指定模型
       SESSION_TIMEOUT: 600 # 超时时间
       HTTP_PROXY: http://host.docker.internal:15777 # 配置代理，注意：host.docker.internal会解析到容器所在的宿主机IP，如果你的服务部署在宿主机，只需要更改端口即可
-      DEFAULT_MODE: "单聊" # 聊天模式
+      DEFAULT_MODE: 单聊 # 聊天模式
     ports:
       - "8090:8090"
     extra_hosts:
