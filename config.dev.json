@@ -1,7 +1,27 @@
 {
-    "api_key": "xxxxxxxxx",
+    "api_key": [
+        "sk-xxxxxxxxxxxxxxxxxxxxxxlbkFxxxxxxxxxxxxxxxxxxxxxx",
+        "sk-xxxxxxxxxxxxxxxxxxxxxxlbkFxxxxxxxxxxxxxxxxxxxxxx",
+        "sk-xxxxxxxxxxxxxxxxxxxxxxlbkFxxxxxxxxxxxxxxxxxxxxxx",
+        "sk-xxxxxxxxxxxxxxxxxxxxxxlbkFxxxxxxxxxxxxxxxxxxxxxx",
+        "sk-xxxxxxxxxxxxxxxxxxxxxxlbkFxxxxxxxxxxxxxxxxxxxxxx",
+        "sk-xxxxxxxxxxxxxxxxxxxxxxlbkFxxxxxxxxxxxxxxxxxxxxxx",
+        "sk-xxxxxxxxxxxxxxxxxxxxxxlbkFxxxxxxxxxxxxxxxxxxxxxx",
+        "sk-xxxxxxxxxxxxxxxxxxxxxxlbkFxxxxxxxxxxxxxxxxxxxxxx",
+        "sk-xxxxxxxxxxxxxxxxxxxxxxlbkFxxxxxxxxxxxxxxxxxxxxxx",
+        "sk-xxxxxxxxxxxxxxxxxxxxxxlbkFxxxxxxxxxxxxxxxxxxxxxx",
+        "sk-xxxxxxxxxxxxxxxxxxxxxxlbkFxxxxxxxxxxxxxxxxxxxxxx",
+        "sk-xxxxxxxxxxxxxxxxxxxxxxlbkFxxxxxxxxxxxxxxxxxxxxxx"
+    ],
     "model": "gpt-3.5-turbo",
     "session_timeout": 600,
     "http_proxy": "",
-    "default_mode": "单聊"
+    "default_mode": "串聊",
+    "allow_groups": [
+        "xxx公司"
+    ],
+    "allow_users": [
+        "张三",
+        "李四"
+    ]
 }

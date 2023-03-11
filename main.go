@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strings"
-	"time"
 
 	"github.com/eryajf/chatgpt-dingtalk/public"
 	"github.com/eryajf/chatgpt-dingtalk/public/logger"
@@ -22,13 +21,12 @@ func main() {
 
 var Welcome string = `Commands:
 =================================
-🙋 单聊 👉 单独聊天
-📣 串聊 👉 带上下文聊天
-🔃 重置 👉 重置带上下文聊天
-💵 余额 👉 查询剩余额度
-🚀 帮助 👉 显示帮助信息
+🙋 单聊/single    👉 单独聊天
+📣 串聊/associate 👉 带上下文聊天
+🔃 重置/reset     👉 重置带上下文聊天
+💵 余额/status    👉 查询剩余额度
+🚀 帮助/help      👉 显示帮助信息
 =================================
-🚜 例：@我发送 空 或 帮助 将返回此帮助信息
 💪 Power By https://github.com/eryajf/chatgpt-dingtalk
 `
 
@@ -56,19 +54,16 @@ func Start() {
 			logger.Warning("从钉钉回调过来的内容为空，根据过往的经验，或许重新创建一下机器人，能解决这个问题")
 			return
 		}
-		// TODO: 校验请求
-		if len(msgObj.Text.Content) == 1 || strings.TrimSpace(msgObj.Text.Content) == "帮助" {
-			// 欢迎信息
-			_, err := msgObj.ReplyText(Welcome, msgObj.SenderStaffId)
-			if err != nil {
-				logger.Warning(fmt.Errorf("send message error: %v", err))
-			}
-		} else {
-			logger.Info(fmt.Sprintf("dingtalk callback parameters: %#v", msgObj))
-			err = ProcessRequest(*msgObj)
-			if err != nil {
-				logger.Warning(fmt.Errorf("process request failed: %v", err))
-			}
+
+		if !public.CheckAllowGroups(*msgObj) && !public.CheckAllowUsers(*msgObj) {
+			logger.Warning(fmt.Sprintf("群组或用户校验失败，群组ID：%s", msgObj.ChatbotUserID))
+			return
+		}
+
+		logger.Info(fmt.Sprintf("dingtalk callback parameters: %#v", msgObj))
+		err = ProcessRequest(*msgObj)
+		if err != nil {
+			logger.Warning(fmt.Errorf("process request failed: %v", err))
 		}
 	}
 
@@ -89,18 +84,33 @@ func Start() {
 func ProcessRequest(rmsg public.ReceiveMsg) error {
 	content := strings.TrimSpace(rmsg.Text.Content)
 	switch content {
+	case "":
+		fallthrough
+	case "help":
+		fallthrough
+	case "帮助":
+		_, err := rmsg.ReplyText(Welcome, rmsg.SenderStaffId)
+		if err != nil {
+			logger.Warning(fmt.Errorf("send message error: %v", err))
+		}
+	case "single":
+		fallthrough
 	case "单聊":
 		public.UserService.SetUserMode(rmsg.SenderStaffId, content)
 		_, err := rmsg.ReplyText(fmt.Sprintf("=====现在进入与👉%s👈单聊的模式 =====", rmsg.SenderNick), rmsg.SenderStaffId)
 		if err != nil {
 			logger.Warning(fmt.Errorf("send message error: %v", err))
 		}
+	case "associate":
+		fallthrough
 	case "串聊":
 		public.UserService.SetUserMode(rmsg.SenderStaffId, content)
 		_, err := rmsg.ReplyText(fmt.Sprintf("=====现在进入与👉%s👈串聊的模式 =====", rmsg.SenderNick), rmsg.SenderStaffId)
 		if err != nil {
 			logger.Warning(fmt.Errorf("send message error: %v", err))
 		}
+	case "reset":
+		fallthrough
 	case "重置":
 		public.UserService.ClearUserMode(rmsg.SenderStaffId)
 		public.UserService.ClearUserSessionContext(rmsg.SenderStaffId)
@@ -108,20 +118,10 @@ func ProcessRequest(rmsg public.ReceiveMsg) error {
 		if err != nil {
 			logger.Warning(fmt.Errorf("send message error: %v", err))
 		}
+	case "status":
+		fallthrough
 	case "余额":
-		cacheMsg := public.UserService.GetUserMode("system_balance")
-		if cacheMsg == "" {
-			rst, err := public.GetBalance()
-			if err != nil {
-				logger.Warning(fmt.Errorf("get balance error: %v", err))
-				return err
-			}
-			t1 := time.Unix(int64(rst.Grants.Data[0].EffectiveAt), 0)
-			t2 := time.Unix(int64(rst.Grants.Data[0].ExpiresAt), 0)
-			cacheMsg = fmt.Sprintf("💵 已用: 💲%v\n💵 剩余: 💲%v\n⏳ 有效时间: 从 %v 到 %v\n", fmt.Sprintf("%.2f", rst.TotalUsed), fmt.Sprintf("%.2f", rst.TotalAvailable), t1.Format("2006-01-02 15:04:05"), t2.Format("2006-01-02 15:04:05"))
-		}
-
-		_, err := rmsg.ReplyText(cacheMsg, rmsg.SenderStaffId)
+		_, err := rmsg.ReplyText(public.ApiKeyList.GetApiKeyInfoString(), rmsg.SenderStaffId)
 		if err != nil {
 			logger.Warning(fmt.Errorf("send message error: %v", err))
 		}
@@ -212,19 +212,60 @@ func Do(mode string, rmsg public.ReceiveMsg) error {
 }
 
 func SingleQa(question, userId string) (answer string, err error) {
-	chat := chatgpt.New(public.Config.ApiKey, public.Config.HttpProxy, userId, public.Config.SessionTimeout)
+	apiKey, err := public.ApiKeyList.GetApiKey(false)
+	if err != nil {
+		return
+	}
+
+	chat := chatgpt.New(apiKey, public.Config.HttpProxy, userId, public.Config.SessionTimeout)
 	defer chat.Close()
-	return chat.ChatWithContext(question)
+
+	answer, err = chat.ChatWithContext(question)
+	if err != nil {
+		logger.Warning(fmt.Errorf("%v", err))
+		logger.Warning(fmt.Errorf("chat error, try next api key"))
+
+		apiKey, err = public.ApiKeyList.GetApiKey(true)
+		if err != nil {
+			return
+		}
+		logger.Info(fmt.Sprintf("get next api key: %v", apiKey))
+
+		chat.UpdateAuthKey(apiKey)
+		answer, err = chat.ChatWithContext(question)
+	}
+
+	return
 }
 
 func ContextQa(question, userId string) (chat *chatgpt.ChatGPT, answer string, err error) {
-	chat = chatgpt.New(public.Config.ApiKey, public.Config.HttpProxy, userId, public.Config.SessionTimeout)
+	apiKey, err := public.ApiKeyList.GetApiKey(false)
+	if err != nil {
+		return
+	}
+
+	chat = chatgpt.New(apiKey, public.Config.HttpProxy, userId, public.Config.SessionTimeout)
 	if public.UserService.GetUserSessionContext(userId) != "" {
 		err = chat.ChatContext.LoadConversation(userId)
 		if err != nil {
 			fmt.Printf("load station failed: %v\n", err)
 		}
 	}
+
 	answer, err = chat.ChatWithContext(question)
+	if err != nil {
+		logger.Warning(fmt.Errorf("%v", err))
+		logger.Warning(fmt.Errorf("chat error, try next api key"))
+
+		apiKey, err = public.ApiKeyList.GetApiKey(true)
+		if err != nil {
+			return
+		}
+		logger.Info(fmt.Sprintf("get next api key: %v", apiKey))
+
+		chat.UpdateAuthKey(apiKey)
+		answer, err = chat.ChatWithContext(question)
+	}
+
 	return
 }

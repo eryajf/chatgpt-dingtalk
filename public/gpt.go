@@ -8,11 +8,11 @@ import (
 	"github.com/go-resty/resty/v2"
 )
 
-func InitAiCli() *resty.Client {
+func InitAiCli(apiKey string) *resty.Client {
 	if Config.HttpProxy != "" {
-		return resty.New().SetTimeout(30*time.Second).SetHeader("Authorization", fmt.Sprintf("Bearer %s", Config.ApiKey)).SetProxy(Config.HttpProxy).SetRetryCount(3).SetRetryWaitTime(5 * time.Second)
+		return resty.New().SetTimeout(30*time.Second).SetHeader("Authorization", fmt.Sprintf("Bearer %s", apiKey)).SetProxy(Config.HttpProxy).SetRetryCount(3).SetRetryWaitTime(5 * time.Second)
 	}
-	return resty.New().SetTimeout(30*time.Second).SetHeader("Authorization", fmt.Sprintf("Bearer %s", Config.ApiKey)).SetRetryCount(3).SetRetryWaitTime(5 * time.Second)
+	return resty.New().SetTimeout(30*time.Second).SetHeader("Authorization", fmt.Sprintf("Bearer %s", apiKey)).SetRetryCount(3).SetRetryWaitTime(5 * time.Second)
 }
 
 type Billing struct {
@@ -33,21 +33,35 @@ type Billing struct {
 	} `json:"grants"`
 }
 
-func GetBalance() (Billing, error) {
+type ErrorResp struct {
+	Error struct {
+		Message string `json:"message"`
+		Type    string `json:"type"`
+		Param   string `json:"param"`
+		Code    string `json:"code"`
+	}
+}
+
+func GetBalance(apiKey string) (Billing, error) {
 	var data Billing
 	url := "https://api.openai.com/dashboard/billing/credit_grants"
-	resp, err := InitAiCli().R().Get(url)
+	resp, err := InitAiCli(apiKey).R().Get(url)
 	if err != nil {
 		return data, err
 	}
+
+	if resp.StatusCode() != 200 {
+		var errorResp ErrorResp
+		err = json.Unmarshal(resp.Body(), &errorResp)
+		if err != nil {
+			return data, err
+		}
+		return data, fmt.Errorf("error: %v", errorResp.Error.Message)
+	}
+
 	err = json.Unmarshal(resp.Body(), &data)
 	if err != nil {
 		return data, err
 	}
-	t1 := time.Unix(int64(data.Grants.Data[0].EffectiveAt), 0)
-	t2 := time.Unix(int64(data.Grants.Data[0].ExpiresAt), 0)
-	msg := fmt.Sprintf("💵 已用: 💲%v\n💵 剩余: 💲%v\n⏳ 有效时间: 从 %v 到 %v\n", fmt.Sprintf("%.2f", data.TotalUsed), fmt.Sprintf("%.2f", data.TotalAvailable), t1.Format("2006-01-02 15:04:05"), t2.Format("2006-01-02 15:04:05"))
-	// 放入缓存
-	UserService.SetUserMode("system_balance", msg)
 	return data, nil
 }

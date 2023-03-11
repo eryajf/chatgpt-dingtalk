@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"strings"
 	"sync"
 	"time"
 
@@ -14,7 +15,7 @@ import (
 // Configuration 项目配置
 type Configuration struct {
 	// gtp apikey
-	ApiKey string `json:"api_key"`
+	ApiKey []string `json:"api_key"`
 	// 使用模型
 	Model string `json:"model"`
 	// 会话超时时间
@@ -23,6 +24,10 @@ type Configuration struct {
 	DefaultMode string `json:"default_mode"`
 	// 代理地址
 	HttpProxy string `json:"http_proxy"`
+	// 群组校验
+	AllowGroups []string `json:"allow_groups"`
+	// 用户校验
+	AllowUsers []string `json:"allow_users"`
 }
 
 var config *Configuration
@@ -52,7 +57,8 @@ func LoadConfig() *Configuration {
 		defaultMode := os.Getenv("DEFAULT_MODE")
 		httpProxy := os.Getenv("HTTP_PROXY")
 		if ApiKey != "" {
-			config.ApiKey = ApiKey
+			// 环境变量使用 api_key1,api_key2,api_key3
+			config.ApiKey = strings.Split(ApiKey, ",")
 		}
 		if SessionTimeout != "" {
 			duration, err := strconv.ParseInt(SessionTimeout, 10, 64)
@@ -80,7 +86,7 @@ func LoadConfig() *Configuration {
 	if config.DefaultMode == "" {
 		config.DefaultMode = "单聊"
 	}
-	if config.ApiKey == "" {
+	if len(config.ApiKey) == 0 {
 		logger.Danger("config err: api key required")
 	}
 	return config

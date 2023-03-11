@@ -76,6 +76,10 @@ func (c *ChatGPT) SetMaxQuestionLen(maxQuestionLen int) int {
 	return c.maxQuestionLen
 }
 
+func (c *ChatGPT) UpdateAuthKey(apiKey string) {
+	c.client.UpdateAuthToken(apiKey)
+}
+
 // func (c *ChatGPT) Chat(question string) (answer string, err error) {
 // 	question = question + "."
 // 	if len(question) > c.maxQuestionLen {
