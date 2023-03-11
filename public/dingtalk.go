@@ -29,12 +29,11 @@ type ReceiveMsg struct {
 	Msgtype                   string `json:"msgtype"`
 }
 
-
 // 发送的消息体
 type SendMsg struct {
 	Text    Text   `json:"text"`
 	Msgtype string `json:"msgtype"`
-	At 		At `json:"at"`
+	At      At     `json:"at"`
 }
 
 // 消息内容
@@ -50,7 +49,8 @@ type At struct {
 // 发消息给钉钉
 func (r ReceiveMsg) ReplyText(msg string, staffId string) (statuscode int, err error) {
 	// 定义消息
-	msgtmp := &SendMsg{Text: Text{Content: msg}, Msgtype: "text", At: At{AtUserIds: []string{staffId}}}
+	// msgtmp := &SendMsg{Text: Text{Content: msg}, Msgtype: "text", At: At{AtUserIds: []string{staffId}}}
+	msgtmp := &SendMsg{Text: Text{Content: msg}, Msgtype: "text", At: At{AtUserIds: []string{}}}
 	data, err := json.Marshal(msgtmp)
 	if err != nil {
 		return 0, err
