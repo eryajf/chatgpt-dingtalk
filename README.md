@@ -238,11 +238,31 @@ $ go run main.go
 
 ```json
 {
-    "api_key": "xxxxxxxxx",   // openai api_key
+    "api_key": [              // openai api_key 列表, docker 部署时，使用 APIKEY=api_key1,api_key2,api_key3
+        "sk-xxxxxxxxxxxxxxxxxxxxxxlbkFxxxxxxxxxxxxxxxxxxxxxx",
+        "sk-xxxxxxxxxxxxxxxxxxxxxxlbkFxxxxxxxxxxxxxxxxxxxxxx",
+        "sk-xxxxxxxxxxxxxxxxxxxxxxlbkFxxxxxxxxxxxxxxxxxxxxxx",
+        "sk-xxxxxxxxxxxxxxxxxxxxxxlbkFxxxxxxxxxxxxxxxxxxxxxx",
+        "sk-xxxxxxxxxxxxxxxxxxxxxxlbkFxxxxxxxxxxxxxxxxxxxxxx",
+        "sk-xxxxxxxxxxxxxxxxxxxxxxlbkFxxxxxxxxxxxxxxxxxxxxxx",
+        "sk-xxxxxxxxxxxxxxxxxxxxxxlbkFxxxxxxxxxxxxxxxxxxxxxx",
+        "sk-xxxxxxxxxxxxxxxxxxxxxxlbkFxxxxxxxxxxxxxxxxxxxxxx",
+        "sk-xxxxxxxxxxxxxxxxxxxxxxlbkFxxxxxxxxxxxxxxxxxxxxxx",
+        "sk-xxxxxxxxxxxxxxxxxxxxxxlbkFxxxxxxxxxxxxxxxxxxxxxx",
+        "sk-xxxxxxxxxxxxxxxxxxxxxxlbkFxxxxxxxxxxxxxxxxxxxxxx",
+        "sk-xxxxxxxxxxxxxxxxxxxxxxlbkFxxxxxxxxxxxxxxxxxxxxxx"
+    ],
     "model": "gpt-3.5-turbo", // 指定模型，默认为 gpt-3.5-turbo ,具体选项参考官网训练场
     "session_timeout": 600,   // 会话超时时间,默认600秒,在会话时间内所有发送给机器人的信息会作为上下文
     "http_proxy": "",         // 指定请求时使用的代理，如果为空，则不使用代理
-    "default_mode": "单聊"    // 默认对话模式，可根据实际场景自定义，如果不设置，默认为单聊
+    "default_mode": "串聊",   // 默认对话模式，可根据实际场景自定义，如果不设置，默认为串聊
+    "allow_groups": [         // 允许的群组名称, 为空时，表示所有群组都允许
+        "xxx公司"
+    ],
+    "allow_users": [          // 允许的用户名称, 为空时，表示所有用户都允许；同时设置了allow_groups和allow_users，满足其中一个即可
+        "张三",
+        "李四"
+    ]
 }
 ```
 
