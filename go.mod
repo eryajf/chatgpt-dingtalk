@@ -9,7 +9,7 @@ require (
 )
 
 require (
-	github.com/sashabaranov/go-openai v1.5.0 // indirect
+	github.com/sashabaranov/go-openai v1.5.1 // indirect
 	golang.org/x/net v0.0.0-20211029224645-99673261e6eb // indirect
 )
 

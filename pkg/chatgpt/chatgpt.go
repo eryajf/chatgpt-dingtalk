@@ -28,7 +28,6 @@ func New(userId string) *ChatGPT {
 	var ctx context.Context
 	var cancel func()
 
-	// public.Config.BaseURL, public.Config.ApiKey, public.Config.HttpProxy
 	if public.Config.SessionTimeout == 0 {
 		ctx, cancel = context.WithCancel(context.Background())
 	} else {
