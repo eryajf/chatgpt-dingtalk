@@ -10,9 +10,9 @@ import (
 
 func InitAiCli() *resty.Client {
 	if Config.HttpProxy != "" {
-		return resty.New().SetTimeout(30*time.Second).SetHeader("Authorization", fmt.Sprintf("Bearer %s", Config.ApiKey)).SetProxy(Config.HttpProxy).SetRetryCount(3).SetRetryWaitTime(5 * time.Second)
+		return resty.New().SetTimeout(10*time.Second).SetHeader("Authorization", fmt.Sprintf("Bearer %s", Config.ApiKey)).SetProxy(Config.HttpProxy).SetRetryCount(3).SetRetryWaitTime(2 * time.Second)
 	}
-	return resty.New().SetTimeout(30*time.Second).SetHeader("Authorization", fmt.Sprintf("Bearer %s", Config.ApiKey)).SetRetryCount(3).SetRetryWaitTime(5 * time.Second)
+	return resty.New().SetTimeout(10*time.Second).SetHeader("Authorization", fmt.Sprintf("Bearer %s", Config.ApiKey)).SetRetryCount(3).SetRetryWaitTime(2 * time.Second)
 }
 
 type Billing struct {
