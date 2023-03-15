@@ -15,6 +15,8 @@ import (
 type Configuration struct {
 	// gtp apikey
 	ApiKey string `json:"api_key"`
+	// 请求的 URL 地址
+	BaseURL string `json:"base_url"`
 	// 使用模型
 	Model string `json:"model"`
 	// 会话超时时间
@@ -46,18 +48,22 @@ func LoadConfig() *Configuration {
 			return
 		}
 		// 如果环境变量有配置，读取环境变量
-		ApiKey := os.Getenv("APIKEY")
+		apiKey := os.Getenv("APIKEY")
+		baseURL := os.Getenv("BASE_URL")
 		model := os.Getenv("MODEL")
-		SessionTimeout := os.Getenv("SESSION_TIMEOUT")
+		sessionTimeout := os.Getenv("SESSION_TIMEOUT")
 		defaultMode := os.Getenv("DEFAULT_MODE")
 		httpProxy := os.Getenv("HTTP_PROXY")
-		if ApiKey != "" {
-			config.ApiKey = ApiKey
+		if apiKey != "" {
+			config.ApiKey = apiKey
 		}
-		if SessionTimeout != "" {
-			duration, err := strconv.ParseInt(SessionTimeout, 10, 64)
+		if baseURL != "" {
+			config.BaseURL = baseURL
+		}
+		if sessionTimeout != "" {
+			duration, err := strconv.ParseInt(sessionTimeout, 10, 64)
 			if err != nil {
-				logger.Danger(fmt.Sprintf("config session timeout err: %v ,get is %v", err, SessionTimeout))
+				logger.Danger(fmt.Sprintf("config session timeout err: %v ,get is %v", err, sessionTimeout))
 				return
 			}
 			config.SessionTimeout = time.Duration(duration) * time.Second

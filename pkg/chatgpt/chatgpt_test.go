@@ -3,11 +3,10 @@ package chatgpt
 import (
 	"fmt"
 	"testing"
-	"time"
 )
 
 func TestChatGPT_ChatWithContext(t *testing.T) {
-	chat := New("CHATGPT_API_KEY", "", "", 10*time.Minute)
+	chat := New("")
 	defer chat.Close()
 	//go func() {
 	//	select {

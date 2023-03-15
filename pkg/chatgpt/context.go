@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/eryajf/chatgpt-dingtalk/public"
-	gogpt "github.com/sashabaranov/go-gpt3"
+	openai "github.com/sashabaranov/go-openai"
 )
 
 var (
@@ -157,10 +157,10 @@ func (c *ChatGPT) ChatWithContext(question string) (answer string, err error) {
 		return "", OverMaxTextLength
 	}
 
-	if public.Config.Model == gogpt.GPT3Dot5Turbo0301 || public.Config.Model == gogpt.GPT3Dot5Turbo {
-		req := gogpt.ChatCompletionRequest{
+	if public.Config.Model == openai.GPT3Dot5Turbo0301 || public.Config.Model == openai.GPT3Dot5Turbo {
+		req := openai.ChatCompletionRequest{
 			Model: public.Config.Model,
-			Messages: []gogpt.ChatCompletionMessage{
+			Messages: []openai.ChatCompletionMessage{
 				{
 					Role:    "user",
 					Content: prompt,
@@ -182,7 +182,7 @@ func (c *ChatGPT) ChatWithContext(question string) (answer string, err error) {
 		c.ChatContext.seqTimes++
 		return resp.Choices[0].Message.Content, nil
 	} else {
-		req := gogpt.CompletionRequest{
+		req := openai.CompletionRequest{
 			Model:            public.Config.Model,
 			MaxTokens:        c.maxAnswerLen,
 			Prompt:           prompt,

@@ -212,13 +212,13 @@ func Do(mode string, rmsg public.ReceiveMsg) error {
 }
 
 func SingleQa(question, userId string) (answer string, err error) {
-	chat := chatgpt.New(public.Config.ApiKey, public.Config.HttpProxy, userId, public.Config.SessionTimeout)
+	chat := chatgpt.New(userId)
 	defer chat.Close()
 	return chat.ChatWithContext(question)
 }
 
 func ContextQa(question, userId string) (chat *chatgpt.ChatGPT, answer string, err error) {
-	chat = chatgpt.New(public.Config.ApiKey, public.Config.HttpProxy, userId, public.Config.SessionTimeout)
+	chat = chatgpt.New(userId)
 	if public.UserService.GetUserSessionContext(userId) != "" {
 		err = chat.ChatContext.LoadConversation(userId)
 		if err != nil {
