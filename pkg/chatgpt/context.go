@@ -157,9 +157,13 @@ func (c *ChatGPT) ChatWithContext(question string) (answer string, err error) {
 		return "", OverMaxTextLength
 	}
 
-	if public.Config.Model == openai.GPT3Dot5Turbo0301 || public.Config.Model == openai.GPT3Dot5Turbo {
+	model := public.Config.Model
+	if model == openai.GPT3Dot5Turbo0301 ||
+		model == openai.GPT3Dot5Turbo ||
+		model == openai.GPT4 || model == openai.GPT40314 ||
+		model == openai.GPT432K || model == openai.GPT432K0314 {
 		req := openai.ChatCompletionRequest{
-			Model: public.Config.Model,
+			Model: model,
 			Messages: []openai.ChatCompletionMessage{
 				{
 					Role:    "user",
@@ -183,7 +187,7 @@ func (c *ChatGPT) ChatWithContext(question string) (answer string, err error) {
 		return resp.Choices[0].Message.Content, nil
 	} else {
 		req := openai.CompletionRequest{
-			Model:            public.Config.Model,
+			Model:            model,
 			MaxTokens:        c.maxAnswerLen,
 			Prompt:           prompt,
 			Temperature:      0.9,

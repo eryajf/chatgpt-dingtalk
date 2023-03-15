@@ -240,7 +240,7 @@ $ go run main.go
 {
     "api_key": "xxxxxxxxx",   // openai api_key
     "base_url": "api.openai.com", //  如果你想指定请求url的地址，可通过这个参数进行配置，默认为官方地址，不需要再添加 /v1
-    "model": "gpt-3.5-turbo", // 指定模型，默认为 gpt-3.5-turbo ,具体选项参考官网训练场
+    "model": "gpt-3.5-turbo", // 指定模型，默认为 gpt-3.5-turbo , 可选参数有： "gpt-4-32k-0314", "gpt-4-32k", "gpt-4-0314", "gpt-4", "gpt-3.5-turbo-0301", "gpt-3.5-turbo", "text-davinci-003", "text-davinci-002", "text-curie-001", "text-babbage-001", "text-ada-001", "text-davinci-001", "davinci-instruct-beta", "davinci", "curie-instruct-beta", "curie", "ada", "babbage"
     "session_timeout": 600,   // 会话超时时间,默认600秒,在会话时间内所有发送给机器人的信息会作为上下文
     "http_proxy": "",         // 指定请求时使用的代理，如果为空，则不使用代理
     "default_mode": "单聊"    // 默认对话模式，可根据实际场景自定义，如果不设置，默认为单聊
