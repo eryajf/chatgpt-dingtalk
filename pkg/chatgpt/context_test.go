@@ -3,9 +3,6 @@ package chatgpt
 import (
 	"os"
 	"testing"
-	"time"
-
-	"github.com/joho/godotenv"
 )
 
 func TestOfflineContext(t *testing.T) {
@@ -13,7 +10,7 @@ func TestOfflineContext(t *testing.T) {
 	if key == "" {
 		t.Skip("CHATGPT_API_KEY is not set")
 	}
-	cli := New(key, "", "user1", time.Second*30)
+	cli := New("")
 	reply, err := cli.ChatWithContext("我叫老三，你是？")
 	if err != nil {
 		t.Fatal(err)
@@ -56,7 +53,7 @@ func TestMaintainContext(t *testing.T) {
 	if key == "" {
 		t.Skip("CHATGPT_API_KEY is not set")
 	}
-	cli := New(key, "", "user1", time.Second*30)
+	cli := New("")
 	cli.ChatContext = NewContext(
 		WithMaxSeqTimes(1),
 		WithMaintainSeqTimes(true),
@@ -80,5 +77,5 @@ func TestMaintainContext(t *testing.T) {
 
 func init() {
 	// 本地加载适用于本地测试，如果要在github进行测试，可以透过传入 secrets 到环境参数
-	_ = godotenv.Load(".env.local")
+	// _ = godotenv.Load(".env.local")
 }
