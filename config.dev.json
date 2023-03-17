@@ -4,5 +4,6 @@
     "model": "gpt-3.5-turbo",
     "session_timeout": 600,
     "http_proxy": "",
-    "default_mode": "单聊"
+    "default_mode": "单聊",
+    "max_request": 0
 }

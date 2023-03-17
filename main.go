@@ -6,12 +6,10 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strings"
-	"time"
 
-	"github.com/avast/retry-go"
+	"github.com/eryajf/chatgpt-dingtalk/pkg/process"
 	"github.com/eryajf/chatgpt-dingtalk/public"
 	"github.com/eryajf/chatgpt-dingtalk/public/logger"
-	"github.com/solywsh/chatgpt"
 )
 
 func init() {
@@ -66,7 +64,7 @@ func Start() {
 			}
 		} else {
 			logger.Info(fmt.Sprintf("dingtalk callback parameters: %#v", msgObj))
-			err = ProcessRequest(*msgObj)
+			err = process.ProcessRequest(*msgObj)
 			if err != nil {
 				logger.Warning(fmt.Errorf("process request failed: %v", err))
 			}
@@ -85,176 +83,4 @@ func Start() {
 	if err != nil {
 		logger.Danger(err)
 	}
-}
-
-func ProcessRequest(rmsg public.ReceiveMsg) error {
-	content := strings.TrimSpace(rmsg.Text.Content)
-	switch content {
-	case "单聊":
-		public.UserService.SetUserMode(rmsg.SenderStaffId, content)
-		_, err := rmsg.ReplyText(fmt.Sprintf("=====现在进入与👉%s👈单聊的模式 =====", rmsg.SenderNick), rmsg.SenderStaffId)
-		if err != nil {
-			logger.Warning(fmt.Errorf("send message error: %v", err))
-		}
-	case "串聊":
-		public.UserService.SetUserMode(rmsg.SenderStaffId, content)
-		_, err := rmsg.ReplyText(fmt.Sprintf("=====现在进入与👉%s👈串聊的模式 =====", rmsg.SenderNick), rmsg.SenderStaffId)
-		if err != nil {
-			logger.Warning(fmt.Errorf("send message error: %v", err))
-		}
-	case "重置":
-		public.UserService.ClearUserMode(rmsg.SenderStaffId)
-		public.UserService.ClearUserSessionContext(rmsg.SenderStaffId)
-		_, err := rmsg.ReplyText(fmt.Sprintf("=====已重置与👉%s👈的对话模式，可以开始新的对话=====", rmsg.SenderNick), rmsg.SenderStaffId)
-		if err != nil {
-			logger.Warning(fmt.Errorf("send message error: %v", err))
-		}
-	case "余额":
-		cacheMsg := public.UserService.GetUserMode("system_balance")
-		if cacheMsg == "" {
-			rst, err := public.GetBalance()
-			if err != nil {
-				logger.Warning(fmt.Errorf("get balance error: %v", err))
-				return err
-			}
-			t1 := time.Unix(int64(rst.Grants.Data[0].EffectiveAt), 0)
-			t2 := time.Unix(int64(rst.Grants.Data[0].ExpiresAt), 0)
-			cacheMsg = fmt.Sprintf("💵 已用: 💲%v\n💵 剩余: 💲%v\n⏳ 有效时间: 从 %v 到 %v\n", fmt.Sprintf("%.2f", rst.TotalUsed), fmt.Sprintf("%.2f", rst.TotalAvailable), t1.Format("2006-01-02 15:04:05"), t2.Format("2006-01-02 15:04:05"))
-		}
-
-		_, err := rmsg.ReplyText(cacheMsg, rmsg.SenderStaffId)
-		if err != nil {
-			logger.Warning(fmt.Errorf("send message error: %v", err))
-		}
-	default:
-		if public.FirstCheck(rmsg) {
-			return Do("串聊", rmsg)
-		} else {
-			return Do("单聊", rmsg)
-		}
-	}
-	return nil
-}
-
-func Do(mode string, rmsg public.ReceiveMsg) error {
-	// 先把模式注入
-	public.UserService.SetUserMode(rmsg.SenderStaffId, mode)
-	switch mode {
-	case "单聊":
-		reply, err := SingleQa(rmsg.Text.Content, rmsg.SenderStaffId)
-		if err != nil {
-			logger.Info(fmt.Errorf("gpt request error: %v", err))
-			if strings.Contains(fmt.Sprintf("%v", err), "maximum text length exceeded") {
-				public.UserService.ClearUserSessionContext(rmsg.SenderStaffId)
-				_, err = rmsg.ReplyText(fmt.Sprintf("请求openai失败了，错误信息：%v，看起来是超过最大对话限制了，已自动重置您的对话", err), rmsg.SenderStaffId)
-				if err != nil {
-					logger.Warning(fmt.Errorf("send message error: %v", err))
-					return err
-				}
-			} else {
-				_, err = rmsg.ReplyText(fmt.Sprintf("请求openai失败了，错误信息：%v", err), rmsg.SenderStaffId)
-				if err != nil {
-					logger.Warning(fmt.Errorf("send message error: %v", err))
-					return err
-				}
-			}
-		}
-		if reply == "" {
-			logger.Warning(fmt.Errorf("get gpt result falied: %v", err))
-			return nil
-		} else {
-			reply = strings.TrimSpace(reply)
-			reply = strings.Trim(reply, "\n")
-			// 回复@我的用户
-			// fmt.Println("单聊结果是：", reply)
-			_, err = rmsg.ReplyText(reply, rmsg.SenderStaffId)
-			if err != nil {
-				logger.Warning(fmt.Errorf("send message error: %v", err))
-				return err
-			}
-		}
-	case "串聊":
-		cli, reply, err := ContextQa(rmsg.Text.Content, rmsg.SenderStaffId)
-		if err != nil {
-			logger.Info(fmt.Sprintf("gpt request error: %v", err))
-			if strings.Contains(fmt.Sprintf("%v", err), "maximum text length exceeded") {
-				public.UserService.ClearUserSessionContext(rmsg.SenderStaffId)
-				_, err = rmsg.ReplyText(fmt.Sprintf("请求openai失败了，错误信息：%v，看起来是超过最大对话限制了，已自动重置您的对话", err), rmsg.SenderStaffId)
-				if err != nil {
-					logger.Warning(fmt.Errorf("send message error: %v", err))
-					return err
-				}
-			} else {
-				_, err = rmsg.ReplyText(fmt.Sprintf("请求openai失败了，错误信息：%v", err), rmsg.SenderStaffId)
-				if err != nil {
-					logger.Warning(fmt.Errorf("send message error: %v", err))
-					return err
-				}
-			}
-		}
-		if reply == "" {
-			logger.Warning(fmt.Errorf("get gpt result falied: %v", err))
-			return nil
-		} else {
-			reply = strings.TrimSpace(reply)
-			reply = strings.Trim(reply, "\n")
-			// 回复@我的用户
-			_, err = rmsg.ReplyText(reply, rmsg.SenderStaffId)
-			if err != nil {
-				logger.Warning(fmt.Errorf("send message error: %v", err))
-				return err
-			}
-			_ = cli.ChatContext.SaveConversation(rmsg.SenderStaffId)
-		}
-	default:
-
-	}
-	return nil
-}
-
-func SingleQa(question, userId string) (answer string, err error) {
-	chat := chatgpt.New(userId)
-	defer chat.Close()
-	// 定义一个重试策略
-	retryStrategy := []retry.Option{
-		retry.Delay(100 * time.Millisecond),
-		retry.Attempts(3),
-		retry.LastErrorOnly(true),
-	}
-	// 使用重试策略进行重试
-	err = retry.Do(
-		func() error {
-			answer, err = chat.ChatWithContext(question)
-			if err != nil {
-				return err
-			}
-			return nil
-		},
-		retryStrategy...)
-	return
-}
-
-func ContextQa(question, userId string) (chat *chatgpt.ChatGPT, answer string, err error) {
-	chat = chatgpt.New(userId)
-	if public.UserService.GetUserSessionContext(userId) != "" {
-		err := chat.ChatContext.LoadConversation(userId)
-		if err != nil {
-			logger.Warning("load station failed: %v\n", err)
-		}
-	}
-	retryStrategy := []retry.Option{
-		retry.Delay(100 * time.Millisecond),
-		retry.Attempts(3),
-		retry.LastErrorOnly(true)}
-	// 使用重试策略进行重试
-	err = retry.Do(
-		func() error {
-			answer, err = chat.ChatWithContext(question)
-			if err != nil {
-				return err
-			}
-			return nil
-		},
-		retryStrategy...)
-	return
 }

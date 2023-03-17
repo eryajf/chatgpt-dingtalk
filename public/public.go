@@ -4,15 +4,15 @@ import (
 	"strings"
 
 	"github.com/eryajf/chatgpt-dingtalk/config"
-	"github.com/eryajf/chatgpt-dingtalk/service"
+	"github.com/eryajf/chatgpt-dingtalk/pkg/cache"
 )
 
-var UserService service.UserServiceInterface
+var UserService cache.UserServiceInterface
 var Config *config.Configuration
 
 func InitSvc() {
 	Config = config.LoadConfig()
-	UserService = service.NewUserService()
+	UserService = cache.NewUserService()
 	_, _ = GetBalance()
 }
 

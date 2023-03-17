@@ -25,6 +25,8 @@ type Configuration struct {
 	DefaultMode string `json:"default_mode"`
 	// 代理地址
 	HttpProxy string `json:"http_proxy"`
+	// 用户单日最大请求次数
+	MaxRequest int `json:"max_request"`
 }
 
 var config *Configuration
@@ -54,6 +56,7 @@ func LoadConfig() *Configuration {
 		sessionTimeout := os.Getenv("SESSION_TIMEOUT")
 		defaultMode := os.Getenv("DEFAULT_MODE")
 		httpProxy := os.Getenv("HTTP_PROXY")
+		maxRequest := os.Getenv("MAX_REQUEST")
 		if apiKey != "" {
 			config.ApiKey = apiKey
 		}
@@ -78,6 +81,10 @@ func LoadConfig() *Configuration {
 		}
 		if model != "" {
 			config.Model = model
+		}
+		if maxRequest != "" {
+			newMR, _ := strconv.Atoi(maxRequest)
+			config.MaxRequest = newMR
 		}
 	})
 	if config.Model == "" {
