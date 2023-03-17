@@ -82,7 +82,7 @@
 
 ```sh
 # 运行项目
-$ docker run -itd --name chatgpt -p 8090:8090 --add-host="host.docker.internal:host-gateway" -e APIKEY=换成你的key -e BASE_URL="" -e MODEL="gpt-3.5-turbo" -e SESSION_TIMEOUT=600 -e HTTP_PROXY="http://host.docker.internal:15732" -e DEFAULT_MODE="单聊" --restart=always  dockerproxy.com/eryajf/chatgpt-dingtalk:latest
+$ docker run -itd --name chatgpt -p 8090:8090 --add-host="host.docker.internal:host-gateway" -e APIKEY=换成你的key -e BASE_URL="" -e MODEL="gpt-3.5-turbo" -e SESSION_TIMEOUT=600 -e HTTP_PROXY="http://host.docker.internal:15732" -e DEFAULT_MODE="单聊" -e MAX_REQUEST=0 --restart=always  dockerproxy.com/eryajf/chatgpt-dingtalk:latest
 ```
 
 `📢 注意：`如果使用docker部署，那么proxy地址可以直接使用如上方式部署，`host.docker.internal`会指向容器所在宿主机的IP，只需要更改端口为你的代理端口即可。参见：[Docker容器如何优雅地访问宿主机网络](https://wiki.eryajf.net/pages/674f53/)
@@ -243,7 +243,8 @@ $ go run main.go
     "model": "gpt-3.5-turbo", // 指定模型，默认为 gpt-3.5-turbo , 可选参数有： "gpt-4-32k-0314", "gpt-4-32k", "gpt-4-0314", "gpt-4", "gpt-3.5-turbo-0301", "gpt-3.5-turbo", "text-davinci-003", "text-davinci-002", "text-curie-001", "text-babbage-001", "text-ada-001", "text-davinci-001", "davinci-instruct-beta", "davinci", "curie-instruct-beta", "curie", "ada", "babbage"
     "session_timeout": 600,   // 会话超时时间,默认600秒,在会话时间内所有发送给机器人的信息会作为上下文
     "http_proxy": "",         // 指定请求时使用的代理，如果为空，则不使用代理
-    "default_mode": "单聊"    // 默认对话模式，可根据实际场景自定义，如果不设置，默认为单聊
+    "default_mode": "单聊",    // 默认对话模式，可根据实际场景自定义，如果不设置，默认为单聊
+    "max_request": 0    // 单人单日请求次数限制，默认为0，即不限制
 }
 ```
 
