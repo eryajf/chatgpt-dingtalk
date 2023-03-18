@@ -200,6 +200,12 @@ $ curl --location --request POST 'http://chat.eryajf.net/' \
 
 ![image_20221209_163739](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20221209_163739.png)
 
+`通过内置prompt聊天`
+
+![image_20230318_093225](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230318_093225.jpg)
+
+> 如果你发现有比较优秀的prompt，欢迎PR。注意：一些与钉钉使用场景不是很匹配的，就不要提交了。
+
 ---
 
 如果你想通过命令行直接部署，可以直接下载release中的[压缩包](https://github.com/eryajf/chatgpt-dingtalk/releases) ，请根据自己系统以及架构选择合适的压缩包，下载之后直接解压运行。
