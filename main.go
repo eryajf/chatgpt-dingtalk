@@ -26,12 +26,11 @@ var Welcome string = `Commands:
 🔃 重置 👉 重置带上下文聊天
 💵 余额 👉 查询剩余额度
 🚀 帮助 👉 显示帮助信息
+🌈 模板 👉 内置的prompt
 =================================
 🚜 例：@我发送 空 或 帮助 将返回此帮助信息
 💪 Power By https://github.com/eryajf/chatgpt-dingtalk
 `
-
-// 💵 余额 👉 查看接口可调用额度
 
 func Start() {
 	// 定义一个处理器函数
@@ -55,6 +54,7 @@ func Start() {
 			logger.Warning("从钉钉回调过来的内容为空，根据过往的经验，或许重新创建一下机器人，能解决这个问题")
 			return
 		}
+
 		// TODO: 校验请求
 		if len(msgObj.Text.Content) == 1 || strings.TrimSpace(msgObj.Text.Content) == "帮助" {
 			// 欢迎信息
@@ -63,6 +63,7 @@ func Start() {
 				logger.Warning(fmt.Errorf("send message error: %v", err))
 			}
 		} else {
+			msgObj.Text.Content = process.GeneratePrompt(msgObj.Text.Content)
 			logger.Info(fmt.Sprintf("dingtalk callback parameters: %#v", msgObj))
 			err = process.ProcessRequest(*msgObj)
 			if err != nil {
