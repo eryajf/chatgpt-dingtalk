@@ -34,6 +34,11 @@ func ProcessRequest(rmsg public.ReceiveMsg) error {
 			if err != nil {
 				logger.Warning(fmt.Errorf("send message error: %v", err))
 			}
+		case "模板":
+			_, err := rmsg.ReplyText(fmt.Sprintf("%s 您好，当前程序内置集成了这些prompt：\n====================================\n| #周报 | #前端 | #架构师 | #产品经理 | #网络安全 | #正则 | #招聘 | #知乎 | #翻译 | #小红书 | #解梦 | \n====================================\n你可以选择某个prompt开头，然后进行对话。\n以周报为例，可发送 #周报 我本周用Go写了一个钉钉集成ChatGPT的聊天应用", rmsg.SenderNick), rmsg.SenderStaffId)
+			if err != nil {
+				logger.Warning(fmt.Errorf("send message error: %v", err))
+			}
 		case "余额":
 			cacheMsg := public.UserService.GetUserMode("system_balance")
 			if cacheMsg == "" {

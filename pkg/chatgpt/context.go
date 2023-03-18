@@ -169,7 +169,11 @@ func (c *ChatGPT) ChatWithContext(question string) (answer string, err error) {
 					Role:    "user",
 					Content: prompt,
 				},
-			}}
+			},
+			MaxTokens:   3072,
+			Temperature: 0.6,
+			User:        c.userId,
+		}
 		resp, err := c.client.CreateChatCompletion(c.ctx, req)
 		if err != nil {
 			return "", err
@@ -187,16 +191,12 @@ func (c *ChatGPT) ChatWithContext(question string) (answer string, err error) {
 		return resp.Choices[0].Message.Content, nil
 	} else {
 		req := openai.CompletionRequest{
-			Model:            model,
-			MaxTokens:        c.maxAnswerLen,
-			Prompt:           prompt,
-			Temperature:      0.9,
-			TopP:             1,
-			N:                1,
-			FrequencyPenalty: 0,
-			PresencePenalty:  0.5,
-			User:             c.userId,
-			Stop:             []string{c.ChatContext.aiRole.Name + ":", c.ChatContext.humanRole.Name + ":"},
+			Model:       model,
+			MaxTokens:   c.maxAnswerLen,
+			Prompt:      prompt,
+			Temperature: 0.6,
+			User:        c.userId,
+			Stop:        []string{c.ChatContext.aiRole.Name + ":", c.ChatContext.humanRole.Name + ":"},
 		}
 		resp, err := c.client.CreateCompletion(c.ctx, req)
 		if err != nil {
