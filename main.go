@@ -63,7 +63,7 @@ func Start() {
 				logger.Warning(fmt.Errorf("send message error: %v", err))
 			}
 		} else {
-			msgObj.Text.Content = process.GeneratePrompt(msgObj.Text.Content)
+			msgObj.Text.Content = process.GeneratePrompt(strings.TrimSpace(msgObj.Text.Content))
 			logger.Info(fmt.Sprintf("dingtalk callback parameters: %#v", msgObj))
 			err = process.ProcessRequest(*msgObj)
 			if err != nil {
