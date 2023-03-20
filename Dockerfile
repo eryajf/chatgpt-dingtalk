@@ -20,6 +20,6 @@ RUN mkdir /app && apk upgrade \
 
 WORKDIR /app
 COPY --from=builder /app/ .
-RUN chmod +x chatgpt-dingtalk && cp config.dev.json config.json && cp prompt.yml prompt.yml
+RUN chmod +x chatgpt-dingtalk && cp config.dev.json config.json
 
 CMD ./chatgpt-dingtalk
