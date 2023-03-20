@@ -9,9 +9,11 @@ import (
 
 var UserService cache.UserServiceInterface
 var Config *config.Configuration
+var Prompt *[]config.Prompt
 
 func InitSvc() {
 	Config = config.LoadConfig()
+	Prompt = config.LoadPrompt()
 	UserService = cache.NewUserService()
 	_, _ = GetBalance()
 }
