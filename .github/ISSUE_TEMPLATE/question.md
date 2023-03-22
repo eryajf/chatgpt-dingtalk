@@ -1,7 +1,7 @@
 ---
 name: 🙋 问题交流
 about: 有任何问题，都可以在这里交流。
-title: "🙋 问题交流"
+title: "🙋 简明扼要起个标题"
 labels: ["question"]
 ---
 
