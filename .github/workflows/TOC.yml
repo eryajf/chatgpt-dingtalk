@@ -9,4 +9,3 @@ jobs:
         with:
           TOC_TITLE: "**目录**"
           MAX_HEADER_LEVEL: 3
-          FOLDING: true
