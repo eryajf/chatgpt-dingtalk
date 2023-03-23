@@ -1,15 +1,14 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
-	"net/http"
+	"path/filepath"
 	"strings"
 
 	"github.com/eryajf/chatgpt-dingtalk/pkg/process"
 	"github.com/eryajf/chatgpt-dingtalk/public"
 	"github.com/eryajf/chatgpt-dingtalk/public/logger"
+	"github.com/xgfone/ship/v5"
 )
 
 func init() {
@@ -27,61 +26,53 @@ var Welcome string = `Commands:
 💵 余额 👉 查询剩余额度
 🚀 帮助 👉 显示帮助信息
 🌈 模板 👉 内置的prompt
+🎨 图片 👉 根据prompt生成图片
 =================================
 🚜 例：@我发送 空 或 帮助 将返回此帮助信息
 💪 Power By https://github.com/eryajf/chatgpt-dingtalk
 `
 
 func Start() {
-	// 定义一个处理器函数
-	handler := func(w http.ResponseWriter, r *http.Request) {
-		data, err := ioutil.ReadAll(r.Body)
+	app := ship.Default()
+	app.Route("/").POST(func(c *ship.Context) error {
+		var msgObj public.ReceiveMsg
+		err := c.Bind(&msgObj)
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
-			logger.Warning(fmt.Sprintf("read request body failed: %v\n", err.Error()))
-			return
-		}
-		if len(data) == 0 {
-			logger.Warning("回调参数为空，以至于无法正常解析，请检查原因")
-			return
-		}
-		var msgObj = new(public.ReceiveMsg)
-		err = json.Unmarshal(data, &msgObj)
-		if err != nil {
-			logger.Warning(fmt.Errorf("unmarshal request body failed: %v", err))
+			return ship.ErrBadRequest.New(fmt.Errorf("bind to receivemsg failed : %v", err))
 		}
 		if msgObj.Text.Content == "" || msgObj.ChatbotUserID == "" {
 			logger.Warning("从钉钉回调过来的内容为空，根据过往的经验，或许重新创建一下机器人，能解决这个问题")
-			return
+			return ship.ErrBadRequest.New(fmt.Errorf("从钉钉回调过来的内容为空，根据过往的经验，或许重新创建一下机器人，能解决这个问题"))
 		}
-
+		// 打印钉钉回调过来的请求明细
+		logger.Info(fmt.Sprintf("dingtalk callback parameters: %#v", msgObj))
 		// TODO: 校验请求
 		if len(msgObj.Text.Content) == 1 || strings.TrimSpace(msgObj.Text.Content) == "帮助" {
 			// 欢迎信息
-			_, err := msgObj.ReplyText(Welcome, msgObj.SenderStaffId)
+			_, err := msgObj.ReplyToDingtalk(string(public.TEXT), Welcome, msgObj.SenderStaffId)
 			if err != nil {
 				logger.Warning(fmt.Errorf("send message error: %v", err))
+				return ship.ErrBadRequest.New(fmt.Errorf("send message error: %v", err))
 			}
 		} else {
-			msgObj.Text.Content = process.GeneratePrompt(strings.TrimSpace(msgObj.Text.Content))
-			logger.Info(fmt.Sprintf("dingtalk callback parameters: %#v", msgObj))
-			err = process.ProcessRequest(*msgObj)
-			if err != nil {
-				logger.Warning(fmt.Errorf("process request failed: %v", err))
+			// 除去帮助之外的逻辑分流在这里处理
+			switch {
+			case strings.HasPrefix(strings.TrimSpace(msgObj.Text.Content), "#图片"):
+				return process.ImageGenerate(&msgObj)
+			default:
+				msgObj.Text.Content = process.GeneratePrompt(strings.TrimSpace(msgObj.Text.Content))
+				return process.ProcessRequest(&msgObj)
 			}
 		}
-	}
-
-	// 创建一个新的 HTTP 服务器
-	server := &http.Server{
-		Addr:    ":8090",
-		Handler: http.HandlerFunc(handler),
-	}
+		return nil
+	})
+	// 解析生成后的图片
+	app.Route("/images/:filename").GET(func(c *ship.Context) error {
+		filename := c.Param("filename")
+		root := "./images/"
+		return c.File(filepath.Join(root, filename))
+	})
 
 	// 启动服务器
-	logger.Info("Start Listen On ", server.Addr)
-	err := server.ListenAndServe()
-	if err != nil {
-		logger.Danger(err)
-	}
+	ship.StartServer(":8090", app)
 }

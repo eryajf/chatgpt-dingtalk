@@ -12,45 +12,73 @@ type ReceiveMsg struct {
 	AtUsers        []struct {
 		DingtalkID string `json:"dingtalkId"`
 	} `json:"atUsers"`
-	ChatbotUserID             string `json:"chatbotUserId"`
-	MsgID                     string `json:"msgId"`
-	SenderNick                string `json:"senderNick"`
-	IsAdmin                   bool   `json:"isAdmin"`
-	SenderStaffId             string `json:"senderStaffId"`
-	SessionWebhookExpiredTime int64  `json:"sessionWebhookExpiredTime"`
-	CreateAt                  int64  `json:"createAt"`
-	ConversationType          string `json:"conversationType"`
-	SenderID                  string `json:"senderId"`
-	ConversationTitle         string `json:"conversationTitle"`
-	IsInAtList                bool   `json:"isInAtList"`
-	SessionWebhook            string `json:"sessionWebhook"`
-	Text                      Text   `json:"text"`
-	RobotCode                 string `json:"robotCode"`
-	Msgtype                   string `json:"msgtype"`
+	ChatbotUserID             string  `json:"chatbotUserId"`
+	MsgID                     string  `json:"msgId"`
+	SenderNick                string  `json:"senderNick"`
+	IsAdmin                   bool    `json:"isAdmin"`
+	SenderStaffId             string  `json:"senderStaffId"`
+	SessionWebhookExpiredTime int64   `json:"sessionWebhookExpiredTime"`
+	CreateAt                  int64   `json:"createAt"`
+	ConversationType          string  `json:"conversationType"`
+	SenderID                  string  `json:"senderId"`
+	ConversationTitle         string  `json:"conversationTitle"`
+	IsInAtList                bool    `json:"isInAtList"`
+	SessionWebhook            string  `json:"sessionWebhook"`
+	Text                      Text    `json:"text"`
+	RobotCode                 string  `json:"robotCode"`
+	Msgtype                   MsgType `json:"msgtype"`
 }
 
+// 消息类型
+type MsgType string
 
-// 发送的消息体
-type SendMsg struct {
-	Text    Text   `json:"text"`
-	Msgtype string `json:"msgtype"`
-	At 		At `json:"at"`
+const TEXT MsgType = "text"
+const MARKDOWN MsgType = "markdown"
+
+// Text 消息
+type TextMessage struct {
+	MsgType MsgType `json:"msgtype"`
+	At      *At     `json:"at"`
+	Text    *Text   `json:"text"`
 }
 
-// 消息内容
+// Text 消息内容
 type Text struct {
 	Content string `json:"content"`
+}
+
+// MarkDown 消息
+type MarkDownMessage struct {
+	MsgType  MsgType   `json:"msgtype"`
+	At       *At       `json:"at"`
+	MarkDown *MarkDown `json:"markdown"`
+}
+
+// MarkDown 消息内容
+type MarkDown struct {
+	Title string `json:"title"`
+	Text  string `json:"text"`
 }
 
 // at 内容
 type At struct {
 	AtUserIds []string `json:"atUserIds"`
+	AtMobiles []string `json:"atMobiles"`
+	IsAtAll   bool     `json:"isAtAll"`
 }
 
 // 发消息给钉钉
-func (r ReceiveMsg) ReplyText(msg string, staffId string) (statuscode int, err error) {
-	// 定义消息
-	msgtmp := &SendMsg{Text: Text{Content: msg}, Msgtype: "text", At: At{AtUserIds: []string{staffId}}}
+func (r ReceiveMsg) ReplyToDingtalk(msgType, msg, staffId string) (statuscode int, err error) {
+	var msgtmp interface{}
+	switch msgType {
+	case string(TEXT):
+		msgtmp = &TextMessage{Text: &Text{Content: msg}, MsgType: TEXT, At: &At{AtUserIds: []string{staffId}}}
+	case string(MARKDOWN):
+		msgtmp = &MarkDownMessage{MsgType: MARKDOWN, At: &At{AtUserIds: []string{staffId}}, MarkDown: &MarkDown{Title: "根据您提供的信息，为您生成图片如下", Text: msg}}
+	default:
+		msgtmp = &TextMessage{Text: &Text{Content: msg}, MsgType: TEXT, At: &At{AtUserIds: []string{staffId}}}
+	}
+
 	data, err := json.Marshal(msgtmp)
 	if err != nil {
 		return 0, err

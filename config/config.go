@@ -27,6 +27,8 @@ type Configuration struct {
 	HttpProxy string `json:"http_proxy"`
 	// 用户单日最大请求次数
 	MaxRequest int `json:"max_request"`
+	// 指定服务的地址，就是钉钉机器人配置的回调地址，比如: http://chat.eryajf.net
+	ServiceURL string `json:"service_url"`
 }
 
 var config *Configuration
@@ -57,6 +59,7 @@ func LoadConfig() *Configuration {
 		defaultMode := os.Getenv("DEFAULT_MODE")
 		httpProxy := os.Getenv("HTTP_PROXY")
 		maxRequest := os.Getenv("MAX_REQUEST")
+		serviceURL := os.Getenv("SERVICE_URL")
 		if apiKey != "" {
 			config.ApiKey = apiKey
 		}
@@ -86,6 +89,9 @@ func LoadConfig() *Configuration {
 			newMR, _ := strconv.Atoi(maxRequest)
 			config.MaxRequest = newMR
 		}
+		if serviceURL != "" {
+			config.ServiceURL = serviceURL
+		}
 	})
 	if config.Model == "" {
 		config.DefaultMode = "gpt-3.5-turbo"
@@ -95,6 +101,9 @@ func LoadConfig() *Configuration {
 	}
 	if config.ApiKey == "" {
 		logger.Danger("config err: api key required")
+	}
+	if config.ServiceURL == "" {
+		logger.Danger("config err: service url required")
 	}
 	return config
 }
