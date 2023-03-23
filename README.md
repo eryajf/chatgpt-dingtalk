@@ -15,6 +15,8 @@
 <img src="https://camo.githubusercontent.com/82291b0fe831bfc6781e07fc5090cbd0a8b912bb8b8d4fec0696c881834f81ac/68747470733a2f2f70726f626f742e6d656469612f394575424971676170492e676966" width="800"  height="3">
 </div><br>
 
+<!-- START doctoc -->
+<!-- END doctoc -->
 
 ## 前言
 
@@ -42,6 +44,7 @@
 - 支持自定义指定的模型，通过配置化指定。
 - 支持自定义默认的聊天模式，通过配置化指定。
 - 支持自定义单个用户单日对话次数，通过配置化指定。
+- 支持生成图片，通过发送 `#图片`关键字开头的内容进行生成。
 - 支持通过内置prompt进行对话。欢迎提交你认为不错的prompt，请通过编辑[此文件](https://github.com/eryajf/chatgpt-dingtalk/blob/main/prompt.yml)来提交PR。
 
 ## 使用前提
@@ -81,20 +84,18 @@
 
 你可以使用docker快速运行本项目。
 
-`第一种：基于环境变量运行`
-
-```sh
+```
+第一种：基于环境变量运行
 # 运行项目
-$ docker run -itd --name chatgpt -p 8090:8090 --add-host="host.docker.internal:host-gateway" -e APIKEY=换成你的key -e BASE_URL="" -e MODEL="gpt-3.5-turbo" -e SESSION_TIMEOUT=600 -e HTTP_PROXY="http://host.docker.internal:15732" -e DEFAULT_MODE="单聊" -e MAX_REQUEST=0 --restart=always  dockerproxy.com/eryajf/chatgpt-dingtalk:latest
+$ docker run -itd --name chatgpt -p 8090:8090 --add-host="host.docker.internal:host-gateway" -e APIKEY=换成你的key -e BASE_URL="" -e MODEL="gpt-3.5-turbo" -e SESSION_TIMEOUT=600 -e HTTP_PROXY="http://host.docker.internal:15732" -e DEFAULT_MODE="单聊" -e MAX_REQUEST=0 -e SERVICE_URL="你当前服务外网可访问的URL" --restart=always  dockerproxy.com/eryajf/chatgpt-dingtalk:latest
 ```
 
 `📢 注意：`如果使用docker部署，那么proxy地址可以直接使用如上方式部署，`host.docker.internal`会指向容器所在宿主机的IP，只需要更改端口为你的代理端口即可。参见：[Docker容器如何优雅地访问宿主机网络](https://wiki.eryajf.net/pages/674f53/)
 
 运行命令中映射的配置文件参考下边的配置文件说明。
 
-`第二种：基于配置文件挂载运行`
-
-```sh
+```
+第二种：基于配置文件挂载运行
 # 复制配置文件，根据自己实际情况，调整配置里的内容
 $ cp config.dev.json config.json  # 其中 config.dev.json 从项目的根目录获取
 
@@ -104,9 +105,8 @@ $ docker run -itd --name chatgpt -p 8090:8090  -v `pwd`/config.json:/app/config.
 
 其中配置文件参考下边的配置文件说明。
 
-`第三种：使用 docker compose 运行`
-
-```sh
+```
+第三种：使用 docker compose 运行
 $ wget https://raw.githubusercontent.com/eryajf/chatgpt-dingtalk/main/docker-compose.yml
 
 $ nano docker-compose.yml # 编辑 APIKEY 等信息
@@ -174,48 +174,14 @@ $ curl --location --request POST 'http://chat.eryajf.net/' \
 
 如果手动请求没有问题，那么就可以在钉钉群里与机器人进行对话了。
 
-`2023-03-08`补充，我发现也可以不在群里艾特机器人聊天，还可点击机器人，然后点击发消息，通过与机器人直接对话进行聊天：
-
-![image](https://user-images.githubusercontent.com/33259379/223607306-2ac836a2-7ce5-4a12-a16e-bec40b22d8d6.png)
-
-`帮助列表`
-
-> 艾特机器人发送空内容或者帮助，会返回帮助列表。
-
-![image_20230216_221253](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230216_221253.png)
-
-`切换模式`
-
-> 发送指定关键字，可以切换不同的模式。
-
-![image_20230215_184655](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230215_184655.png)
-
-> 📢 注意：串聊模式下，群里每个人的聊天上下文是独立的。
-> 📢 注意：默认对话模式为单聊，因此不必发送单聊即可进入单聊模式，而要进入串聊，则需要发送串聊关键字进行切换，当串聊内容超过最大限制的时候，你可以发送重置，然后再次进入串聊模式。
-
-`查询余额`
-
-> 艾特机器人发送 `余额` 二字，会返回当前key对应的账号的剩余额度以及可用日期。
-
-![image_20230304_222522](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230304_222522.jpg)
-
-`实际聊天效果如下`
-
-![image_20221209_163739](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20221209_163739.png)
-
-`通过内置prompt聊天`
-
-![image_20230318_093225](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230318_093225.jpg)
-
-> 如果你发现有比较优秀的prompt，欢迎PR。注意：一些与钉钉使用场景不是很匹配的，就不要提交了。
-
 ---
+
 
 如果你想通过命令行直接部署，可以直接下载release中的[压缩包](https://github.com/eryajf/chatgpt-dingtalk/releases) ，请根据自己系统以及架构选择合适的压缩包，下载之后直接解压运行。
 
 下载之后，在本地解压，即可看到可执行程序，与配置文件：
 
-```
+```sh
 $ tar xf chatgpt-dingtalk-v0.0.4-darwin-arm64.tar.gz
 $ cd chatgpt-dingtalk-v0.0.4-darwin-arm64
 $ cp config.dev.json  config.json # 然后根据情况调整配置文件内容
@@ -226,6 +192,56 @@ $ nohup ./chatgpt-dingtalk &> run.log &
 $ tail -f run.log
 ```
 
+## 亮点特色
+
+### 与机器人单聊
+
+`2023-03-08`补充，我发现也可以不在群里艾特机器人聊天，还可点击机器人，然后点击发消息，通过与机器人直接对话进行聊天：
+
+> 由 [@Raytow](https://github.com/Raytow) 同学发现，在机器人自动生成的测试群里无法直接私聊机器人，在其他群里单独添加这个机器人，然后再点击就可以跟它私聊了。
+
+![image](https://user-images.githubusercontent.com/33259379/223607306-2ac836a2-7ce5-4a12-a16e-bec40b22d8d6.png)
+
+### 帮助列表
+
+> 艾特机器人发送空内容或者帮助，会返回帮助列表。
+
+![image_20230216_221253](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230216_221253.png)
+
+### 切换模式
+
+> 发送指定关键字，可以切换不同的模式。
+
+![image_20230215_184655](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230215_184655.png)
+
+> 📢 注意：串聊模式下，群里每个人的聊天上下文是独立的。
+> 📢 注意：默认对话模式为单聊，因此不必发送单聊即可进入单聊模式，而要进入串聊，则需要发送串聊关键字进行切换，当串聊内容超过最大限制的时候，你可以发送重置，然后再次进入串聊模式。
+
+### 查询余额
+
+> 艾特机器人发送 `余额` 二字，会返回当前key对应的账号的剩余额度以及可用日期。
+
+![image_20230304_222522](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230304_222522.jpg)
+
+### 日常问题
+
+![image_20221209_163739](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20221209_163739.png)
+
+### 通过内置prompt聊天
+
+> 发送模板两个字，会返回当前内置支持的prompt列表。
+
+![image_20230323_152703](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230323_152703.jpg)
+
+> 如果你发现有比较优秀的prompt，欢迎PR。注意：一些与钉钉使用场景不是很匹配的，就不要提交了。
+
+### 生成图片
+
+> 发送以 `#图片`开头的内容，将会触发绘画能力，图片生成之后，将会保存在程序根目录下的`images目录`下。
+>
+> 如果你绘图没有思路，可以在[这里 https://www.clickprompt.org/zh-CN/](https://www.clickprompt.org/zh-CN/)以及[这里 https://lexica.art/](https://lexica.art/)找到一些不错的prompt。
+
+![image_20230323_150547](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230323_150547.jpg)
 
 ## 本地开发
 
@@ -254,6 +270,7 @@ $ go run main.go
     "http_proxy": "",         // 指定请求时使用的代理，如果为空，则不使用代理
     "default_mode": "单聊",    // 默认对话模式，可根据实际场景自定义，如果不设置，默认为单聊
     "max_request": 0    // 单人单日请求次数限制，默认为0，即不限制
+    "service_url": "" // 指定服务的地址，就是当前服务可供外网访问的地址，用于生成图片时给钉钉渲染
 }
 ```
 
@@ -261,11 +278,11 @@ $ go run main.go
 
 如何更好地使用ChatGPT：这里有[许多案例](https://github.com/f/awesome-chatgpt-prompts)可供参考。
 
-一些常见的问题，我单独开issue放在这里：[点我](https://github.com/eryajf/chatgpt-dingtalk/issues/44)，可以查看这里辅助你解决问题，如果里边没有，请对历史issue进行搜索(不要提交重复的issue)，也欢迎大家补充。
+`🗣 重要重要` 一些常见的问题，我单独开issue放在这里：[👉点我👈](https://github.com/eryajf/chatgpt-dingtalk/issues/44)，可以查看这里辅助你解决问题，如果里边没有，请对历史issue进行搜索(不要提交重复的issue)，也欢迎大家补充。
 
 ## 高光时刻
 
-> 本项目曾在 | [2022-12-12](https://github.com/bonfy/github-trending/blob/master/2022/2022-12-12.md#go) | [2022-12-18](https://github.com/bonfy/github-trending/blob/master/2022/2022-12-18.md#go) | [2022-12-19](https://github.com/bonfy/github-trending/blob/master/2022/2022-12-19.md#go) | [2022-12-20](https://github.com/bonfy/github-trending/blob/master/2022/2022-12-20.md#go) | [2023-02-09](https://github.com/bonfy/github-trending/blob/master/2023-02-09.md#go) | [2023-02-10](https://github.com/bonfy/github-trending/blob/master/2023-02-10.md#go) | [2023-02-11](https://github.com/bonfy/github-trending/blob/master/2023-02-11.md#go) | [2023-02-12](https://github.com/bonfy/github-trending/blob/master/2023-02-12.md#go) | [2023-02-13](https://github.com/bonfy/github-trending/blob/master/2023-02-13.md#go) | [2023-02-14](https://github.com/bonfy/github-trending/blob/master/2023-02-14.md#go) | [2023-02-15](https://github.com/bonfy/github-trending/blob/master/2023-02-15.md#go) | [2023-03-04](https://github.com/bonfy/github-trending/blob/master/2023-03-04.md#go) | [2023-03-05](https://github.com/bonfy/github-trending/blob/master/2023-03-05.md#go) | [2023-03-19](https://github.com/bonfy/github-trending/blob/master/2023-03-19.md#go) | [2023-03-22](https://github.com/bonfy/github-trending/blob/master/2023-03-22.md#go), 这些天里，登上GitHub Trending。而且还在持续登榜中，可见最近openai的热度。
+> 本项目曾在 | [2022-12-12](https://github.com/bonfy/github-trending/blob/master/2022/2022-12-12.md#go) | [2022-12-18](https://github.com/bonfy/github-trending/blob/master/2022/2022-12-18.md#go) | [2022-12-19](https://github.com/bonfy/github-trending/blob/master/2022/2022-12-19.md#go) | [2022-12-20](https://github.com/bonfy/github-trending/blob/master/2022/2022-12-20.md#go) | [2023-02-09](https://github.com/bonfy/github-trending/blob/master/2023-02-09.md#go) | [2023-02-10](https://github.com/bonfy/github-trending/blob/master/2023-02-10.md#go) | [2023-02-11](https://github.com/bonfy/github-trending/blob/master/2023-02-11.md#go) | [2023-02-12](https://github.com/bonfy/github-trending/blob/master/2023-02-12.md#go) | [2023-02-13](https://github.com/bonfy/github-trending/blob/master/2023-02-13.md#go) | [2023-02-14](https://github.com/bonfy/github-trending/blob/master/2023-02-14.md#go) | [2023-02-15](https://github.com/bonfy/github-trending/blob/master/2023-02-15.md#go) | [2023-03-04](https://github.com/bonfy/github-trending/blob/master/2023-03-04.md#go) | [2023-03-05](https://github.com/bonfy/github-trending/blob/master/2023-03-05.md#go) | [2023-03-19](https://github.com/bonfy/github-trending/blob/master/2023-03-19.md#go) | [2023-03-22](https://github.com/bonfy/github-trending/blob/master/2023-03-22.md#go) | [2023-03-23](https://github.com/bonfy/github-trending/blob/master/2023-03-23.md#go), 这些天里，登上GitHub Trending。而且还在持续登榜中，可见最近openai的热度。
 > ![image_20230316_114915](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230316_114915.jpg)
 
 ## 赞赏

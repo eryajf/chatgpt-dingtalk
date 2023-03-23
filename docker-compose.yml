@@ -7,12 +7,13 @@ services:
     restart: always
     environment:
       APIKEY: xxxxxx  # 你的 api_key
-      BASE_URL: xxxxxx  # 如果你想指定请求url的地址，可通过这个参数进行配置，默认为官方地址，不需要再添加 /v1
+      BASE_URL: xxxxxx  # 如果你想指定请求url的地址，可通过这个参数进行配置，不需要再添加 /v1，如果留空则默认为官方地址，
       MODEL: "gpt-3.5-turbo" # 指定模型
       SESSION_TIMEOUT: 600 # 超时时间
-      HTTP_PROXY: http://host.docker.internal:15777 # 配置代理，注意：host.docker.internal会解析到容器所在的宿主机IP，如果你的服务部署在宿主机，只需要更改端口即可
+      HTTP_PROXY: http://host.docker.internal:15777 # 配置代理，注意：host.docker.internal会解析到容器所在的宿主机IP，因此只需要更改端口即可，另外如果服务器在国外，则这里留空即可
       DEFAULT_MODE: "单聊" # 聊天模式
       MAX_REQUEST: 0 # 单人单日请求次数限制，默认为0，即不限制
+      SERVICE_URL: ""  # 指定服务的地址，就是钉钉机器人配置的回调地址，比如: http://chat.eryajf.net
     ports:
       - "8090:8090"
     extra_hosts:

@@ -5,5 +5,6 @@
     "session_timeout": 600,
     "http_proxy": "",
     "default_mode": "单聊",
-    "max_request": 0
+    "max_request": 0,
+    "service_url": "http://chat.eryajf.net"
 }

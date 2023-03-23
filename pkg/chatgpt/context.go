@@ -2,9 +2,12 @@ package chatgpt
 
 import (
 	"bytes"
+	"encoding/base64"
 	"encoding/gob"
-	"fmt"
+	"image/png"
+	"os"
 	"strings"
+	"time"
 
 	"github.com/eryajf/chatgpt-dingtalk/public"
 	openai "github.com/sashabaranov/go-openai"
@@ -52,9 +55,9 @@ func NewContext(options ...ChatContextOption) *ChatContext {
 	ctx := &ChatContext{
 		aiRole:           &role{Name: DefaultAiRole},
 		humanRole:        &role{Name: DefaultHumanRole},
-		background:       fmt.Sprintf(DefaultBackground, strings.Join(DefaultCharacter, ", ")+"."),
+		background:       "",
 		maxSeqTimes:      1000,
-		preset:           fmt.Sprintf(DefaultPreset, DefaultHumanRole, DefaultAiRole),
+		preset:           "",
 		old:              []conversation{},
 		seqTimes:         0,
 		restartSeq:       "\n" + DefaultHumanRole + ": ",
@@ -156,7 +159,6 @@ func (c *ChatGPT) ChatWithContext(question string) (answer string, err error) {
 	if len(prompt) > c.maxText-c.maxAnswerLen {
 		return "", OverMaxTextLength
 	}
-
 	model := public.Config.Model
 	if model == openai.GPT3Dot5Turbo0301 ||
 		model == openai.GPT3Dot5Turbo ||
@@ -214,6 +216,53 @@ func (c *ChatGPT) ChatWithContext(question string) (answer string, err error) {
 		c.ChatContext.seqTimes++
 		return resp.Choices[0].Text, nil
 	}
+}
+func (c *ChatGPT) GenreateImage(prompt string) (string, error) {
+	model := public.Config.Model
+	if model == openai.GPT3Dot5Turbo0301 ||
+		model == openai.GPT3Dot5Turbo ||
+		model == openai.GPT4 || model == openai.GPT40314 ||
+		model == openai.GPT432K || model == openai.GPT432K0314 {
+		req := openai.ImageRequest{
+			Prompt:         prompt,
+			Size:           openai.CreateImageSize1024x1024,
+			ResponseFormat: openai.CreateImageResponseFormatB64JSON,
+			N:              1,
+			User:           c.userId,
+		}
+		respBase64, err := c.client.CreateImage(c.ctx, req)
+		if err != nil {
+			return "", err
+		}
+		imgBytes, err := base64.StdEncoding.DecodeString(respBase64.Data[0].B64JSON)
+		if err != nil {
+			return "", err
+		}
+
+		r := bytes.NewReader(imgBytes)
+		imgData, err := png.Decode(r)
+		if err != nil {
+			return "", err
+		}
+
+		imageName := time.Now().Format("20060102-150405") + ".png"
+		err = os.MkdirAll("images", 0755)
+		if err != nil {
+			return "", err
+		}
+		file, err := os.Create("images/" + imageName)
+		if err != nil {
+			return "", err
+		}
+		defer file.Close()
+
+		if err := png.Encode(file, imgData); err != nil {
+			return "", err
+		}
+
+		return public.Config.ServiceURL + "/images/" + imageName, nil
+	}
+	return "", nil
 }
 
 func WithMaxSeqTimes(times int) ChatContextOption {

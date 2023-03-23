@@ -6,6 +6,7 @@ require (
 	github.com/go-resty/resty/v2 v2.7.0
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/solywsh/chatgpt v0.0.14
+	github.com/xgfone/ship/v5 v5.3.1
 	gopkg.in/yaml.v2 v2.4.0
 )
 
