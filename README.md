@@ -17,8 +17,7 @@
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-<details>
-<summary>目录</summary>
+**目录**
 
 - [前言](#%E5%89%8D%E8%A8%80)
 - [功能简介](#%E5%8A%9F%E8%83%BD%E7%AE%80%E4%BB%8B)
@@ -40,7 +39,6 @@
 - [高光时刻](#%E9%AB%98%E5%85%89%E6%97%B6%E5%88%BB)
 - [赞赏](#%E8%B5%9E%E8%B5%8F)
 
-</details>
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## 前言
