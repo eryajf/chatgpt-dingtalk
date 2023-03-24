@@ -120,10 +120,13 @@
 ```
 第一种：基于环境变量运行
 # 运行项目
-$ docker run -itd --name chatgpt -p 8090:8090 --add-host="host.docker.internal:host-gateway" -e APIKEY=换成你的key -e BASE_URL="" -e MODEL="gpt-3.5-turbo" -e SESSION_TIMEOUT=600 -e HTTP_PROXY="http://host.docker.internal:15732" -e DEFAULT_MODE="单聊" -e MAX_REQUEST=0 -e SERVICE_URL="你当前服务外网可访问的URL" --restart=always  dockerproxy.com/eryajf/chatgpt-dingtalk:latest
+$ docker run -itd --name chatgpt -p 8090:8090 --add-host="host.docker.internal:host-gateway" -e APIKEY=换成你的key -e BASE_URL="" -e MODEL="gpt-3.5-turbo" -e SESSION_TIMEOUT=600 -e HTTP_PROXY="http://host.docker.internal:15732" -e DEFAULT_MODE="单聊" -e MAX_REQUEST=0 -e PORT=8090 -e SERVICE_URL="你当前服务外网可访问的URL" --restart=always  dockerproxy.com/eryajf/chatgpt-dingtalk:latest
 ```
 
+`📢 注意：`如果使用docker部署，那么PORT参数不需要进行任何调整。
+`📢 注意：`如果服务器节点本身就在国外或者自定义了`BASE_URL`，那么就把`HTTP_PROXY`参数留空即可。
 `📢 注意：`如果使用docker部署，那么proxy地址可以直接使用如上方式部署，`host.docker.internal`会指向容器所在宿主机的IP，只需要更改端口为你的代理端口即可。参见：[Docker容器如何优雅地访问宿主机网络](https://wiki.eryajf.net/pages/674f53/)
+
 
 运行命令中映射的配置文件参考下边的配置文件说明。
 
@@ -217,7 +220,7 @@ $ curl --location --request POST 'http://chat.eryajf.net/' \
 ```sh
 $ tar xf chatgpt-dingtalk-v0.0.4-darwin-arm64.tar.gz
 $ cd chatgpt-dingtalk-v0.0.4-darwin-arm64
-$ cp config.dev.json  config.json # 然后根据情况调整配置文件内容
+$ cp config.dev.json  config.json # 然后根据情况调整配置文件内容,宿主机如遇端口冲突,可通过调整config.json中的port参数自定义服务端口
 $ ./chatgpt-dingtalk  # 直接运行
 
 # 如果要守护在后台运行
@@ -302,7 +305,8 @@ $ go run main.go
     "session_timeout": 600,   // 会话超时时间,默认600秒,在会话时间内所有发送给机器人的信息会作为上下文
     "http_proxy": "",         // 指定请求时使用的代理，如果为空，则不使用代理
     "default_mode": "单聊",    // 默认对话模式，可根据实际场景自定义，如果不设置，默认为单聊
-    "max_request": 0    // 单人单日请求次数限制，默认为0，即不限制
+    "max_request": 0,    // 单人单日请求次数限制，默认为0，即不限制
+    "port": "8090",     // 指定服务启动端口，默认为 8090，一般在二进制宿主机部署时，遇到端口冲突时使用。
     "service_url": "" // 指定服务的地址，就是当前服务可供外网访问的地址，用于生成图片时给钉钉渲染
 }
 ```

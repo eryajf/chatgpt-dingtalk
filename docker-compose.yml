@@ -13,6 +13,7 @@ services:
       HTTP_PROXY: http://host.docker.internal:15777 # 配置代理，注意：host.docker.internal会解析到容器所在的宿主机IP，因此只需要更改端口即可，另外如果服务器在国外，则这里留空即可
       DEFAULT_MODE: "单聊" # 聊天模式
       MAX_REQUEST: 0 # 单人单日请求次数限制，默认为0，即不限制
+      PORT: 8090 # 指定服务启动端口，默认为 8090，容器化部署时，不需要调整
       SERVICE_URL: ""  # 指定服务的地址，就是钉钉机器人配置的回调地址，比如: http://chat.eryajf.net
     ports:
       - "8090:8090"

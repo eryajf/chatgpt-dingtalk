@@ -73,6 +73,8 @@ func Start() {
 		return c.File(filepath.Join(root, filename))
 	})
 
+	// 服务端口
+	port := ":" + public.Config.Port
 	// 启动服务器
-	ship.StartServer(":8090", app)
+	ship.StartServer(port, app)
 }
