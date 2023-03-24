@@ -47,6 +47,11 @@ func Start() {
 		// 打印钉钉回调过来的请求明细
 		logger.Info(fmt.Sprintf("dingtalk callback parameters: %#v", msgObj))
 		// TODO: 校验请求
+		chars := []rune(msgObj.Text.Content) // 将字符串转换为rune切片
+		if len(chars) > 0 && chars[0] == '＃' {
+			chars[0] = '#' // 替换第一个字符为#
+			msgObj.Text.Content = string(chars) // 将rune类型转换为字符串类型
+		}
 		if len(msgObj.Text.Content) == 1 || strings.TrimSpace(msgObj.Text.Content) == "帮助" {
 			// 欢迎信息
 			_, err := msgObj.ReplyToDingtalk(string(public.TEXT), Welcome, msgObj.SenderStaffId)
