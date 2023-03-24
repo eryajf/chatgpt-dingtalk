@@ -1,5 +1,6 @@
 <div align="center">
 <h1>ChatGPT Dingtalk</h1>
+
 [![Auth](https://img.shields.io/badge/Auth-eryajf-ff69b4)](https://github.com/eryajf)
 [![Go Version](https://img.shields.io/github/go-mod/go-version/eryajf/chatgpt-dingtalk)](https://github.com/eryajf/chatgpt-dingtalk)
 [![GitHub Pull Requests](https://img.shields.io/github/issues-pr/eryajf/chatgpt-dingtalk)](https://github.com/eryajf/chatgpt-dingtalk/pulls)
@@ -62,15 +63,15 @@
 
 ## 🤖 功能介绍
 
-- 🚀 帮助菜单：通过发送 `帮助` 将看到帮助列表
-- 🥷 私聊：支持与机器人单独私聊(无需艾特)
+- 🚀 帮助菜单：通过发送 `帮助` 将看到帮助列表，[🖼 查看示例](#-%E5%B8%AE%E5%8A%A9%E5%88%97%E8%A1%A8)
+- 🥷 私聊：支持与机器人单独私聊(无需艾特)，[🖼 查看示例]()
 - 💬 群聊：支持在群里艾特机器人进行对话
 - 🙋 单聊模式：每次对话都是一次新的对话，没有历史聊天上下文联系
 - 🗣 串聊模式：带上下文理解的对话模式
-- 🎨 图片生成：通过发送 `#图片`关键字开头的内容进行生成图片，[查看示例]()
+- 🎨 图片生成：通过发送 `#图片`关键字开头的内容进行生成图片，[🖼 查看示例](#-%E7%94%9F%E6%88%90%E5%9B%BE%E7%89%87)
 - 🎭 角色扮演：支持场景模式，通过 `#周报` 的方式触发内置prompt模板
 - 🧑‍💻 频率限制：通过配置指定，自定义单个用户单日最大对话次数
-- 💵 余额查询：通过发送 `余额` 关键字查询当前key所剩额度
+- 💵 余额查询：通过发送 `余额` 关键字查询当前key所剩额度，[🖼 查看示例](#-%E6%9F%A5%E8%AF%A2%E4%BD%99%E9%A2%9D)
 - 🔗 自定义api域名：通过配置指定，解决国内服务器无法直接访问openai的问题
 - 🪜 添加代理：通过配置指定，通过给应用注入代理解决国内服务器无法访问的问题
 - 👐 默认模式：支持自定义默认的聊天模式，通过配置化指定
