@@ -3,6 +3,7 @@ package public
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"net/http"
 )
 
@@ -68,15 +69,19 @@ type At struct {
 }
 
 // 发消息给钉钉
-func (r ReceiveMsg) ReplyToDingtalk(msgType, msg, staffId string) (statuscode int, err error) {
+func (r ReceiveMsg) ReplyToDingtalk(msgType, msg string) (statuscode int, err error) {
+	atUser := r.SenderStaffId
+	if atUser == "" {
+		msg = fmt.Sprintf("%s\n\n@%s", msg, r.SenderNick)
+	}
 	var msgtmp interface{}
 	switch msgType {
 	case string(TEXT):
-		msgtmp = &TextMessage{Text: &Text{Content: msg}, MsgType: TEXT, At: &At{AtUserIds: []string{staffId}}}
+		msgtmp = &TextMessage{Text: &Text{Content: msg}, MsgType: TEXT, At: &At{AtUserIds: []string{atUser}}}
 	case string(MARKDOWN):
-		msgtmp = &MarkDownMessage{MsgType: MARKDOWN, At: &At{AtUserIds: []string{staffId}}, MarkDown: &MarkDown{Title: "根据您提供的信息，为您生成图片如下", Text: msg}}
+		msgtmp = &MarkDownMessage{MsgType: MARKDOWN, At: &At{AtUserIds: []string{atUser}}, MarkDown: &MarkDown{Title: "Markdown Type", Text: msg}}
 	default:
-		msgtmp = &TextMessage{Text: &Text{Content: msg}, MsgType: TEXT, At: &At{AtUserIds: []string{staffId}}}
+		msgtmp = &TextMessage{Text: &Text{Content: msg}, MsgType: TEXT, At: &At{AtUserIds: []string{atUser}}}
 	}
 
 	data, err := json.Marshal(msgtmp)
