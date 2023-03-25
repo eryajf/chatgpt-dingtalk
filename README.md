@@ -24,6 +24,8 @@
 - [使用前提](#%E4%BD%BF%E7%94%A8%E5%89%8D%E6%8F%90)
 - [使用教程](#%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B)
   - [第一步，创建机器人](#%E7%AC%AC%E4%B8%80%E6%AD%A5%E5%88%9B%E5%BB%BA%E6%9C%BA%E5%99%A8%E4%BA%BA)
+    - [方案一：outgoing类型机器人](#%E6%96%B9%E6%A1%88%E4%B8%80outgoing%E7%B1%BB%E5%9E%8B%E6%9C%BA%E5%99%A8%E4%BA%BA)
+    - [方案二：企业内部应用](#%E6%96%B9%E6%A1%88%E4%BA%8C%E4%BC%81%E4%B8%9A%E5%86%85%E9%83%A8%E5%BA%94%E7%94%A8)
   - [第二步，部署应用](#%E7%AC%AC%E4%BA%8C%E6%AD%A5%E9%83%A8%E7%BD%B2%E5%BA%94%E7%94%A8)
     - [docker部署](#docker%E9%83%A8%E7%BD%B2)
     - [二进制部署](#%E4%BA%8C%E8%BF%9B%E5%88%B6%E9%83%A8%E7%BD%B2)
