@@ -44,12 +44,13 @@ func Start() {
 			logger.Warning("从钉钉回调过来的内容为空，根据过往的经验，或许重新创建一下机器人，能解决这个问题")
 			return ship.ErrBadRequest.New(fmt.Errorf("从钉钉回调过来的内容为空，根据过往的经验，或许重新创建一下机器人，能解决这个问题"))
 		}
+
 		// 打印钉钉回调过来的请求明细
 		logger.Info(fmt.Sprintf("dingtalk callback parameters: %#v", msgObj))
 		// TODO: 校验请求
 		if len(msgObj.Text.Content) == 1 || strings.TrimSpace(msgObj.Text.Content) == "帮助" {
 			// 欢迎信息
-			_, err := msgObj.ReplyToDingtalk(string(public.TEXT), Welcome, msgObj.SenderStaffId)
+			_, err := msgObj.ReplyToDingtalk(string(public.MARKDOWN), Welcome)
 			if err != nil {
 				logger.Warning(fmt.Errorf("send message error: %v", err))
 				return ship.ErrBadRequest.New(fmt.Errorf("send message error: %v", err))

@@ -17,20 +17,20 @@ func ProcessRequest(rmsg *public.ReceiveMsg) error {
 		switch content {
 		case "单聊":
 			public.UserService.SetUserMode(rmsg.SenderStaffId, content)
-			_, err := rmsg.ReplyToDingtalk(string(public.TEXT), fmt.Sprintf("=====现在进入与👉%s👈单聊的模式 =====", rmsg.SenderNick), rmsg.SenderStaffId)
+			_, err := rmsg.ReplyToDingtalk(string(public.TEXT), fmt.Sprintf("=====现在进入与👉%s👈单聊的模式 =====", rmsg.SenderNick))
 			if err != nil {
 				logger.Warning(fmt.Errorf("send message error: %v", err))
 			}
 		case "串聊":
 			public.UserService.SetUserMode(rmsg.SenderStaffId, content)
-			_, err := rmsg.ReplyToDingtalk(string(public.TEXT), fmt.Sprintf("=====现在进入与👉%s👈串聊的模式 =====", rmsg.SenderNick), rmsg.SenderStaffId)
+			_, err := rmsg.ReplyToDingtalk(string(public.TEXT), fmt.Sprintf("=====现在进入与👉%s👈串聊的模式 =====", rmsg.SenderNick))
 			if err != nil {
 				logger.Warning(fmt.Errorf("send message error: %v", err))
 			}
 		case "重置":
 			public.UserService.ClearUserMode(rmsg.SenderStaffId)
 			public.UserService.ClearUserSessionContext(rmsg.SenderStaffId)
-			_, err := rmsg.ReplyToDingtalk(string(public.TEXT), fmt.Sprintf("=====已重置与👉%s👈的对话模式，可以开始新的对话=====", rmsg.SenderNick), rmsg.SenderStaffId)
+			_, err := rmsg.ReplyToDingtalk(string(public.TEXT), fmt.Sprintf("=====已重置与👉%s👈的对话模式，可以开始新的对话=====", rmsg.SenderNick))
 			if err != nil {
 				logger.Warning(fmt.Errorf("send message error: %v", err))
 			}
@@ -39,12 +39,12 @@ func ProcessRequest(rmsg *public.ReceiveMsg) error {
 			for _, v := range *public.Prompt {
 				title = title + v.Title + " | "
 			}
-			_, err := rmsg.ReplyToDingtalk(string(public.TEXT), fmt.Sprintf("%s 您好，当前程序内置集成了这些prompt：\n====================================\n| %s \n====================================\n你可以选择某个prompt开头，然后进行对话。\n以周报为例，可发送 #周报 我本周用Go写了一个钉钉集成ChatGPT的聊天应用", rmsg.SenderNick, title), rmsg.SenderStaffId)
+			_, err := rmsg.ReplyToDingtalk(string(public.TEXT), fmt.Sprintf("%s 您好，当前程序内置集成了这些prompt：\n====================================\n| %s \n====================================\n你可以选择某个prompt开头，然后进行对话。\n以周报为例，可发送 #周报 我本周用Go写了一个钉钉集成ChatGPT的聊天应用", rmsg.SenderNick, title))
 			if err != nil {
 				logger.Warning(fmt.Errorf("send message error: %v", err))
 			}
 		case "图片":
-			_, err := rmsg.ReplyToDingtalk(string(public.MARKDOWN), "发送以 **#图片** 开头的内容，将会触发绘画能力，图片生成之后，将会保存在程序根目录下的 **images目录** \n 如果你绘图没有思路，可以在这两个网站寻找灵感。\n - [https://lexica.art/](https://lexica.art/)\n- [https://www.clickprompt.org/zh-CN/](https://www.clickprompt.org/zh-CN/)", rmsg.SenderStaffId)
+			_, err := rmsg.ReplyToDingtalk(string(public.MARKDOWN), "发送以 **#图片** 开头的内容，将会触发绘画能力，图片生成之后，将会保存在程序根目录下的 **images目录** \n 如果你绘图没有思路，可以在这两个网站寻找灵感。\n - [https://lexica.art/](https://lexica.art/)\n- [https://www.clickprompt.org/zh-CN/](https://www.clickprompt.org/zh-CN/)")
 			if err != nil {
 				logger.Warning(fmt.Errorf("send message error: %v", err))
 			}
@@ -61,7 +61,7 @@ func ProcessRequest(rmsg *public.ReceiveMsg) error {
 				cacheMsg = fmt.Sprintf("💵 已用: 💲%v\n💵 剩余: 💲%v\n⏳ 有效时间: 从 %v 到 %v\n", fmt.Sprintf("%.2f", rst.TotalUsed), fmt.Sprintf("%.2f", rst.TotalAvailable), t1.Format("2006-01-02 15:04:05"), t2.Format("2006-01-02 15:04:05"))
 			}
 
-			_, err := rmsg.ReplyToDingtalk(string(public.TEXT), cacheMsg, rmsg.SenderStaffId)
+			_, err := rmsg.ReplyToDingtalk(string(public.TEXT), cacheMsg)
 			if err != nil {
 				logger.Warning(fmt.Errorf("send message error: %v", err))
 			}
@@ -87,13 +87,13 @@ func Do(mode string, rmsg *public.ReceiveMsg) error {
 			logger.Info(fmt.Errorf("gpt request error: %v", err))
 			if strings.Contains(fmt.Sprintf("%v", err), "maximum text length exceeded") {
 				public.UserService.ClearUserSessionContext(rmsg.SenderStaffId)
-				_, err = rmsg.ReplyToDingtalk(string(public.TEXT), fmt.Sprintf("请求openai失败了，错误信息：%v，看起来是超过最大对话限制了，已自动重置您的对话", err), rmsg.SenderStaffId)
+				_, err = rmsg.ReplyToDingtalk(string(public.TEXT), fmt.Sprintf("请求openai失败了，错误信息：%v，看起来是超过最大对话限制了，已自动重置您的对话", err))
 				if err != nil {
 					logger.Warning(fmt.Errorf("send message error: %v", err))
 					return err
 				}
 			} else {
-				_, err = rmsg.ReplyToDingtalk(string(public.TEXT), fmt.Sprintf("请求openai失败了，错误信息：%v", err), rmsg.SenderStaffId)
+				_, err = rmsg.ReplyToDingtalk(string(public.TEXT), fmt.Sprintf("请求openai失败了，错误信息：%v", err))
 				if err != nil {
 					logger.Warning(fmt.Errorf("send message error: %v", err))
 					return err
@@ -107,8 +107,7 @@ func Do(mode string, rmsg *public.ReceiveMsg) error {
 			reply = strings.TrimSpace(reply)
 			reply = strings.Trim(reply, "\n")
 			// 回复@我的用户
-			// fmt.Println("单聊结果是：", reply)
-			_, err = rmsg.ReplyToDingtalk(string(public.TEXT), reply, rmsg.SenderStaffId)
+			_, err = rmsg.ReplyToDingtalk(string(public.TEXT), reply)
 			if err != nil {
 				logger.Warning(fmt.Errorf("send message error: %v", err))
 				return err
@@ -120,13 +119,13 @@ func Do(mode string, rmsg *public.ReceiveMsg) error {
 			logger.Info(fmt.Sprintf("gpt request error: %v", err))
 			if strings.Contains(fmt.Sprintf("%v", err), "maximum text length exceeded") {
 				public.UserService.ClearUserSessionContext(rmsg.SenderStaffId)
-				_, err = rmsg.ReplyToDingtalk(string(public.TEXT), fmt.Sprintf("请求openai失败了，错误信息：%v，看起来是超过最大对话限制了，已自动重置您的对话", err), rmsg.SenderStaffId)
+				_, err = rmsg.ReplyToDingtalk(string(public.TEXT), fmt.Sprintf("请求openai失败了，错误信息：%v，看起来是超过最大对话限制了，已自动重置您的对话", err))
 				if err != nil {
 					logger.Warning(fmt.Errorf("send message error: %v", err))
 					return err
 				}
 			} else {
-				_, err = rmsg.ReplyToDingtalk(string(public.TEXT), fmt.Sprintf("请求openai失败了，错误信息：%v", err), rmsg.SenderStaffId)
+				_, err = rmsg.ReplyToDingtalk(string(public.TEXT), fmt.Sprintf("请求openai失败了，错误信息：%v", err))
 				if err != nil {
 					logger.Warning(fmt.Errorf("send message error: %v", err))
 					return err
@@ -140,7 +139,7 @@ func Do(mode string, rmsg *public.ReceiveMsg) error {
 			reply = strings.TrimSpace(reply)
 			reply = strings.Trim(reply, "\n")
 			// 回复@我的用户
-			_, err = rmsg.ReplyToDingtalk(string(public.TEXT), reply, rmsg.SenderStaffId)
+			_, err = rmsg.ReplyToDingtalk(string(public.TEXT), reply)
 			if err != nil {
 				logger.Warning(fmt.Errorf("send message error: %v", err))
 				return err
@@ -157,7 +156,7 @@ func ImageGenerate(rmsg *public.ReceiveMsg) error {
 	reply, err := chatgpt.ImageQa(rmsg.Text.Content, rmsg.SenderStaffId)
 	if err != nil {
 		logger.Info(fmt.Errorf("gpt request error: %v", err))
-		_, err = rmsg.ReplyToDingtalk(string(public.TEXT), fmt.Sprintf("请求openai失败了，错误信息：%v", err), rmsg.SenderStaffId)
+		_, err = rmsg.ReplyToDingtalk(string(public.TEXT), fmt.Sprintf("请求openai失败了，错误信息：%v", err))
 		if err != nil {
 			logger.Warning(fmt.Errorf("send message error: %v", err))
 			return err
@@ -170,7 +169,7 @@ func ImageGenerate(rmsg *public.ReceiveMsg) error {
 		reply = strings.TrimSpace(reply)
 		reply = strings.Trim(reply, "\n")
 		// 回复@我的用户
-		_, err = rmsg.ReplyToDingtalk(string(public.MARKDOWN), fmt.Sprintf(">点击图片可旋转或放大。\n![](%s)", reply), rmsg.SenderStaffId)
+		_, err = rmsg.ReplyToDingtalk(string(public.MARKDOWN), fmt.Sprintf(">点击图片可旋转或放大。\n![](%s)", reply))
 		if err != nil {
 			logger.Warning(fmt.Errorf("send message error: %v", err))
 			return err
