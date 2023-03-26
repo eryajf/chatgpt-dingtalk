@@ -50,7 +50,7 @@ func Start() {
 		// TODO: 校验请求
 		if len(msgObj.Text.Content) == 1 || strings.TrimSpace(msgObj.Text.Content) == "帮助" {
 			// 欢迎信息
-			_, err := msgObj.ReplyToDingtalk(string(public.MARKDOWN), Welcome)
+			_, err := msgObj.ReplyToDingtalk(string(public.TEXT), Welcome)
 			if err != nil {
 				logger.Warning(fmt.Errorf("send message error: %v", err))
 				return ship.ErrBadRequest.New(fmt.Errorf("send message error: %v", err))
