@@ -40,9 +40,9 @@
 - [本地开发](#%E6%9C%AC%E5%9C%B0%E5%BC%80%E5%8F%91)
 - [配置文件说明](#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%AF%B4%E6%98%8E)
 - [常见问题](#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98)
-- [高光时刻](#%E9%AB%98%E5%85%89%E6%97%B6%E5%88%BB)
 - [感谢](#%E6%84%9F%E8%B0%A2)
 - [赞赏](#%E8%B5%9E%E8%B5%8F)
+- [高光时刻](#%E9%AB%98%E5%85%89%E6%97%B6%E5%88%BB)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
