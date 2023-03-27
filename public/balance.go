@@ -33,6 +33,7 @@ type Billing struct {
 	} `json:"grants"`
 }
 
+// GetBalance 获取账号余额
 func GetBalance() (Billing, error) {
 	var data Billing
 	var url string = "https://api.openai.com/dashboard/billing/credit_grants"

@@ -8,7 +8,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/eryajf/chatgpt-dingtalk/public/logger"
+	"github.com/eryajf/chatgpt-dingtalk/pkg/logger"
 )
 
 // Configuration 项目配置
@@ -43,7 +43,7 @@ func LoadConfig() *Configuration {
 		config = &Configuration{}
 		f, err := os.Open("config.json")
 		if err != nil {
-			logger.Danger(fmt.Errorf("open config err: %+v", err))
+			logger.Fatal(fmt.Errorf("open config err: %+v", err))
 			return
 		}
 		defer f.Close()
@@ -72,7 +72,7 @@ func LoadConfig() *Configuration {
 		if sessionTimeout != "" {
 			duration, err := strconv.ParseInt(sessionTimeout, 10, 64)
 			if err != nil {
-				logger.Danger(fmt.Sprintf("config session timeout err: %v ,get is %v", err, sessionTimeout))
+				logger.Fatal(fmt.Sprintf("config session timeout err: %v ,get is %v", err, sessionTimeout))
 				return
 			}
 			config.SessionTimeout = time.Duration(duration) * time.Second
@@ -109,10 +109,10 @@ func LoadConfig() *Configuration {
 		config.Port = "8090"
 	}
 	if config.ApiKey == "" {
-		logger.Danger("config err: api key required")
+		logger.Fatal("config err: api key required")
 	}
 	if config.ServiceURL == "" {
-		logger.Danger("config err: service url required")
+		logger.Fatal("config err: service url required")
 	}
 	return config
 }

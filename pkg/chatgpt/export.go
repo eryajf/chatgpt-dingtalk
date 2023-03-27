@@ -4,8 +4,8 @@ import (
 	"time"
 
 	"github.com/avast/retry-go"
+	"github.com/eryajf/chatgpt-dingtalk/pkg/logger"
 	"github.com/eryajf/chatgpt-dingtalk/public"
-	"github.com/eryajf/chatgpt-dingtalk/public/logger"
 )
 
 // SingleQa 单聊
