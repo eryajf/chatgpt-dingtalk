@@ -347,6 +347,7 @@ $ go run main.go
 - [xgfone/ship](https://github.com/xgfone/ship)
 - [avast/retry-go](https://github.com/avast/retry-go)
 - [sashabaranov/go-openapi](https://github.com/sashabaranov/go-openai)
+- [charmbracelet/log](https://github.com/charmbracelet/log)
 
 ## 赞赏
 

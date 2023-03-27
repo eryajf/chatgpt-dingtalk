@@ -5,9 +5,10 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/eryajf/chatgpt-dingtalk/pkg/dingbot"
+	"github.com/eryajf/chatgpt-dingtalk/pkg/logger"
 	"github.com/eryajf/chatgpt-dingtalk/pkg/process"
 	"github.com/eryajf/chatgpt-dingtalk/public"
-	"github.com/eryajf/chatgpt-dingtalk/public/logger"
 	"github.com/xgfone/ship/v5"
 )
 
@@ -35,7 +36,7 @@ var Welcome string = `Commands:
 func Start() {
 	app := ship.Default()
 	app.Route("/").POST(func(c *ship.Context) error {
-		var msgObj public.ReceiveMsg
+		var msgObj dingbot.ReceiveMsg
 		err := c.Bind(&msgObj)
 		if err != nil {
 			return ship.ErrBadRequest.New(fmt.Errorf("bind to receivemsg failed : %v", err))
@@ -50,7 +51,7 @@ func Start() {
 		// TODO: 校验请求
 		if len(msgObj.Text.Content) == 1 || strings.TrimSpace(msgObj.Text.Content) == "帮助" {
 			// 欢迎信息
-			_, err := msgObj.ReplyToDingtalk(string(public.TEXT), Welcome)
+			_, err := msgObj.ReplyToDingtalk(string(dingbot.TEXT), Welcome)
 			if err != nil {
 				logger.Warning(fmt.Errorf("send message error: %v", err))
 				return ship.ErrBadRequest.New(fmt.Errorf("send message error: %v", err))
@@ -62,6 +63,7 @@ func Start() {
 				return process.ImageGenerate(&msgObj)
 			default:
 				msgObj.Text.Content = process.GeneratePrompt(strings.TrimSpace(msgObj.Text.Content))
+				logger.Info(fmt.Sprintf("after generate prompt: %#v", msgObj.Text.Content))
 				return process.ProcessRequest(&msgObj)
 			}
 		}
