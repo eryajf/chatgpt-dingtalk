@@ -94,7 +94,16 @@ func Start() {
 			case strings.HasPrefix(strings.TrimSpace(msgObj.Text.Content), "#图片"):
 				return process.ImageGenerate(&msgObj)
 			default:
-				msgObj.Text.Content = process.GeneratePrompt(strings.TrimSpace(msgObj.Text.Content))
+				msgObj.Text.Content, err = process.GeneratePrompt(strings.TrimSpace(msgObj.Text.Content))
+				// err不为空：提示词之后没有文本 -> 直接返回提示词所代表的内容
+				if err != nil {
+					_, err = msgObj.ReplyToDingtalk(string(dingbot.TEXT), msgObj.Text.Content)
+					if err != nil {
+						logger.Warning(fmt.Errorf("send message error: %v", err))
+						return err
+					}
+					return nil
+				}
 				logger.Info(fmt.Sprintf("after generate prompt: %#v", msgObj.Text.Content))
 				return process.ProcessRequest(&msgObj)
 			}

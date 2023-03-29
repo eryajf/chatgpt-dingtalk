@@ -40,7 +40,7 @@ func ProcessRequest(rmsg *dingbot.ReceiveMsg) error {
 			for _, v := range *public.Prompt {
 				title = title + v.Title + " | "
 			}
-			_, err := rmsg.ReplyToDingtalk(string(dingbot.TEXT), fmt.Sprintf("%s 您好，当前程序内置集成了这些prompt：\n====================================\n| %s \n====================================\n你可以选择某个prompt开头，然后进行对话。\n以周报为例，可发送 #周报 我本周用Go写了一个钉钉集成ChatGPT的聊天应用", rmsg.SenderNick, title))
+			_, err := rmsg.ReplyToDingtalk(string(dingbot.MARKDOWN), fmt.Sprintf("%s 您好，当前程序内置集成了这些提示词：\n\n-----\n\n| %s \n\n-----\n\n您可以选择某个提示词作为对话内容的开头。\n\n以周报为例，可发送\"#周报 我本周用Go写了一个钉钉集成ChatGPT的聊天应用\"，可将工作内容填充为一篇完整的周报。\n\n-----\n\n若您不清楚某个提示词的所代表的含义，您可以直接发送提示词，例如直接发送\"#周报\"", rmsg.SenderNick, title))
 			if err != nil {
 				logger.Warning(fmt.Errorf("send message error: %v", err))
 			}
