@@ -43,6 +43,7 @@
 - [感谢](#%E6%84%9F%E8%B0%A2)
 - [赞赏](#%E8%B5%9E%E8%B5%8F)
 - [高光时刻](#%E9%AB%98%E5%85%89%E6%97%B6%E5%88%BB)
+- [贡献者列表](#%E8%B4%A1%E7%8C%AE%E8%80%85%E5%88%97%E8%A1%A8)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
