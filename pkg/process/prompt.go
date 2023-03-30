@@ -16,7 +16,7 @@ func GeneratePrompt(msg string) (rst string, err error) {
 				rst = fmt.Sprintf("%s：\n%s___输入内容___%s", prompt.Title, prompt.Prefix, prompt.Suffix)
 				err = errors.New("消息内容为空") // 当提示词之后没有文本，抛出异常，以便直接返回Prompt所代表的内容
 			} else {
-				rst = prompt.Prefix + strings.Replace(msg, prompt.Title, "", -1) + prompt.Suffix
+				rst = prompt.Prefix + strings.TrimSpace(strings.Replace(msg, prompt.Title, "", -1)) + prompt.Suffix
 			}
 			return
 		} else {
