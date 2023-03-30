@@ -362,4 +362,42 @@ $ go run main.go
 ## 贡献者列表
 
 <!-- readme: collaborators,contributors -start -->
+<table>
+<tr>
+    <td align="center">
+        <a href="https://github.com/eryajf">
+            <img src="https://avatars.githubusercontent.com/u/33259379?v=4" width="100;" alt="eryajf"/>
+            <br />
+            <sub><b>二丫讲梵</b></sub>
+        </a>
+    </td>
+    <td align="center">
+        <a href="https://github.com/laorange">
+            <img src="https://avatars.githubusercontent.com/u/68316902?v=4" width="100;" alt="laorange"/>
+            <br />
+            <sub><b>辣橙</b></sub>
+        </a>
+    </td>
+    <td align="center">
+        <a href="https://github.com/luoxufeiyan">
+            <img src="https://avatars.githubusercontent.com/u/6621172?v=4" width="100;" alt="luoxufeiyan"/>
+            <br />
+            <sub><b>Hugh Gao</b></sub>
+        </a>
+    </td>
+    <td align="center">
+        <a href="https://github.com/iblogc">
+            <img src="https://avatars.githubusercontent.com/u/3283023?v=4" width="100;" alt="iblogc"/>
+            <br />
+            <sub><b>Iblogc</b></sub>
+        </a>
+    </td>
+    <td align="center">
+        <a href="https://github.com/WinMin">
+            <img src="https://avatars.githubusercontent.com/u/18380453?v=4" width="100;" alt="WinMin"/>
+            <br />
+            <sub><b>Swing</b></sub>
+        </a>
+    </td></tr>
+</table>
 <!-- readme: collaborators,contributors -end -->
