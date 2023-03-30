@@ -8,6 +8,7 @@ import (
 	"github.com/eryajf/chatgpt-dingtalk/pkg/cache"
 	"github.com/eryajf/chatgpt-dingtalk/pkg/dingbot"
 	"github.com/eryajf/chatgpt-dingtalk/pkg/logger"
+	"github.com/sashabaranov/go-openai"
 )
 
 var UserService cache.UserServiceInterface
@@ -18,7 +19,9 @@ func InitSvc() {
 	Config = config.LoadConfig()
 	Prompt = config.LoadPrompt()
 	UserService = cache.NewUserService()
-	_, _ = GetBalance()
+	if Config.Model == openai.GPT3Dot5Turbo0301 || Config.Model == openai.GPT3Dot5Turbo {
+		_, _ = GetBalance()
+	}
 }
 
 func FirstCheck(rmsg *dingbot.ReceiveMsg) bool {
