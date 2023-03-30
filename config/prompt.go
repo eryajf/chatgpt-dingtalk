@@ -8,8 +8,9 @@ import (
 )
 
 type Prompt struct {
-	Title   string `yaml:"title"`
-	Content string `yaml:"content"`
+	Title  string `yaml:"title"`
+	Prefix string `yaml:"prefix"`
+	Suffix string `yaml:"suffix"`
 }
 
 var prompTmp *[]Prompt
