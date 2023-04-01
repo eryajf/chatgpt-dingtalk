@@ -155,10 +155,10 @@ $ docker run -itd --name chatgpt -p 8090:8090 --add-host="host.docker.internal:h
 ```
 第二种：基于配置文件挂载运行
 # 复制配置文件，根据自己实际情况，调整配置里的内容
-$ cp config.dev.json config.json  # 其中 config.dev.json 从项目的根目录获取
+$ cp config.example.yml config.yml  # 其中 config.example.yml 从项目的根目录获取
 
 # 运行项目
-$ docker run -itd --name chatgpt -p 8090:8090  -v `pwd`/config.json:/app/config.json --restart=always  dockerproxy.com/eryajf/chatgpt-dingtalk:latest
+$ docker run -itd --name chatgpt -p 8090:8090  -v `pwd`/config.yml:/app/config.yml --restart=always  dockerproxy.com/eryajf/chatgpt-dingtalk:latest
 ```
 
 其中配置文件参考下边的配置文件说明。
@@ -171,8 +171,6 @@ $ nano docker-compose.yml # 编辑 APIKEY 等信息
 
 $ docker compose up -d
 ```
-
-注意，不论通过上边哪种docker方式部署，都需要配置Nginx代理，当然你直接通过服务器外网IP也可以。
 
 部署完成之后，通过Nginx代理本服务：
 
@@ -196,12 +194,14 @@ server {
 
 部署完成之后，就可以在群里艾特机器人进行体验了。
 
+`📢 注意`:Nginx代理步骤是个可选步骤，你也可以直接通过服务器外网IP:PORT作为回调地址。
+
 Nginx配置完毕之后，可以先手动请求一下，通过服务日志输出判断服务是否正常可用：
 
 ```sh
 $ curl --location --request POST 'http://chat.eryajf.net/' \
   --header 'Content-type: application/json' \
-  --data-raw '{
+  -d '{
     "conversationId": "xxx",
     "atUsers": [
         {
@@ -242,7 +242,7 @@ $ curl --location --request POST 'http://chat.eryajf.net/' \
 ```sh
 $ tar xf chatgpt-dingtalk-v0.0.4-darwin-arm64.tar.gz
 $ cd chatgpt-dingtalk-v0.0.4-darwin-arm64
-$ cp config.dev.json  config.json # 然后根据情况调整配置文件内容,宿主机如遇端口冲突,可通过调整config.json中的port参数自定义服务端口
+$ cp config.example.yml  config.yml # 然后根据情况调整配置文件内容,宿主机如遇端口冲突,可通过调整config.yml中的port参数自定义服务端口
 $ ./chatgpt-dingtalk  # 直接运行
 
 # 如果要守护在后台运行
@@ -321,7 +321,7 @@ $ git clone https://github.com/eryajf/chatgpt-dingtalk.git
 $ cd chatgpt-dingtalk
 
 # 复制配置文件，根据个人实际情况进行配置
-$ cp config.dev.json config.json
+$ cp config.example.yml config.yml
 
 # 启动项目
 $ go run main.go

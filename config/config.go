@@ -1,36 +1,38 @@
 package config
 
 import (
-	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"log"
 	"os"
 	"strconv"
 	"sync"
 	"time"
 
 	"github.com/eryajf/chatgpt-dingtalk/pkg/logger"
+	"gopkg.in/yaml.v2"
 )
 
 // Configuration 项目配置
 type Configuration struct {
 	// gtp apikey
-	ApiKey string `json:"api_key"`
+	ApiKey string `yaml:"api_key"`
 	// 请求的 URL 地址
-	BaseURL string `json:"base_url"`
+	BaseURL string `yaml:"base_url"`
 	// 使用模型
-	Model string `json:"model"`
+	Model string `yaml:"model"`
 	// 会话超时时间
-	SessionTimeout time.Duration `json:"session_timeout"`
+	SessionTimeout time.Duration `yaml:"session_timeout"`
 	// 默认对话模式
-	DefaultMode string `json:"default_mode"`
+	DefaultMode string `yaml:"default_mode"`
 	// 代理地址
-	HttpProxy string `json:"http_proxy"`
+	HttpProxy string `yaml:"http_proxy"`
 	// 用户单日最大请求次数
-	MaxRequest int `json:"max_request"`
+	MaxRequest int `yaml:"max_request"`
 	// 指定服务启动端口，默认为 8090
-	Port string `json:"port"`
+	Port string `yaml:"port"`
 	// 指定服务的地址，就是钉钉机器人配置的回调地址，比如: http://chat.eryajf.net
-	ServiceURL string `json:"service_url"`
+	ServiceURL string `yaml:"service_url"`
 }
 
 var config *Configuration
@@ -41,18 +43,15 @@ func LoadConfig() *Configuration {
 	once.Do(func() {
 		// 从文件中读取
 		config = &Configuration{}
-		f, err := os.Open("config.json")
+		data, err := ioutil.ReadFile("config.yml")
 		if err != nil {
-			logger.Fatal(fmt.Errorf("open config err: %+v", err))
-			return
+			log.Fatal(err)
 		}
-		defer f.Close()
-		encoder := json.NewDecoder(f)
-		err = encoder.Decode(config)
+		err = yaml.Unmarshal(data, &config)
 		if err != nil {
-			logger.Warning(fmt.Errorf("decode config err: %v", err))
-			return
+			log.Fatal(err)
 		}
+
 		// 如果环境变量有配置，读取环境变量
 		apiKey := os.Getenv("APIKEY")
 		baseURL := os.Getenv("BASE_URL")
