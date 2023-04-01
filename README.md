@@ -52,6 +52,7 @@
 
 本项目可以助你将GPT机器人集成到钉钉群聊当中。当前默认模型为`gpt-3.5`，支持`gpt-4`。
 
+`📢 注意`：当下部署以及配置流程都已非常成熟，文档和issue中基本都覆盖到了，因此不再回答任何项目安装部署与配置使用上的问题，如果完全不懂，可考虑通过 **[邮箱](mailto:eryajf@163.com)** 联系我进行付费的技术支持。
 
 > 🥳 **欢迎关注我的其他开源项目：**
 >
@@ -61,9 +62,9 @@
 > - [read-list](https://github.com/eryajf/read-list)：📖 优质内容订阅，阅读方为根本
 > - [awesome-github-profile-readme-chinese](https://github.com/eryajf/awesome-github-profile-readme-chinese)：🦩 优秀的中文区个人主页搜集
 
-🚜 我还创建了一个项目[awesome-chatgpt-answer](https://github.com/eryajf/awesome-chatgpt-answer)：记录那些问得好，答得妙的时刻，欢迎提交你与ChatGPT交互过程中遇到的那些精妙对话。
+🚜 我还创建了一个项目 **[awesome-chatgpt-answer](https://github.com/eryajf/awesome-chatgpt-answer)** ：记录那些问得好，答得妙的时刻，欢迎提交你与ChatGPT交互过程中遇到的那些精妙对话。
 
-⚗️ openai官方提供了一个[状态页](https://status.openai.com/)来呈现当前openAI服务的状态，同时如果有问题发布公告也会在这个页面，如果你感觉它有问题了，可以在这个页面看看。
+⚗️ openai官方提供了一个 **[状态页](https://status.openai.com/)** 来呈现当前openAI服务的状态，同时如果有问题发布公告也会在这个页面，如果你感觉它有问题了，可以在这个页面看看。
 
 ## 功能介绍
 
