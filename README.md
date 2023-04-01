@@ -143,7 +143,7 @@
 ```
 第一种：基于环境变量运行
 # 运行项目
-$ docker run -itd --name chatgpt -p 8090:8090 --add-host="host.docker.internal:host-gateway" -e APIKEY=换成你的key -e BASE_URL="" -e MODEL="gpt-3.5-turbo" -e SESSION_TIMEOUT=600 -e HTTP_PROXY="http://host.docker.internal:15732" -e DEFAULT_MODE="单聊" -e MAX_REQUEST=0 -e PORT=8090 -e SERVICE_URL="你当前服务外网可访问的URL" --restart=always  dockerproxy.com/eryajf/chatgpt-dingtalk:latest
+$ docker run -itd --name chatgpt -p 8090:8090 --add-host="host.docker.internal:host-gateway" -e APIKEY=换成你的key -e BASE_URL="" -e MODEL="gpt-3.5-turbo" -e SESSION_TIMEOUT=600 -e HTTP_PROXY="http://host.docker.internal:15732" -e DEFAULT_MODE="单聊" -e MAX_REQUEST=0 -e PORT=8090 -e SERVICE_URL="你当前服务外网可访问的URL" -e CHAT_TYPE="0" --restart=always  dockerproxy.com/eryajf/chatgpt-dingtalk:latest
 ```
 
 `📢 注意：`如果使用docker部署，那么PORT参数不需要进行任何调整。
@@ -330,18 +330,27 @@ $ go run main.go
 
 ## 配置文件说明
 
-```json
-{
-    "api_key": "xxxxxxxxx",   // openai api_key
-    "base_url": "api.openai.com", //  如果你想指定请求url的地址，可通过这个参数进行配置，默认为官方地址，不需要再添加 /v1
-    "model": "gpt-3.5-turbo", // 指定模型，默认为 gpt-3.5-turbo , 可选参数有： "gpt-4-0314", "gpt-4", "gpt-3.5-turbo-0301", "gpt-3.5-turbo"
-    "session_timeout": 600,   // 会话超时时间,默认600秒,在会话时间内所有发送给机器人的信息会作为上下文
-    "http_proxy": "",         // 指定请求时使用的代理，如果为空，则不使用代理
-    "default_mode": "单聊",    // 默认对话模式，可根据实际场景自定义，如果不设置，默认为单聊
-    "max_request": 0,    // 单人单日请求次数限制，默认为0，即不限制
-    "port": "8090",     // 指定服务启动端口，默认为 8090，一般在二进制宿主机部署时，遇到端口冲突时使用。
-    "service_url": "" // 指定服务的地址，就是当前服务可供外网访问的地址，用于生成图片时给钉钉渲染
-}
+```yaml
+# openai api_key
+api_key: "xxxxxxxxx"
+# 如果你使用官方的接口地址 https://api.openai.com，则留空即可，如果你想指定请求url的地址，可通过这个参数进行配置，注意需要带上 http 协议
+base_url: ""
+# 指定模型，默认为 gpt-3.5-turbo , 可选参数有： "gpt-4-0314", "gpt-4", "gpt-3.5-turbo-0301", "gpt-3.5-turbo"，如果使用gpt-4，请确认自己是否有接口调用白名单
+model: "gpt-3.5-turbo"
+# 会话超时时间,默认600秒,在会话时间内所有发送给机器人的信息会作为上下文
+session_timeout: 600
+# 指定请求时使用的代理，如果为空，则不使用代理，注意需要带上 http 协议 或 socks5 协议
+http_proxy: ""
+# 指定默认的对话模式，可根据实际需求进行自定义，如果不设置，默认为单聊，即无上下文关联的对话模式
+default_mode: "单聊"
+# 单人单日请求次数上限，默认为0，即不限制
+max_request: 0
+# 指定服务启动端口，默认为 8090，一般在二进制宿主机部署时，遇到端口冲突时使用
+port: "8090"
+# 指定服务的地址，就是当前服务可供外网访问的地址(或者直接理解为你配置在钉钉回调那里的地址)，用于生成图片时给钉钉做渲染
+service_url: "http://chat.eryajf.net"
+# 限定对话类型 0：不限 1：只能单聊 2：只能群聊
+chat_type: "0"
 ```
 
 ## 常见问题
