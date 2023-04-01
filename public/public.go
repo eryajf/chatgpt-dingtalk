@@ -25,7 +25,7 @@ func InitSvc() {
 }
 
 func FirstCheck(rmsg *dingbot.ReceiveMsg) bool {
-	lc := UserService.GetUserMode(rmsg.SenderStaffId)
+	lc := UserService.GetUserMode(rmsg.GetSenderIdentifier())
 	if lc == "" {
 		if Config.DefaultMode == "串聊" {
 			return true
@@ -45,7 +45,7 @@ func CheckRequest(rmsg *dingbot.ReceiveMsg) bool {
 	if Config.MaxRequest == 0 {
 		return true
 	}
-	count := UserService.GetUseRequestCount(rmsg.SenderStaffId)
+	count := UserService.GetUseRequestCount(rmsg.GetSenderIdentifier())
 	// 判断访问次数是否超过限制
 	if count >= Config.MaxRequest {
 		logger.Info(fmt.Sprintf("亲爱的: %s，您今日请求次数已达上限，请明天再来，交互发问资源有限，请务必斟酌您的问题，给您带来不便，敬请谅解!", rmsg.SenderNick))
@@ -56,6 +56,6 @@ func CheckRequest(rmsg *dingbot.ReceiveMsg) bool {
 		return false
 	}
 	// 访问次数未超过限制，将计数加1
-	UserService.SetUseRequestCount(rmsg.SenderStaffId, count+1)
+	UserService.SetUseRequestCount(rmsg.GetSenderIdentifier(), count+1)
 	return true
 }
