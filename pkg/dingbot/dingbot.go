@@ -68,6 +68,15 @@ type At struct {
 	IsAtAll   bool     `json:"isAtAll"`
 }
 
+// 获取用户标识，兼容当 SenderStaffId 字段为空的场景
+func (r ReceiveMsg) GetSenderIdentifier() string {
+	if r.SenderStaffId != "" {
+		return r.SenderStaffId
+	} else {
+		return r.SenderNick
+	}
+}
+
 // 发消息给钉钉
 func (r ReceiveMsg) ReplyToDingtalk(msgType, msg string) (statuscode int, err error) {
 	atUser := r.SenderStaffId

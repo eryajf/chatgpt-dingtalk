@@ -17,20 +17,20 @@ func ProcessRequest(rmsg *dingbot.ReceiveMsg) error {
 		content := strings.TrimSpace(rmsg.Text.Content)
 		switch content {
 		case "单聊":
-			public.UserService.SetUserMode(rmsg.SenderStaffId, content)
+			public.UserService.SetUserMode(rmsg.GetSenderIdentifier(), content)
 			_, err := rmsg.ReplyToDingtalk(string(dingbot.TEXT), fmt.Sprintf("=====现在进入与👉%s👈单聊的模式 =====", rmsg.SenderNick))
 			if err != nil {
 				logger.Warning(fmt.Errorf("send message error: %v", err))
 			}
 		case "串聊":
-			public.UserService.SetUserMode(rmsg.SenderStaffId, content)
+			public.UserService.SetUserMode(rmsg.GetSenderIdentifier(), content)
 			_, err := rmsg.ReplyToDingtalk(string(dingbot.TEXT), fmt.Sprintf("=====现在进入与👉%s👈串聊的模式 =====", rmsg.SenderNick))
 			if err != nil {
 				logger.Warning(fmt.Errorf("send message error: %v", err))
 			}
 		case "重置":
-			public.UserService.ClearUserMode(rmsg.SenderStaffId)
-			public.UserService.ClearUserSessionContext(rmsg.SenderStaffId)
+			public.UserService.ClearUserMode(rmsg.GetSenderIdentifier())
+			public.UserService.ClearUserSessionContext(rmsg.GetSenderIdentifier())
 			_, err := rmsg.ReplyToDingtalk(string(dingbot.TEXT), fmt.Sprintf("=====已重置与👉%s👈的对话模式，可以开始新的对话=====", rmsg.SenderNick))
 			if err != nil {
 				logger.Warning(fmt.Errorf("send message error: %v", err))
@@ -80,14 +80,14 @@ func ProcessRequest(rmsg *dingbot.ReceiveMsg) error {
 // 执行处理请求
 func Do(mode string, rmsg *dingbot.ReceiveMsg) error {
 	// 先把模式注入
-	public.UserService.SetUserMode(rmsg.SenderStaffId, mode)
+	public.UserService.SetUserMode(rmsg.GetSenderIdentifier(), mode)
 	switch mode {
 	case "单聊":
-		reply, err := chatgpt.SingleQa(rmsg.Text.Content, rmsg.SenderStaffId)
+		reply, err := chatgpt.SingleQa(rmsg.Text.Content, rmsg.GetSenderIdentifier())
 		if err != nil {
 			logger.Info(fmt.Errorf("gpt request error: %v", err))
 			if strings.Contains(fmt.Sprintf("%v", err), "maximum text length exceeded") {
-				public.UserService.ClearUserSessionContext(rmsg.SenderStaffId)
+				public.UserService.ClearUserSessionContext(rmsg.GetSenderIdentifier())
 				_, err = rmsg.ReplyToDingtalk(string(dingbot.TEXT), fmt.Sprintf("请求openai失败了，错误信息：%v，看起来是超过最大对话限制了，已自动重置您的对话", err))
 				if err != nil {
 					logger.Warning(fmt.Errorf("send message error: %v", err))
@@ -115,11 +115,11 @@ func Do(mode string, rmsg *dingbot.ReceiveMsg) error {
 			}
 		}
 	case "串聊":
-		cli, reply, err := chatgpt.ContextQa(rmsg.Text.Content, rmsg.SenderStaffId)
+		cli, reply, err := chatgpt.ContextQa(rmsg.Text.Content, rmsg.GetSenderIdentifier())
 		if err != nil {
 			logger.Info(fmt.Sprintf("gpt request error: %v", err))
 			if strings.Contains(fmt.Sprintf("%v", err), "maximum text length exceeded") {
-				public.UserService.ClearUserSessionContext(rmsg.SenderStaffId)
+				public.UserService.ClearUserSessionContext(rmsg.GetSenderIdentifier())
 				_, err = rmsg.ReplyToDingtalk(string(dingbot.TEXT), fmt.Sprintf("请求openai失败了，错误信息：%v，看起来是超过最大对话限制了，已自动重置您的对话", err))
 				if err != nil {
 					logger.Warning(fmt.Errorf("send message error: %v", err))
@@ -145,7 +145,7 @@ func Do(mode string, rmsg *dingbot.ReceiveMsg) error {
 				logger.Warning(fmt.Errorf("send message error: %v", err))
 				return err
 			}
-			_ = cli.ChatContext.SaveConversation(rmsg.SenderStaffId)
+			_ = cli.ChatContext.SaveConversation(rmsg.GetSenderIdentifier())
 		}
 	default:
 
@@ -154,7 +154,7 @@ func Do(mode string, rmsg *dingbot.ReceiveMsg) error {
 }
 
 func ImageGenerate(rmsg *dingbot.ReceiveMsg) error {
-	reply, err := chatgpt.ImageQa(rmsg.Text.Content, rmsg.SenderStaffId)
+	reply, err := chatgpt.ImageQa(rmsg.Text.Content, rmsg.GetSenderIdentifier())
 	if err != nil {
 		logger.Info(fmt.Errorf("gpt request error: %v", err))
 		_, err = rmsg.ReplyToDingtalk(string(dingbot.TEXT), fmt.Sprintf("请求openai失败了，错误信息：%v", err))
