@@ -33,6 +33,8 @@ type Configuration struct {
 	Port string `yaml:"port"`
 	// 指定服务的地址，就是钉钉机器人配置的回调地址，比如: http://chat.eryajf.net
 	ServiceURL string `yaml:"service_url"`
+	// 限定对话类型 0：不限 1：单聊 2：群聊
+	ChatType string `yaml:"chat_type"`
 }
 
 var config *Configuration
@@ -62,6 +64,7 @@ func LoadConfig() *Configuration {
 		maxRequest := os.Getenv("MAX_REQUEST")
 		port := os.Getenv("PORT")
 		serviceURL := os.Getenv("SERVICE_URL")
+		chatType := os.Getenv("CHAT_TYPE")
 		if apiKey != "" {
 			config.ApiKey = apiKey
 		}
@@ -97,6 +100,9 @@ func LoadConfig() *Configuration {
 		if serviceURL != "" {
 			config.ServiceURL = serviceURL
 		}
+		if chatType != "" {
+			config.ChatType = chatType
+		}
 	})
 	if config.Model == "" {
 		config.DefaultMode = "gpt-3.5-turbo"
@@ -106,6 +112,9 @@ func LoadConfig() *Configuration {
 	}
 	if config.Port == "" {
 		config.Port = "8090"
+	}
+	if config.ChatType == "" {
+		config.ChatType = "0"
 	}
 	if config.ApiKey == "" {
 		logger.Fatal("config err: api key required")

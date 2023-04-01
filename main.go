@@ -41,6 +41,14 @@ func Start() {
 		// 打印钉钉回调过来的请求明细
 		logger.Info(fmt.Sprintf("dingtalk callback parameters: %#v", msgObj))
 		// TODO: 校验请求
+		if public.Config.ChatType != "0" && msgObj.ConversationType != public.Config.ChatType {
+			_, err = msgObj.ReplyToDingtalk(string(dingbot.TEXT), "抱歉，管理员禁用了这种聊天方式，请选择其他聊天方式与机器人对话！")
+			if err != nil {
+				logger.Warning(fmt.Errorf("send message error: %v", err))
+				return err
+			}
+			return nil
+		}
 		if len(msgObj.Text.Content) == 1 || msgObj.Text.Content == "帮助" {
 			// 欢迎信息
 			_, err := msgObj.ReplyToDingtalk(string(dingbot.MARKDOWN), public.Welcome)
