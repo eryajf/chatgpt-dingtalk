@@ -1,6 +1,7 @@
 package db
 
 import (
+	"errors"
 	"fmt"
 	"strings"
 
@@ -48,13 +49,20 @@ func (c Chat) List(req ChatListReq) ([]*Chat, error) {
 
 	userName := strings.TrimSpace(req.Username)
 	if userName != "" {
-		db = db.Where("username LIKE ?", fmt.Sprintf("%%%s%%", userName))
+		db = db.Where("username = ?", fmt.Sprintf("%%%s%%", userName))
 	}
 	source := strings.TrimSpace(req.Source)
 	if source != "" {
-		db = db.Where("source LIKE ?", fmt.Sprintf("%%%s%%", source))
+		db = db.Where("source = ?", fmt.Sprintf("%%%s%%", source))
 	}
 
 	err := db.Find(&list).Error
 	return list, err
+}
+
+// Exist 判断资源是否存在
+func (c Chat) Exist(filter map[string]interface{}) bool {
+	var dataObj Chat
+	err := DB.Where(filter).First(&dataObj).Error
+	return !errors.Is(err, gorm.ErrRecordNotFound)
 }

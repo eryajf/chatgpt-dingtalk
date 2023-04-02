@@ -258,7 +258,7 @@ func ImageGenerate(rmsg *dingbot.ReceiveMsg) error {
 }
 func SelectHistory(rmsg *dingbot.ReceiveMsg) error {
 	name := strings.TrimSpace(strings.Split(rmsg.Text.Content, ":")[1])
-	if !rmsg.IsAdmin || name != rmsg.SenderNick {
+	if !rmsg.IsAdmin && name != rmsg.SenderNick && !public.JudgeAdminUsers(rmsg.SenderNick) {
 		_, err := rmsg.ReplyToDingtalk(string(dingbot.MARKDOWN), "**🤷 抱歉，您没有权限查询其他人的对话记录！**")
 		if err != nil {
 			logger.Error(fmt.Errorf("send message error: %v", err))
@@ -268,6 +268,14 @@ func SelectHistory(rmsg *dingbot.ReceiveMsg) error {
 	}
 	// 获取数据列表
 	var chat db.Chat
+	if !chat.Exist(map[string]interface{}{"username": name}) {
+		_, err := rmsg.ReplyToDingtalk(string(dingbot.TEXT), "用户名错误，这个用户不存在，请核实之后再进行查询")
+		if err != nil {
+			logger.Error(fmt.Errorf("send message error: %v", err))
+			return err
+		}
+		return fmt.Errorf("用户名错误，这个用户不存在，请核实之后重新查询")
+	}
 	chats, err := chat.List(db.ChatListReq{
 		Username: name,
 	})

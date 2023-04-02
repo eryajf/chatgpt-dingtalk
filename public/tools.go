@@ -23,3 +23,42 @@ func WriteToFile(path string, data []byte) error {
 	}
 	return nil
 }
+
+// JudgeGroup 判断群聊名称是否在白名单
+func JudgeGroup(s string) bool {
+	if len(Config.AllowGroups) == 0 {
+		return true
+	}
+	for _, v := range Config.AllowGroups {
+		if v == s {
+			return true
+		}
+	}
+	return false
+}
+
+// JudgeUsers 判断用户名称是否在白名单
+func JudgeUsers(s string) bool {
+	if len(Config.AllowUsers) == 0 {
+		return true
+	}
+	for _, v := range Config.AllowUsers {
+		if v == s {
+			return true
+		}
+	}
+	return false
+}
+
+// JudgeAdminUsers 判断用户是否为系统管理员
+func JudgeAdminUsers(s string) bool {
+	if len(Config.AllowGroups) == 0 {
+		return false
+	}
+	for _, v := range Config.AdminUsers {
+		if v == s {
+			return true
+		}
+	}
+	return false
+}
