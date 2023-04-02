@@ -80,7 +80,9 @@
 - 🔗 自定义api域名：通过配置指定，解决国内服务器无法直接访问openai的问题
 - 🪜 添加代理：通过配置指定，通过给应用注入代理解决国内服务器无法访问的问题
 - 👐 默认模式：支持自定义默认的聊天模式，通过配置化指定
-- 📝 查询对话：通过发送`#查对话 username:xxx`查询xxx的对话历史，可在线预览，可下载到本地。
+- 📝 查询对话：通过发送`#查对话 username:xxx`查询xxx的对话历史，可在线预览，可下载到本地
+- 👹 白名单机制：通过配置指定，支持指定群组名称和用户名称作为白名单，从而实现可控范围与机器人对话
+- 💂‍♀️ 管理员机制：通过配置指定管理员，部分敏感操作，以及一些应用配置，管理员有权限进行操作
 
 ## 使用前提
 
@@ -144,10 +146,11 @@
 ```
 第一种：基于环境变量运行
 # 运行项目
-$ docker run -itd --name chatgpt -p 8090:8090 -v ./data:/app/data --add-host="host.docker.internal:host-gateway" -e APIKEY=换成你的key -e BASE_URL="" -e MODEL="gpt-3.5-turbo" -e SESSION_TIMEOUT=600 -e HTTP_PROXY="http://host.docker.internal:15732" -e DEFAULT_MODE="单聊" -e MAX_REQUEST=0 -e PORT=8090 -e SERVICE_URL="你当前服务外网可访问的URL" -e CHAT_TYPE="0" --restart=always  dockerproxy.com/eryajf/chatgpt-dingtalk:latest
+$ docker run -itd --name chatgpt -p 8090:8090 -v ./data:/app/data --add-host="host.docker.internal:host-gateway" -e APIKEY=换成你的key -e BASE_URL="" -e MODEL="gpt-3.5-turbo" -e SESSION_TIMEOUT=600 -e HTTP_PROXY="http://host.docker.internal:15732" -e DEFAULT_MODE="单聊" -e MAX_REQUEST=0 -e PORT=8090 -e SERVICE_URL="你当前服务外网可访问的URL" -e CHAT_TYPE="0" -e ALLOW_GROUPS=a,b -e ALLOW_USERS=a,b ADMIN_USERS=a,b --restart=always  dockerproxy.com/eryajf/chatgpt-dingtalk:latest
 ```
 
 `📢 注意：`如果使用docker部署，那么PORT参数不需要进行任何调整。
+`📢 注意：`ALLOW_GROUPS,ALLOW_USERS,ADMIN_USERS三个参数为数组，如果需要指定多个，可用英文逗号分割。
 `📢 注意：`如果服务器节点本身就在国外或者自定义了`BASE_URL`，那么就把`HTTP_PROXY`参数留空即可。
 `📢 注意：`如果使用docker部署，那么proxy地址可以直接使用如上方式部署，`host.docker.internal`会指向容器所在宿主机的IP，只需要更改端口为你的代理端口即可。参见：[Docker容器如何优雅地访问宿主机网络](https://wiki.eryajf.net/pages/674f53/)
 
@@ -352,6 +355,14 @@ port: "8090"
 service_url: "http://chat.eryajf.net"
 # 限定对话类型 0：不限 1：只能单聊 2：只能群聊
 chat_type: "0"
+# 哪些群组可以进行对话，如果留空，则表示允许所有群组，对话聊天是，如下三个满足其一即可通过校验
+allow_groups:
+  - "学无止境"
+# 哪些用户可以进行对话，如果留空，则表示允许所有用户
+allow_users:
+  - "xxx"
+# 指定哪些人为此系统的管理员，如果留空，则表示没有人是管理员
+admin_users:
 ```
 
 ## 常见问题

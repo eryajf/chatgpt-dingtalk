@@ -49,6 +49,14 @@ func Start() {
 			}
 			return nil
 		}
+		if !public.JudgeGroup(msgObj.GetChatTitle()) && !public.JudgeUsers(msgObj.SenderNick) && !public.JudgeAdminUsers(msgObj.SenderNick) {
+			_, err = msgObj.ReplyToDingtalk(string(dingbot.TEXT), "抱歉，您不在该机器人对话功能的白名单当中！")
+			if err != nil {
+				logger.Warning(fmt.Errorf("send message error: %v", err))
+				return err
+			}
+			return nil
+		}
 		if len(msgObj.Text.Content) == 1 || msgObj.Text.Content == "帮助" {
 			// 欢迎信息
 			_, err := msgObj.ReplyToDingtalk(string(dingbot.MARKDOWN), public.Welcome)

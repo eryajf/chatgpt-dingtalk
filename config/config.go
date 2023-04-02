@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"strings"
 	"sync"
 	"time"
 
@@ -35,6 +36,12 @@ type Configuration struct {
 	ServiceURL string `yaml:"service_url"`
 	// 限定对话类型 0：不限 1：单聊 2：群聊
 	ChatType string `yaml:"chat_type"`
+	// 哪些群组可以进行对话
+	AllowGroups []string `yaml:"allow_groups"`
+	// 哪些用户可以进行对话
+	AllowUsers []string `yaml:"allow_users"`
+	// 指定哪些人为此系统的管理员，必须指定，否则所有人都是
+	AdminUsers []string `yaml:"admin_users"`
 }
 
 var config *Configuration
@@ -56,21 +63,18 @@ func LoadConfig() *Configuration {
 
 		// 如果环境变量有配置，读取环境变量
 		apiKey := os.Getenv("APIKEY")
-		baseURL := os.Getenv("BASE_URL")
-		model := os.Getenv("MODEL")
-		sessionTimeout := os.Getenv("SESSION_TIMEOUT")
-		defaultMode := os.Getenv("DEFAULT_MODE")
-		httpProxy := os.Getenv("HTTP_PROXY")
-		maxRequest := os.Getenv("MAX_REQUEST")
-		port := os.Getenv("PORT")
-		serviceURL := os.Getenv("SERVICE_URL")
-		chatType := os.Getenv("CHAT_TYPE")
 		if apiKey != "" {
 			config.ApiKey = apiKey
 		}
+		baseURL := os.Getenv("BASE_URL")
 		if baseURL != "" {
 			config.BaseURL = baseURL
 		}
+		model := os.Getenv("MODEL")
+		if model != "" {
+			config.Model = model
+		}
+		sessionTimeout := os.Getenv("SESSION_TIMEOUT")
 		if sessionTimeout != "" {
 			duration, err := strconv.ParseInt(sessionTimeout, 10, 64)
 			if err != nil {
@@ -81,27 +85,42 @@ func LoadConfig() *Configuration {
 		} else {
 			config.SessionTimeout = time.Duration(config.SessionTimeout) * time.Second
 		}
+		defaultMode := os.Getenv("DEFAULT_MODE")
 		if defaultMode != "" {
 			config.DefaultMode = defaultMode
 		}
+		httpProxy := os.Getenv("HTTP_PROXY")
 		if httpProxy != "" {
 			config.HttpProxy = httpProxy
 		}
-		if model != "" {
-			config.Model = model
-		}
+		maxRequest := os.Getenv("MAX_REQUEST")
 		if maxRequest != "" {
 			newMR, _ := strconv.Atoi(maxRequest)
 			config.MaxRequest = newMR
 		}
+		port := os.Getenv("PORT")
 		if port != "" {
 			config.Port = port
 		}
+		serviceURL := os.Getenv("SERVICE_URL")
 		if serviceURL != "" {
 			config.ServiceURL = serviceURL
 		}
+		chatType := os.Getenv("CHAT_TYPE")
 		if chatType != "" {
 			config.ChatType = chatType
+		}
+		allowGroup := os.Getenv("ALLOW_GROUPS")
+		if allowGroup != "" {
+			config.AllowGroups = strings.Split(allowGroup, ",")
+		}
+		allowUsers := os.Getenv("ALLOW_USERS")
+		if allowUsers != "" {
+			config.AllowUsers = strings.Split(allowUsers, ",")
+		}
+		adminUsers := os.Getenv("ADMIN_USERS")
+		if adminUsers != "" {
+			config.AdminUsers = strings.Split(adminUsers, ",")
 		}
 	})
 	if config.Model == "" {
