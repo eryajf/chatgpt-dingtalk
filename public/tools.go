@@ -1,7 +1,6 @@
-package chatgpt
+package public
 
 import (
-	"fmt"
 	"io/ioutil"
 	"os"
 	"strings"
@@ -13,7 +12,7 @@ func WriteToFile(path string, data []byte) error {
 	if len(tmp) > 0 {
 		tmp = tmp[:len(tmp)-1]
 	}
-	fmt.Println(tmp)
+
 	err := os.MkdirAll(strings.Join(tmp, "/"), os.ModePerm)
 	if err != nil {
 		return err

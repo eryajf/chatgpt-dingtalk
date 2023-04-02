@@ -19,6 +19,10 @@ type UserServiceInterface interface {
 	// 用户请求次数
 	SetUseRequestCount(userId string, current int)
 	GetUseRequestCount(uerId string) int
+	// 用户对话ID
+	SetAnswerID(userId, chattype string, current uint)
+	GetAnswerID(uerId, chattype string) uint
+	ClearAnswerID(userId, chattitle string)
 }
 
 var _ UserServiceInterface = (*UserService)(nil)

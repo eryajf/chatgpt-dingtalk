@@ -80,6 +80,7 @@
 - 🔗 自定义api域名：通过配置指定，解决国内服务器无法直接访问openai的问题
 - 🪜 添加代理：通过配置指定，通过给应用注入代理解决国内服务器无法访问的问题
 - 👐 默认模式：支持自定义默认的聊天模式，通过配置化指定
+- 📝 查询对话：通过发送`#查对话 username:xxx`查询xxx的对话历史，可在线预览，可下载到本地。
 
 ## 使用前提
 
@@ -143,7 +144,7 @@
 ```
 第一种：基于环境变量运行
 # 运行项目
-$ docker run -itd --name chatgpt -p 8090:8090 --add-host="host.docker.internal:host-gateway" -e APIKEY=换成你的key -e BASE_URL="" -e MODEL="gpt-3.5-turbo" -e SESSION_TIMEOUT=600 -e HTTP_PROXY="http://host.docker.internal:15732" -e DEFAULT_MODE="单聊" -e MAX_REQUEST=0 -e PORT=8090 -e SERVICE_URL="你当前服务外网可访问的URL" -e CHAT_TYPE="0" --restart=always  dockerproxy.com/eryajf/chatgpt-dingtalk:latest
+$ docker run -itd --name chatgpt -p 8090:8090 -v ./data:/app/data --add-host="host.docker.internal:host-gateway" -e APIKEY=换成你的key -e BASE_URL="" -e MODEL="gpt-3.5-turbo" -e SESSION_TIMEOUT=600 -e HTTP_PROXY="http://host.docker.internal:15732" -e DEFAULT_MODE="单聊" -e MAX_REQUEST=0 -e PORT=8090 -e SERVICE_URL="你当前服务外网可访问的URL" -e CHAT_TYPE="0" --restart=always  dockerproxy.com/eryajf/chatgpt-dingtalk:latest
 ```
 
 `📢 注意：`如果使用docker部署，那么PORT参数不需要进行任何调整。

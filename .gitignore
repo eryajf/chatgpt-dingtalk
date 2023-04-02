@@ -18,5 +18,8 @@ chatgpt-dingtalk
 # Dependency directories (remove the comment below to include it)
 # vendor/
 config.yml
+dingtalkbot.sqlite
 tmp
 test/
+images/
+data/
