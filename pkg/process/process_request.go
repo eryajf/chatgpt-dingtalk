@@ -5,6 +5,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/eryajf/chatgpt-dingtalk/pkg/db"
 	"github.com/eryajf/chatgpt-dingtalk/pkg/dingbot"
 	"github.com/eryajf/chatgpt-dingtalk/pkg/logger"
 	"github.com/eryajf/chatgpt-dingtalk/public"
@@ -29,8 +30,12 @@ func ProcessRequest(rmsg *dingbot.ReceiveMsg) error {
 				logger.Warning(fmt.Errorf("send message error: %v", err))
 			}
 		case "重置":
+			// 重置用户对话模式
 			public.UserService.ClearUserMode(rmsg.GetSenderIdentifier())
+			// 清空用户对话上下文
 			public.UserService.ClearUserSessionContext(rmsg.GetSenderIdentifier())
+			// 清空用户对话的答案ID
+			public.UserService.ClearAnswerID(rmsg.SenderNick, rmsg.GetChatTitle())
 			_, err := rmsg.ReplyToDingtalk(string(dingbot.TEXT), fmt.Sprintf("=====已重置与👉%s👈的对话模式，可以开始新的对话=====", rmsg.SenderNick))
 			if err != nil {
 				logger.Warning(fmt.Errorf("send message error: %v", err))
@@ -83,6 +88,17 @@ func Do(mode string, rmsg *dingbot.ReceiveMsg) error {
 	public.UserService.SetUserMode(rmsg.GetSenderIdentifier(), mode)
 	switch mode {
 	case "单聊":
+		qObj := db.Chat{
+			Username:      rmsg.SenderNick,
+			Source:        rmsg.GetChatTitle(),
+			ChatType:      db.Q,
+			ParentContent: 0,
+			Content:       rmsg.Text.Content,
+		}
+		qid, err := qObj.Add()
+		if err != nil {
+			logger.Error("往MySQL新增数据失败,错误信息：", err)
+		}
 		reply, err := chatgpt.SingleQa(rmsg.Text.Content, rmsg.GetSenderIdentifier())
 		if err != nil {
 			logger.Info(fmt.Errorf("gpt request error: %v", err))
@@ -107,6 +123,18 @@ func Do(mode string, rmsg *dingbot.ReceiveMsg) error {
 		} else {
 			reply = strings.TrimSpace(reply)
 			reply = strings.Trim(reply, "\n")
+			aObj := db.Chat{
+				Username:      rmsg.SenderNick,
+				Source:        rmsg.GetChatTitle(),
+				ChatType:      db.A,
+				ParentContent: qid,
+				Content:       reply,
+			}
+			_, err := aObj.Add()
+			if err != nil {
+				logger.Error("往MySQL新增数据失败,错误信息：", err)
+			}
+			logger.Info(fmt.Sprintf("🤖 %s得到的答案: %#v", rmsg.SenderNick, reply))
 			// 回复@我的用户
 			_, err = rmsg.ReplyToDingtalk(string(dingbot.TEXT), reply)
 			if err != nil {
@@ -115,6 +143,18 @@ func Do(mode string, rmsg *dingbot.ReceiveMsg) error {
 			}
 		}
 	case "串聊":
+		lastAid := public.UserService.GetAnswerID(rmsg.SenderNick, rmsg.GetChatTitle())
+		qObj := db.Chat{
+			Username:      rmsg.SenderNick,
+			Source:        rmsg.GetChatTitle(),
+			ChatType:      db.Q,
+			ParentContent: lastAid,
+			Content:       rmsg.Text.Content,
+		}
+		qid, err := qObj.Add()
+		if err != nil {
+			logger.Error("往MySQL新增数据失败,错误信息：", err)
+		}
 		cli, reply, err := chatgpt.ContextQa(rmsg.Text.Content, rmsg.GetSenderIdentifier())
 		if err != nil {
 			logger.Info(fmt.Sprintf("gpt request error: %v", err))
@@ -139,6 +179,20 @@ func Do(mode string, rmsg *dingbot.ReceiveMsg) error {
 		} else {
 			reply = strings.TrimSpace(reply)
 			reply = strings.Trim(reply, "\n")
+			aObj := db.Chat{
+				Username:      rmsg.SenderNick,
+				Source:        rmsg.GetChatTitle(),
+				ChatType:      db.A,
+				ParentContent: qid,
+				Content:       reply,
+			}
+			aid, err := aObj.Add()
+			if err != nil {
+				logger.Error("往MySQL新增数据失败,错误信息：", err)
+			}
+			// 将当前回答的ID放入缓存
+			public.UserService.SetAnswerID(rmsg.SenderNick, rmsg.GetChatTitle(), aid)
+			logger.Info(fmt.Sprintf("🤖 %s得到的答案: %#v", rmsg.SenderNick, reply))
 			// 回复@我的用户
 			_, err = rmsg.ReplyToDingtalk(string(dingbot.TEXT), reply)
 			if err != nil {
@@ -154,12 +208,23 @@ func Do(mode string, rmsg *dingbot.ReceiveMsg) error {
 }
 
 func ImageGenerate(rmsg *dingbot.ReceiveMsg) error {
+	qObj := db.Chat{
+		Username:      rmsg.SenderNick,
+		Source:        rmsg.GetChatTitle(),
+		ChatType:      db.Q,
+		ParentContent: 0,
+		Content:       rmsg.Text.Content,
+	}
+	qid, err := qObj.Add()
+	if err != nil {
+		logger.Error("往MySQL新增数据失败,错误信息：", err)
+	}
 	reply, err := chatgpt.ImageQa(rmsg.Text.Content, rmsg.GetSenderIdentifier())
 	if err != nil {
 		logger.Info(fmt.Errorf("gpt request error: %v", err))
 		_, err = rmsg.ReplyToDingtalk(string(dingbot.TEXT), fmt.Sprintf("请求openai失败了，错误信息：%v", err))
 		if err != nil {
-			logger.Warning(fmt.Errorf("send message error: %v", err))
+			logger.Error(fmt.Errorf("send message error: %v", err))
 			return err
 		}
 	}
@@ -169,12 +234,68 @@ func ImageGenerate(rmsg *dingbot.ReceiveMsg) error {
 	} else {
 		reply = strings.TrimSpace(reply)
 		reply = strings.Trim(reply, "\n")
-		// 回复@我的用户
-		_, err = rmsg.ReplyToDingtalk(string(dingbot.MARKDOWN), fmt.Sprintf(">点击图片可旋转或放大。\n![](%s)", reply))
+		reply = fmt.Sprintf(">点击图片可旋转或放大。\n![](%s)", reply)
+		aObj := db.Chat{
+			Username:      rmsg.SenderNick,
+			Source:        rmsg.GetChatTitle(),
+			ChatType:      db.A,
+			ParentContent: qid,
+			Content:       reply,
+		}
+		_, err := aObj.Add()
 		if err != nil {
-			logger.Warning(fmt.Errorf("send message error: %v", err))
+			logger.Error("往MySQL新增数据失败,错误信息：", err)
+		}
+		logger.Info(fmt.Sprintf("🤖 %s得到的答案: %#v", rmsg.SenderNick, reply))
+		// 回复@我的用户
+		_, err = rmsg.ReplyToDingtalk(string(dingbot.MARKDOWN), reply)
+		if err != nil {
+			logger.Error(fmt.Errorf("send message error: %v", err))
 			return err
 		}
+	}
+	return nil
+}
+func SelectHistory(rmsg *dingbot.ReceiveMsg) error {
+	name := strings.TrimSpace(strings.Split(rmsg.Text.Content, ":")[1])
+	if !rmsg.IsAdmin || name != rmsg.SenderNick {
+		_, err := rmsg.ReplyToDingtalk(string(dingbot.MARKDOWN), "**🤷 抱歉，您没有权限查询其他人的对话记录！**")
+		if err != nil {
+			logger.Error(fmt.Errorf("send message error: %v", err))
+			return err
+		}
+		return nil
+	}
+	// 获取数据列表
+	var chat db.Chat
+	chats, err := chat.List(db.ChatListReq{
+		Username: name,
+	})
+	if err != nil {
+		return err
+	}
+	var rst string
+	for _, chatTmp := range chats {
+		ctime := chatTmp.CreatedAt.Format("2006-01-02 15:04:05")
+		if chatTmp.ChatType == 1 {
+			rst += fmt.Sprintf("## 🙋 %s 问\n\n**时间:** %v\n\n**问题为:** %s\n\n", chatTmp.Username, ctime, chatTmp.Content)
+		} else {
+			rst += fmt.Sprintf("## 🤖 机器人答\n\n**时间:** %v\n\n**回答如下：** \n\n%s\n\n", ctime, chatTmp.Content)
+		}
+		// TODO: 答案应该严格放在问题之后，目前只根据ID排序进行的陈列，当一个用户同时提出多个问题时，最终展示的可能会有点问题
+	}
+	fileName := time.Now().Format("20060102-150405") + ".md"
+	// 写入文件
+	if err = public.WriteToFile("./data/chatHistory/"+fileName, []byte(rst)); err != nil {
+		return err
+	}
+	// 回复@我的用户
+	reply := fmt.Sprintf("- 在线查看: [点我](%s)\n- 下载文件: [点我](%s)\n- 在线预览请安装插件:[Markdown Preview Plus](https://chrome.google.com/webstore/detail/markdown-preview-plus/febilkbfcbhebfnokafefeacimjdckgl)", public.Config.ServiceURL+"/history/"+fileName, public.Config.ServiceURL+"/download/"+fileName)
+	logger.Info(fmt.Sprintf("🤖 %s得到的答案: %#v", rmsg.SenderNick, reply))
+	_, err = rmsg.ReplyToDingtalk(string(dingbot.MARKDOWN), reply)
+	if err != nil {
+		logger.Error(fmt.Errorf("send message error: %v", err))
+		return err
 	}
 	return nil
 }

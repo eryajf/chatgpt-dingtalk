@@ -39,7 +39,7 @@ func Start() {
 		// 去除问题的前后空格
 		msgObj.Text.Content = strings.TrimSpace(msgObj.Text.Content)
 		// 打印钉钉回调过来的请求明细
-		logger.Info(fmt.Sprintf("dingtalk callback parameters: %#v", msgObj))
+		// logger.Info(fmt.Sprintf("dingtalk callback parameters: %#v", msgObj))
 		// TODO: 校验请求
 		if public.Config.ChatType != "0" && msgObj.ConversationType != public.Config.ChatType {
 			_, err = msgObj.ReplyToDingtalk(string(dingbot.TEXT), "抱歉，管理员禁用了这种聊天方式，请选择其他聊天方式与机器人对话！")
@@ -57,10 +57,13 @@ func Start() {
 				return ship.ErrBadRequest.New(fmt.Errorf("send message error: %v", err))
 			}
 		} else {
+			logger.Info(fmt.Sprintf("🙋 %s发起的问题: %#v", msgObj.SenderNick, msgObj.Text.Content))
 			// 除去帮助之外的逻辑分流在这里处理
 			switch {
 			case strings.HasPrefix(msgObj.Text.Content, "#图片"):
 				return process.ImageGenerate(&msgObj)
+			case strings.HasPrefix(msgObj.Text.Content, "#查对话"):
+				return process.SelectHistory(&msgObj)
 			default:
 				msgObj.Text.Content, err = process.GeneratePrompt(msgObj.Text.Content)
 				// err不为空：提示词之后没有文本 -> 直接返回提示词所代表的内容
@@ -72,7 +75,6 @@ func Start() {
 					}
 					return nil
 				}
-				logger.Info(fmt.Sprintf("after generate prompt: %#v", msgObj.Text.Content))
 				return process.ProcessRequest(&msgObj)
 			}
 		}
@@ -81,8 +83,20 @@ func Start() {
 	// 解析生成后的图片
 	app.Route("/images/:filename").GET(func(c *ship.Context) error {
 		filename := c.Param("filename")
-		root := "./images/"
+		root := "./data/images/"
 		return c.File(filepath.Join(root, filename))
+	})
+	// 解析生成后的历史聊天
+	app.Route("/history/:filename").GET(func(c *ship.Context) error {
+		filename := c.Param("filename")
+		root := "./data/chatHistory/"
+		return c.File(filepath.Join(root, filename))
+	})
+	// 直接下载文件
+	app.Route("/download/:filename").GET(func(c *ship.Context) error {
+		filename := c.Param("filename")
+		root := "./data/chatHistory/"
+		return c.Attachment(filepath.Join(root, filename), "")
 	})
 
 	port := ":" + public.Config.Port

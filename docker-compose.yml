@@ -17,7 +17,7 @@ services:
       SERVICE_URL: ""  # 指定服务的地址，就是当前服务可供外网访问的地址(或者直接理解为你配置在钉钉回调那里的地址)，用于生成图片时给钉钉做渲染
       CHAT_TYPE: "0" # 限定对话类型 0：不限 1：只能单聊 2：只能群聊
     volumes:
-      - ./data/images:/app/images
+      - ./data:/app/data
     ports:
       - "8090:8090"
     extra_hosts:

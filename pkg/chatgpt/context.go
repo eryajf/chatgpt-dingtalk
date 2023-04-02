@@ -250,7 +250,7 @@ func (c *ChatGPT) GenreateImage(prompt string) (string, error) {
 		if err != nil {
 			return "", err
 		}
-		file, err := os.Create("images/" + imageName)
+		file, err := os.Create("data/images/" + imageName)
 		if err != nil {
 			return "", err
 		}
