@@ -2,7 +2,6 @@ package db
 
 import (
 	"errors"
-	"fmt"
 	"strings"
 
 	"gorm.io/gorm"
@@ -49,11 +48,11 @@ func (c Chat) List(req ChatListReq) ([]*Chat, error) {
 
 	userName := strings.TrimSpace(req.Username)
 	if userName != "" {
-		db = db.Where("username = ?", fmt.Sprintf("%%%s%%", userName))
+		db = db.Where("username = ?", userName)
 	}
 	source := strings.TrimSpace(req.Source)
 	if source != "" {
-		db = db.Where("source = ?", fmt.Sprintf("%%%s%%", source))
+		db = db.Where("source = ?", source)
 	}
 
 	err := db.Find(&list).Error
