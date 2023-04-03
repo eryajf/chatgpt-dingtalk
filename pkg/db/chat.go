@@ -21,9 +21,10 @@ type Chat struct {
 	Content       string   `gorm:"type:varchar(128);comment:'内容'" json:"content"` // 问题或回答的内容
 }
 
-// 需要考虑下如何处理一个完整对话的问题
-// 如果是单聊，那么就记录上下两句就好了
-// 如果是串聊，则需要知道哪条是第一条，并依次往下记录
+type ChatListReq struct {
+	Username string `json:"username" form:"username"`
+	Source   string `json:"source" form:"source"`
+}
 
 // Add 添加资源
 func (c Chat) Add() (uint, error) {
@@ -34,11 +35,6 @@ func (c Chat) Add() (uint, error) {
 // Find 获取单个资源
 func (c Chat) Find(filter map[string]interface{}, data *Chat) error {
 	return DB.Where(filter).First(&data).Error
-}
-
-type ChatListReq struct {
-	Username string `json:"username" form:"username"`
-	Source   string `json:"source" form:"source"`
 }
 
 // List 获取数据列表
