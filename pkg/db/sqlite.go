@@ -1,6 +1,8 @@
 package db
 
 import (
+	"os"
+
 	"github.com/eryajf/chatgpt-dingtalk/pkg/logger"
 	"github.com/glebarez/sqlite"
 	"gorm.io/gorm"
@@ -24,6 +26,10 @@ func dbAutoMigrate() {
 }
 
 func ConnSqlite() *gorm.DB {
+	err := os.MkdirAll("data", 0755)
+	if err != nil {
+		return nil
+	}
 	db, err := gorm.Open(sqlite.Open("data/dingtalkbot.sqlite"), &gorm.Config{
 		// 禁用外键(指定外键时不会在mysql创建真实的外键约束)
 		DisableForeignKeyConstraintWhenMigrating: true,
