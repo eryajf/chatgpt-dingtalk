@@ -72,7 +72,7 @@ func ProcessRequest(rmsg *dingbot.ReceiveMsg) error {
 				logger.Warning(fmt.Errorf("send message error: %v", err))
 			}
 		case "查对话":
-			msg := "使用如下指令进行查询:\n\n---\n\n**#查对话 username:张三**\n\n---\n\n需要注意格式必须严格与上边一致，否则会查询失败\n\n只有钉钉管理员，程序系统管理员，与查自己的情况下，才会被允许"
+			msg := "使用如下指令进行查询:\n\n---\n\n**#查对话 username:张三**\n\n---\n\n需要注意格式必须严格与上边一致，否则将会查询失败\n\n只有程序系统管理员有权限查询，即config.yml中的admin_users指定的人员。"
 			_, err := rmsg.ReplyToDingtalk(string(dingbot.MARKDOWN), msg)
 			if err != nil {
 				logger.Warning(fmt.Errorf("send message error: %v", err))
@@ -264,8 +264,8 @@ func ImageGenerate(rmsg *dingbot.ReceiveMsg) error {
 }
 func SelectHistory(rmsg *dingbot.ReceiveMsg) error {
 	name := strings.TrimSpace(strings.Split(rmsg.Text.Content, ":")[1])
-	if !rmsg.IsAdmin && name != rmsg.SenderNick && !public.JudgeAdminUsers(rmsg.SenderNick) {
-		_, err := rmsg.ReplyToDingtalk(string(dingbot.MARKDOWN), "**🤷 抱歉，您没有权限查询其他人的对话记录！**")
+	if !public.JudgeAdminUsers(rmsg.SenderNick) {
+		_, err := rmsg.ReplyToDingtalk(string(dingbot.MARKDOWN), "**🤷 抱歉，您没有查询对话记录的权限，只有程序管理员可以查询！**")
 		if err != nil {
 			logger.Error(fmt.Errorf("send message error: %v", err))
 			return err
