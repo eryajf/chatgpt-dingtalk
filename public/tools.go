@@ -52,7 +52,8 @@ func JudgeUsers(s string) bool {
 
 // JudgeAdminUsers 判断用户是否为系统管理员
 func JudgeAdminUsers(s string) bool {
-	if len(Config.AllowGroups) == 0 {
+	// 如果没有指定，则没有人是管理员
+	if len(Config.AdminUsers) == 0 {
 		return false
 	}
 	for _, v := range Config.AdminUsers {
