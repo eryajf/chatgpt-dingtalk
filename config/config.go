@@ -16,6 +16,8 @@ import (
 
 // Configuration 项目配置
 type Configuration struct {
+	// 日志级别，info或者debug
+	LogLevel string `yaml:"log_level"`
 	// gtp apikey
 	ApiKey string `yaml:"api_key"`
 	// 请求的 URL 地址
@@ -42,6 +44,8 @@ type Configuration struct {
 	AllowUsers []string `yaml:"allow_users"`
 	// 指定哪些人为此系统的管理员，必须指定，否则所有人都是
 	AdminUsers []string `yaml:"admin_users"`
+	// 钉钉机器人在应用信息中的AppSecret，为了校验回调的请求是否合法
+	AppSecret string `yaml:"app_secret"`
 }
 
 var config *Configuration
@@ -62,6 +66,10 @@ func LoadConfig() *Configuration {
 		}
 
 		// 如果环境变量有配置，读取环境变量
+		logLevel := os.Getenv("LOG_LEVEL")
+		if logLevel != "" {
+			config.LogLevel = logLevel
+		}
 		apiKey := os.Getenv("APIKEY")
 		if apiKey != "" {
 			config.ApiKey = apiKey
@@ -122,7 +130,16 @@ func LoadConfig() *Configuration {
 		if adminUsers != "" {
 			config.AdminUsers = strings.Split(adminUsers, ",")
 		}
+		appSecret := os.Getenv("APP_SECRET")
+		if appSecret != "" {
+			config.AppSecret = appSecret
+		}
 	})
+
+	// 一些默认值
+	if config.LogLevel == "" {
+		config.LogLevel = "info"
+	}
 	if config.Model == "" {
 		config.Model = "gpt-3.5-turbo"
 	}

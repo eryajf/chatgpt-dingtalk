@@ -146,16 +146,16 @@
 ```
 第一种：基于环境变量运行
 # 运行项目
-$ docker run -itd --name chatgpt -p 8090:8090 -v ./data:/app/data --add-host="host.docker.internal:host-gateway" -e APIKEY=换成你的key -e BASE_URL="" -e MODEL="gpt-3.5-turbo" -e SESSION_TIMEOUT=600 -e HTTP_PROXY="http://host.docker.internal:15732" -e DEFAULT_MODE="单聊" -e MAX_REQUEST=0 -e PORT=8090 -e SERVICE_URL="你当前服务外网可访问的URL" -e CHAT_TYPE="0" -e ALLOW_GROUPS=a,b -e ALLOW_USERS=a,b ADMIN_USERS=a,b --restart=always  dockerproxy.com/eryajf/chatgpt-dingtalk:latest
+$ docker run -itd --name chatgpt -p 8090:8090 -v ./data:/app/data --add-host="host.docker.internal:host-gateway" -e LOG_LEVEL="info" -e APIKEY=换成你的key -e BASE_URL="" -e MODEL="gpt-3.5-turbo" -e SESSION_TIMEOUT=600 -e HTTP_PROXY="http://host.docker.internal:15732" -e DEFAULT_MODE="单聊" -e MAX_REQUEST=0 -e PORT=8090 -e SERVICE_URL="你当前服务外网可访问的URL" -e CHAT_TYPE="0" -e ALLOW_GROUPS=a,b -e ALLOW_USERS=a,b ADMIN_USERS=a,b -e APP_SECRET="" --restart=always  dockerproxy.com/eryajf/chatgpt-dingtalk:latest
 ```
+
+> 运行命令中映射的配置文件参考下边的[配置文件说明](#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%AF%B4%E6%98%8E)。
 
 - `📢 注意：`如果使用docker部署，那么PORT参数不需要进行任何调整。
 - `📢 注意：`ALLOW_GROUPS,ALLOW_USERS,ADMIN_USERS三个参数为数组，如果需要指定多个，可用英文逗号分割。
 - `📢 注意：`如果服务器节点本身就在国外或者自定义了`BASE_URL`，那么就把`HTTP_PROXY`参数留空即可。
 - `📢 注意：`如果使用docker部署，那么proxy地址可以直接使用如上方式部署，`host.docker.internal`会指向容器所在宿主机的IP，只需要更改端口为你的代理端口即可。参见：[Docker容器如何优雅地访问宿主机网络](https://wiki.eryajf.net/pages/674f53/)
 
-
-运行命令中映射的配置文件参考下边的[配置文件说明](#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%AF%B4%E6%98%8E)。
 
 ```
 第二种：基于配置文件挂载运行
@@ -335,6 +335,8 @@ $ go run main.go
 ## 配置文件说明
 
 ```yaml
+# 应用的日志级别，info or debug
+log_level: "info"
 # openai api_key
 api_key: "xxxxxxxxx"
 # 如果你使用官方的接口地址 https://api.openai.com，则留空即可，如果你想指定请求url的地址，可通过这个参数进行配置，注意需要带上 http 协议
@@ -363,6 +365,8 @@ allow_groups:
 allow_users: ["张三","李四"]
 # 指定哪些人为此系统的管理员，如果留空，则表示没有人是管理员，如果要限制，则列表中写用户的名称，比如 ["张三","李四"]
 admin_users: []
+# 钉钉机器人在应用信息中的AppSecret，为了校验回调的请求是否合法，如果留空，将会忽略校验，则该接口将会存在其他人也能随意调用的安全隐患，因此强烈建议配置正确的secret
+app_secret: ""
 ```
 
 ## 常见问题
