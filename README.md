@@ -50,8 +50,9 @@
 
 ## 前言
 
-本项目可以助你将GPT机器人集成到钉钉群聊当中。当前默认模型为 gpt-3.5，支持gpt-4。
+本项目可以助你将GPT机器人集成到钉钉群聊当中。当前默认模型为`gpt-3.5`，支持`gpt-4`。
 
+`📢 注意`：当下部署以及配置流程都已非常成熟，文档和issue中基本都覆盖到了，因此不再回答任何项目安装部署与配置使用上的问题，如果完全不懂，可考虑通过 **[邮箱](mailto:eryajf@163.com)** 联系我进行付费的技术支持。
 
 > 🥳 **欢迎关注我的其他开源项目：**
 >
@@ -61,9 +62,9 @@
 > - [read-list](https://github.com/eryajf/read-list)：📖 优质内容订阅，阅读方为根本
 > - [awesome-github-profile-readme-chinese](https://github.com/eryajf/awesome-github-profile-readme-chinese)：🦩 优秀的中文区个人主页搜集
 
-🚜 我还创建了一个项目[awesome-chatgpt-answer](https://github.com/eryajf/awesome-chatgpt-answer)：记录那些问得好，答得妙的时刻，欢迎提交你与ChatGPT交互过程中遇到的那些精妙对话。
+🚜 我还创建了一个项目 **[awesome-chatgpt-answer](https://github.com/eryajf/awesome-chatgpt-answer)** ：记录那些问得好，答得妙的时刻，欢迎提交你与ChatGPT交互过程中遇到的那些精妙对话。
 
-⚗️ openai官方提供了一个[状态页](https://status.openai.com/)来呈现当前openAI服务的状态，同时如果有问题发布公告也会在这个页面，如果你感觉它有问题了，可以在这个页面看看。
+⚗️ openai官方提供了一个 **[状态页](https://status.openai.com/)** 来呈现当前openAI服务的状态，同时如果有问题发布公告也会在这个页面，如果你感觉它有问题了，可以在这个页面看看。
 
 ## 功能介绍
 
@@ -79,6 +80,9 @@
 - 🔗 自定义api域名：通过配置指定，解决国内服务器无法直接访问openai的问题
 - 🪜 添加代理：通过配置指定，通过给应用注入代理解决国内服务器无法访问的问题
 - 👐 默认模式：支持自定义默认的聊天模式，通过配置化指定
+- 📝 查询对话：通过发送`#查对话 username:xxx`查询xxx的对话历史，可在线预览，可下载到本地
+- 👹 白名单机制：通过配置指定，支持指定群组名称和用户名称作为白名单，从而实现可控范围与机器人对话
+- 💂‍♀️ 管理员机制：通过配置指定管理员，部分敏感操作，以及一些应用配置，管理员有权限进行操作
 
 ## 使用前提
 
@@ -142,23 +146,24 @@
 ```
 第一种：基于环境变量运行
 # 运行项目
-$ docker run -itd --name chatgpt -p 8090:8090 --add-host="host.docker.internal:host-gateway" -e APIKEY=换成你的key -e BASE_URL="" -e MODEL="gpt-3.5-turbo" -e SESSION_TIMEOUT=600 -e HTTP_PROXY="http://host.docker.internal:15732" -e DEFAULT_MODE="单聊" -e MAX_REQUEST=0 -e PORT=8090 -e SERVICE_URL="你当前服务外网可访问的URL" --restart=always  dockerproxy.com/eryajf/chatgpt-dingtalk:latest
+$ docker run -itd --name chatgpt -p 8090:8090 -v ./data:/app/data --add-host="host.docker.internal:host-gateway" -e APIKEY=换成你的key -e BASE_URL="" -e MODEL="gpt-3.5-turbo" -e SESSION_TIMEOUT=600 -e HTTP_PROXY="http://host.docker.internal:15732" -e DEFAULT_MODE="单聊" -e MAX_REQUEST=0 -e PORT=8090 -e SERVICE_URL="你当前服务外网可访问的URL" -e CHAT_TYPE="0" -e ALLOW_GROUPS=a,b -e ALLOW_USERS=a,b ADMIN_USERS=a,b --restart=always  dockerproxy.com/eryajf/chatgpt-dingtalk:latest
 ```
 
-`📢 注意：`如果使用docker部署，那么PORT参数不需要进行任何调整。
-`📢 注意：`如果服务器节点本身就在国外或者自定义了`BASE_URL`，那么就把`HTTP_PROXY`参数留空即可。
-`📢 注意：`如果使用docker部署，那么proxy地址可以直接使用如上方式部署，`host.docker.internal`会指向容器所在宿主机的IP，只需要更改端口为你的代理端口即可。参见：[Docker容器如何优雅地访问宿主机网络](https://wiki.eryajf.net/pages/674f53/)
+- `📢 注意：`如果使用docker部署，那么PORT参数不需要进行任何调整。
+- `📢 注意：`ALLOW_GROUPS,ALLOW_USERS,ADMIN_USERS三个参数为数组，如果需要指定多个，可用英文逗号分割。
+- `📢 注意：`如果服务器节点本身就在国外或者自定义了`BASE_URL`，那么就把`HTTP_PROXY`参数留空即可。
+- `📢 注意：`如果使用docker部署，那么proxy地址可以直接使用如上方式部署，`host.docker.internal`会指向容器所在宿主机的IP，只需要更改端口为你的代理端口即可。参见：[Docker容器如何优雅地访问宿主机网络](https://wiki.eryajf.net/pages/674f53/)
 
 
-运行命令中映射的配置文件参考下边的配置文件说明。
+运行命令中映射的配置文件参考下边的[配置文件说明](#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%AF%B4%E6%98%8E)。
 
 ```
 第二种：基于配置文件挂载运行
 # 复制配置文件，根据自己实际情况，调整配置里的内容
-$ cp config.dev.json config.json  # 其中 config.dev.json 从项目的根目录获取
+$ cp config.example.yml config.yml  # 其中 config.example.yml 从项目的根目录获取
 
 # 运行项目
-$ docker run -itd --name chatgpt -p 8090:8090  -v `pwd`/config.json:/app/config.json --restart=always  dockerproxy.com/eryajf/chatgpt-dingtalk:latest
+$ docker run -itd --name chatgpt -p 8090:8090  -v `pwd`/config.yml:/app/config.yml --restart=always  dockerproxy.com/eryajf/chatgpt-dingtalk:latest
 ```
 
 其中配置文件参考下边的配置文件说明。
@@ -171,8 +176,6 @@ $ nano docker-compose.yml # 编辑 APIKEY 等信息
 
 $ docker compose up -d
 ```
-
-注意，不论通过上边哪种docker方式部署，都需要配置Nginx代理，当然你直接通过服务器外网IP也可以。
 
 部署完成之后，通过Nginx代理本服务：
 
@@ -196,12 +199,14 @@ server {
 
 部署完成之后，就可以在群里艾特机器人进行体验了。
 
+`📢 注意`:Nginx代理步骤是个可选步骤，你也可以直接通过服务器外网IP:PORT作为回调地址。
+
 Nginx配置完毕之后，可以先手动请求一下，通过服务日志输出判断服务是否正常可用：
 
 ```sh
 $ curl --location --request POST 'http://chat.eryajf.net/' \
   --header 'Content-type: application/json' \
-  --data-raw '{
+  -d '{
     "conversationId": "xxx",
     "atUsers": [
         {
@@ -242,7 +247,7 @@ $ curl --location --request POST 'http://chat.eryajf.net/' \
 ```sh
 $ tar xf chatgpt-dingtalk-v0.0.4-darwin-arm64.tar.gz
 $ cd chatgpt-dingtalk-v0.0.4-darwin-arm64
-$ cp config.dev.json  config.json # 然后根据情况调整配置文件内容,宿主机如遇端口冲突,可通过调整config.json中的port参数自定义服务端口
+$ cp config.example.yml  config.yml # 然后根据情况调整配置文件内容,宿主机如遇端口冲突,可通过调整config.yml中的port参数自定义服务端口
 $ ./chatgpt-dingtalk  # 直接运行
 
 # 如果要守护在后台运行
@@ -321,7 +326,7 @@ $ git clone https://github.com/eryajf/chatgpt-dingtalk.git
 $ cd chatgpt-dingtalk
 
 # 复制配置文件，根据个人实际情况进行配置
-$ cp config.dev.json config.json
+$ cp config.example.yml config.yml
 
 # 启动项目
 $ go run main.go
@@ -329,18 +334,35 @@ $ go run main.go
 
 ## 配置文件说明
 
-```json
-{
-    "api_key": "xxxxxxxxx",   // openai api_key
-    "base_url": "api.openai.com", //  如果你想指定请求url的地址，可通过这个参数进行配置，默认为官方地址，不需要再添加 /v1
-    "model": "gpt-3.5-turbo", // 指定模型，默认为 gpt-3.5-turbo , 可选参数有： "gpt-4-0314", "gpt-4", "gpt-3.5-turbo-0301", "gpt-3.5-turbo"
-    "session_timeout": 600,   // 会话超时时间,默认600秒,在会话时间内所有发送给机器人的信息会作为上下文
-    "http_proxy": "",         // 指定请求时使用的代理，如果为空，则不使用代理
-    "default_mode": "单聊",    // 默认对话模式，可根据实际场景自定义，如果不设置，默认为单聊
-    "max_request": 0,    // 单人单日请求次数限制，默认为0，即不限制
-    "port": "8090",     // 指定服务启动端口，默认为 8090，一般在二进制宿主机部署时，遇到端口冲突时使用。
-    "service_url": "" // 指定服务的地址，就是当前服务可供外网访问的地址，用于生成图片时给钉钉渲染
-}
+```yaml
+# openai api_key
+api_key: "xxxxxxxxx"
+# 如果你使用官方的接口地址 https://api.openai.com，则留空即可，如果你想指定请求url的地址，可通过这个参数进行配置，注意需要带上 http 协议
+base_url: ""
+# 指定模型，默认为 gpt-3.5-turbo , 可选参数有： "gpt-4-0314", "gpt-4", "gpt-3.5-turbo-0301", "gpt-3.5-turbo"，如果使用gpt-4，请确认自己是否有接口调用白名单
+model: "gpt-3.5-turbo"
+# 会话超时时间,默认600秒,在会话时间内所有发送给机器人的信息会作为上下文
+session_timeout: 600
+# 指定请求时使用的代理，如果为空，则不使用代理，注意需要带上 http 协议 或 socks5 协议
+http_proxy: ""
+# 指定默认的对话模式，可根据实际需求进行自定义，如果不设置，默认为单聊，即无上下文关联的对话模式
+default_mode: "单聊"
+# 单人单日请求次数上限，默认为0，即不限制
+max_request: 0
+# 指定服务启动端口，默认为 8090，一般在二进制宿主机部署时，遇到端口冲突时使用
+port: "8090"
+# 指定服务的地址，就是当前服务可供外网访问的地址(或者直接理解为你配置在钉钉回调那里的地址)，用于生成图片时给钉钉做渲染
+service_url: "http://chat.eryajf.net"
+# 限定对话类型 0：不限 1：只能单聊 2：只能群聊
+chat_type: "0"
+# 哪些群组可以进行对话，如果留空，则表示允许所有群组，如果要限制，则写群组的名称，比如 ["aa","bb"]
+# 对话聊天时，如下三个满足其一即可通过校验
+allow_groups:
+  - "学无止境"
+# 哪些用户可以进行对话，如果留空，则表示允许所有用户，如果要限制，则列表中写用户的名称，比如 ["张三","李四"]
+allow_users: ["张三","李四"]
+# 指定哪些人为此系统的管理员，如果留空，则表示没有人是管理员，如果要限制，则列表中写用户的名称，比如 ["张三","李四"]
+admin_users: []
 ```
 
 ## 常见问题
@@ -367,7 +389,7 @@ $ go run main.go
 
 ## 高光时刻
 
-> 本项目曾在 | [2022-12-12](https://github.com/bonfy/github-trending/blob/master/2022/2022-12-12.md#go) | [2022-12-18](https://github.com/bonfy/github-trending/blob/master/2022/2022-12-18.md#go) | [2022-12-19](https://github.com/bonfy/github-trending/blob/master/2022/2022-12-19.md#go) | [2022-12-20](https://github.com/bonfy/github-trending/blob/master/2022/2022-12-20.md#go) | [2023-02-09](https://github.com/bonfy/github-trending/blob/master/2023-02-09.md#go) | [2023-02-10](https://github.com/bonfy/github-trending/blob/master/2023-02-10.md#go) | [2023-02-11](https://github.com/bonfy/github-trending/blob/master/2023-02-11.md#go) | [2023-02-12](https://github.com/bonfy/github-trending/blob/master/2023-02-12.md#go) | [2023-02-13](https://github.com/bonfy/github-trending/blob/master/2023-02-13.md#go) | [2023-02-14](https://github.com/bonfy/github-trending/blob/master/2023-02-14.md#go) | [2023-02-15](https://github.com/bonfy/github-trending/blob/master/2023-02-15.md#go) | [2023-03-04](https://github.com/bonfy/github-trending/blob/master/2023-03-04.md#go) | [2023-03-05](https://github.com/bonfy/github-trending/blob/master/2023-03-05.md#go) | [2023-03-19](https://github.com/bonfy/github-trending/blob/master/2023-03-19.md#go) | [2023-03-22](https://github.com/bonfy/github-trending/blob/master/2023-03-22.md#go) | [2023-03-25](https://github.com/bonfy/github-trending/blob/master/2023-03-25.md#go) | [2023-03-26](https://github.com/bonfy/github-trending/blob/master/2023-03-26.md#go), 这些天里，登上GitHub Trending。而且还在持续登榜中，可见最近openai的热度。
+> 本项目曾在 | [2022-12-12](https://github.com/bonfy/github-trending/blob/master/2022/2022-12-12.md#go) | [2022-12-18](https://github.com/bonfy/github-trending/blob/master/2022/2022-12-18.md#go) | [2022-12-19](https://github.com/bonfy/github-trending/blob/master/2022/2022-12-19.md#go) | [2022-12-20](https://github.com/bonfy/github-trending/blob/master/2022/2022-12-20.md#go) | [2023-02-09](https://github.com/bonfy/github-trending/blob/master/2023-02-09.md#go) | [2023-02-10](https://github.com/bonfy/github-trending/blob/master/2023-02-10.md#go) | [2023-02-11](https://github.com/bonfy/github-trending/blob/master/2023-02-11.md#go) | [2023-02-12](https://github.com/bonfy/github-trending/blob/master/2023-02-12.md#go) | [2023-02-13](https://github.com/bonfy/github-trending/blob/master/2023-02-13.md#go) | [2023-02-14](https://github.com/bonfy/github-trending/blob/master/2023-02-14.md#go) | [2023-02-15](https://github.com/bonfy/github-trending/blob/master/2023-02-15.md#go) | [2023-03-04](https://github.com/bonfy/github-trending/blob/master/2023-03-04.md#go) | [2023-03-05](https://github.com/bonfy/github-trending/blob/master/2023-03-05.md#go) | [2023-03-19](https://github.com/bonfy/github-trending/blob/master/2023-03-19.md#go) | [2023-03-22](https://github.com/bonfy/github-trending/blob/master/2023-03-22.md#go) | [2023-03-25](https://github.com/bonfy/github-trending/blob/master/2023-03-25.md#go) | [2023-03-26](https://github.com/bonfy/github-trending/blob/master/2023-03-26.md#go) | [2023-03-27](https://github.com/bonfy/github-trending/blob/master/2023-03-27.md#go) | [2023-03-29](https://github.com/bonfy/github-trending/blob/master/2023-03-29.md#go), 这些天里，登上GitHub Trending。而且还在持续登榜中，可见最近openai的热度。
 > ![image_20230316_114915](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230316_114915.jpg)
 
 ## 贡献者列表
@@ -394,6 +416,13 @@ $ go run main.go
             <img src="https://avatars.githubusercontent.com/u/6621172?v=4" width="100;" alt="luoxufeiyan"/>
             <br />
             <sub><b>Hugh Gao</b></sub>
+        </a>
+    </td>
+    <td align="center">
+        <a href="https://github.com/fantasticmao">
+            <img src="https://avatars.githubusercontent.com/u/20675747?v=4" width="100;" alt="fantasticmao"/>
+            <br />
+            <sub><b>Mao Mao</b></sub>
         </a>
     </td>
     <td align="center">

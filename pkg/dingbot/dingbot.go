@@ -68,6 +68,24 @@ type At struct {
 	IsAtAll   bool     `json:"isAtAll"`
 }
 
+// 获取用户标识，兼容当 SenderStaffId 字段为空的场景，此处提供给发送消息是艾特使用
+func (r ReceiveMsg) GetSenderIdentifier() (uid string) {
+	uid = r.SenderStaffId
+	if uid == "" {
+		uid = r.SenderNick
+	}
+	return
+}
+
+// GetChatTitle 获取聊天的群名字，如果是私聊，则命名为 昵称_私聊
+func (r ReceiveMsg) GetChatTitle() (chatType string) {
+	chatType = r.ConversationTitle
+	if chatType == "" {
+		chatType = r.SenderNick + "_私聊"
+	}
+	return
+}
+
 // 发消息给钉钉
 func (r ReceiveMsg) ReplyToDingtalk(msgType, msg string) (statuscode int, err error) {
 	atUser := r.SenderStaffId

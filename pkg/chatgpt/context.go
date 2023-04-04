@@ -246,11 +246,11 @@ func (c *ChatGPT) GenreateImage(prompt string) (string, error) {
 		}
 
 		imageName := time.Now().Format("20060102-150405") + ".png"
-		err = os.MkdirAll("images", 0755)
+		err = os.MkdirAll("data/images", 0755)
 		if err != nil {
 			return "", err
 		}
-		file, err := os.Create("images/" + imageName)
+		file, err := os.Create("data/images/" + imageName)
 		if err != nil {
 			return "", err
 		}
