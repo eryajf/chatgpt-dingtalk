@@ -6,6 +6,7 @@ services:
     image: eryajf/chatgpt-dingtalk:latest
     restart: always
     environment:
+      LOG_LEVEL: "info" # 应用的日志级别 info/debug
       APIKEY: xxxxxx  # 你的 api_key
       BASE_URL: ""  # 如果你使用官方的接口地址 https://api.openai.com，则留空即可，如果你想指定请求url的地址，可通过这个参数进行配置，注意需要带上 http 协议
       MODEL: "gpt-3.5-turbo" # 指定模型，默认为 gpt-3.5-turbo , 可选参数有： "gpt-4-0314", "gpt-4", "gpt-3.5-turbo-0301", "gpt-3.5-turbo"，如果使用gpt-4，请确认自己是否有接口调用白名单
@@ -19,6 +20,7 @@ services:
       ALLOW_GROUPS: "" # 哪些群组可以进行对话，如果留空，则表示允许所有群组，如果要限制，则填写群组的名字，比如 "aa,bb"
       ALLOW_USERS: "" # 哪些用户可以进行对话，如果留空，则表示允许所有用户，如果要限制，则填写用户的名字，比如 "张三,李四"
       ADMIN_USERS: "" # 指定哪些人为此系统的管理员，如果留空，则表示没有人是管理员，如果要限制，则填写用户的名字，比如 "张三,李四"
+      APP_SECRET: "" # 钉钉机器人在应用信息中的AppSecret，为了校验回调的请求是否合法，如果留空，将会忽略校验，则该接口将会存在其他人也能随意调用的安全隐患，因此强烈建议配置正确的secret
     volumes:
       - ./data:/app/data
     ports:

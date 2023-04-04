@@ -13,7 +13,7 @@ import (
 
 // ProcessRequest 分析处理请求逻辑
 func ProcessRequest(rmsg *dingbot.ReceiveMsg) error {
-	if public.CheckRequest(rmsg) {
+	if CheckRequestTimes(rmsg) {
 		content := strings.TrimSpace(rmsg.Text.Content)
 		switch content {
 		case "单聊":
@@ -210,4 +210,25 @@ func Do(mode string, rmsg *dingbot.ReceiveMsg) error {
 
 	}
 	return nil
+}
+
+// CheckRequestTimes 分析处理请求逻辑
+// 主要提供单日请求限额的功能
+func CheckRequestTimes(rmsg *dingbot.ReceiveMsg) bool {
+	if public.Config.MaxRequest == 0 {
+		return true
+	}
+	count := public.UserService.GetUseRequestCount(rmsg.GetSenderIdentifier())
+	// 判断访问次数是否超过限制
+	if count >= public.Config.MaxRequest {
+		logger.Info(fmt.Sprintf("亲爱的: %s，您今日请求次数已达上限，请明天再来，交互发问资源有限，请务必斟酌您的问题，给您带来不便，敬请谅解!", rmsg.SenderNick))
+		_, err := rmsg.ReplyToDingtalk(string(dingbot.TEXT), fmt.Sprintf("一个好的问题，胜过十个好的答案！\n亲爱的: %s，您今日请求次数已达上限，请明天再来，交互发问资源有限，请务必斟酌您的问题，给您带来不便，敬请谅解!", rmsg.SenderNick))
+		if err != nil {
+			logger.Warning(fmt.Errorf("send message error: %v", err))
+		}
+		return false
+	}
+	// 访问次数未超过限制，将计数加1
+	public.UserService.SetUseRequestCount(rmsg.GetSenderIdentifier(), count+1)
+	return true
 }

@@ -1,6 +1,10 @@
 package public
 
 import (
+	"crypto/hmac"
+	"crypto/sha256"
+	"encoding/base64"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"strings"
@@ -67,4 +71,15 @@ func JudgeAdminUsers(s string) bool {
 
 func GetReadTime(t time.Time) string {
 	return t.Format("2006-01-02 15:04:05")
+}
+
+func CheckRequest(ts, sg string) bool {
+	appSecret := Config.AppSecret
+	if appSecret == "" {
+		return true
+	}
+	stringToSign := fmt.Sprintf("%s\n%s", ts, appSecret)
+	mac := hmac.New(sha256.New, []byte(appSecret))
+	_, _ = mac.Write([]byte(stringToSign))
+	return base64.StdEncoding.EncodeToString(mac.Sum(nil)) == sg
 }

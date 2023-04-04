@@ -10,10 +10,15 @@ import (
 var Logger *log.Logger
 var once sync.Once
 
-func init() {
+func InitLogger(level string) {
 	once.Do(func() {
 		Logger = log.New(os.Stderr)
 	})
+	if level == "debug" {
+		Logger.SetLevel(log.DebugLevel)
+	} else {
+		Logger.SetLevel(log.InfoLevel)
+	}
 }
 
 func Info(args ...interface{}) {
@@ -22,6 +27,10 @@ func Info(args ...interface{}) {
 
 func Warning(args ...interface{}) {
 	Logger.Warn(args)
+}
+
+func Debug(args ...interface{}) {
+	Logger.Debug(args)
 }
 
 func Error(args ...interface{}) {

@@ -19,6 +19,7 @@ import (
 
 func init() {
 	public.InitSvc()
+	logger.InitLogger(public.Config.LogLevel)
 }
 func main() {
 	Start()
@@ -32,15 +33,22 @@ func Start() {
 		if err != nil {
 			return ship.ErrBadRequest.New(fmt.Errorf("bind to receivemsg failed : %v", err))
 		}
+		// 先校验回调是否合法
+		if !public.CheckRequest(c.GetReqHeader("timestamp"), c.GetReqHeader("sign")) {
+			logger.Warning("该请求不合法，可能是其他企业或者未经允许的应用调用所致，请知悉！")
+			return nil
+		}
+		// 再校验回调参数是否有价值
 		if msgObj.Text.Content == "" || msgObj.ChatbotUserID == "" {
 			logger.Warning("从钉钉回调过来的内容为空，根据过往的经验，或许重新创建一下机器人，能解决这个问题")
 			return ship.ErrBadRequest.New(fmt.Errorf("从钉钉回调过来的内容为空，根据过往的经验，或许重新创建一下机器人，能解决这个问题"))
 		}
 		// 去除问题的前后空格
 		msgObj.Text.Content = strings.TrimSpace(msgObj.Text.Content)
-		// 打印钉钉回调过来的请求明细
-		// logger.Info(fmt.Sprintf("dingtalk callback parameters: %#v", msgObj))
-		// TODO: 校验请求
+		// 打印钉钉回调过来的请求明细，调试时打开
+		fmt.Println("=======", logger.Logger.GetLevel().String())
+		logger.Debug(fmt.Sprintf("dingtalk callback parameters: %#v", msgObj))
+
 		if public.Config.ChatType != "0" && msgObj.ConversationType != public.Config.ChatType {
 			_, err = msgObj.ReplyToDingtalk(string(dingbot.TEXT), "抱歉，管理员禁用了这种聊天方式，请选择其他聊天方式与机器人对话！")
 			if err != nil {
