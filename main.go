@@ -46,7 +46,6 @@ func Start() {
 		// 去除问题的前后空格
 		msgObj.Text.Content = strings.TrimSpace(msgObj.Text.Content)
 		// 打印钉钉回调过来的请求明细，调试时打开
-		fmt.Println("=======", logger.Logger.GetLevel().String())
 		logger.Debug(fmt.Sprintf("dingtalk callback parameters: %#v", msgObj))
 
 		if public.Config.ChatType != "0" && msgObj.ConversationType != public.Config.ChatType {
@@ -67,7 +66,7 @@ func Start() {
 		}
 		if len(msgObj.Text.Content) == 1 || msgObj.Text.Content == "帮助" {
 			// 欢迎信息
-			_, err := msgObj.ReplyToDingtalk(string(dingbot.MARKDOWN), public.Welcome)
+			_, err := msgObj.ReplyToDingtalk(string(dingbot.MARKDOWN), public.Config.Help)
 			if err != nil {
 				logger.Warning(fmt.Errorf("send message error: %v", err))
 				return ship.ErrBadRequest.New(fmt.Errorf("send message error: %v", err))

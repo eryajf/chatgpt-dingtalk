@@ -46,6 +46,8 @@ type Configuration struct {
 	AdminUsers []string `yaml:"admin_users"`
 	// 钉钉机器人在应用信息中的AppSecret，为了校验回调的请求是否合法
 	AppSecret string `yaml:"app_secret"`
+	// 自定义帮助信息
+	Help string `yaml:"help"`
 }
 
 var config *Configuration
@@ -133,6 +135,10 @@ func LoadConfig() *Configuration {
 		appSecret := os.Getenv("APP_SECRET")
 		if appSecret != "" {
 			config.AppSecret = appSecret
+		}
+		help := os.Getenv("HELP")
+		if help != "" {
+			config.Help = help
 		}
 	})
 

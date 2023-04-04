@@ -146,7 +146,16 @@
 ```
 第一种：基于环境变量运行
 # 运行项目
-$ docker run -itd --name chatgpt -p 8090:8090 -v ./data:/app/data --add-host="host.docker.internal:host-gateway" -e LOG_LEVEL="info" -e APIKEY=换成你的key -e BASE_URL="" -e MODEL="gpt-3.5-turbo" -e SESSION_TIMEOUT=600 -e HTTP_PROXY="http://host.docker.internal:15732" -e DEFAULT_MODE="单聊" -e MAX_REQUEST=0 -e PORT=8090 -e SERVICE_URL="你当前服务外网可访问的URL" -e CHAT_TYPE="0" -e ALLOW_GROUPS=a,b -e ALLOW_USERS=a,b ADMIN_USERS=a,b -e APP_SECRET="" --restart=always  dockerproxy.com/eryajf/chatgpt-dingtalk:latest
+$ docker run -itd --name chatgpt -p 8090:8090 \
+  -v ./data:/app/data --add-host="host.docker.internal:host-gateway" \
+  -e LOG_LEVEL="info" -e APIKEY=换成你的key -e BASE_URL="" \
+  -e MODEL="gpt-3.5-turbo" -e SESSION_TIMEOUT=600 \
+  -e HTTP_PROXY="http://host.docker.internal:15732" \
+  -e DEFAULT_MODE="单聊" -e MAX_REQUEST=0 -e PORT=8090 \
+  -e SERVICE_URL="你当前服务外网可访问的URL" -e CHAT_TYPE="0" \
+  -e ALLOW_GROUPS=a,b -e ALLOW_USERS=a,b ADMIN_USERS=a,b -e APP_SECRET="" \
+  -e HELP: "欢迎使用本工具\n\n你可以查看：[用户指南](https://github.com/eryajf/chatgpt-dingtalk/blob/main/docs/userGuide.md)\n\n这是一个[开源项目](https://github.com/eryajf/chatgpt-dingtalk/)，觉得不错你可以来波素质三连."  \
+  --restart=always  dockerproxy.com/eryajf/chatgpt-dingtalk:latest
 ```
 
 > 运行命令中映射的配置文件参考下边的[配置文件说明](#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%AF%B4%E6%98%8E)。
@@ -367,6 +376,8 @@ allow_users: ["张三","李四"]
 admin_users: []
 # 钉钉机器人在应用信息中的AppSecret，为了校验回调的请求是否合法，如果留空，将会忽略校验，则该接口将会存在其他人也能随意调用的安全隐患，因此强烈建议配置正确的secret
 app_secret: ""
+# 帮助信息，放在配置文件，可供自定义
+help: "欢迎使用本工具\n\n你可以查看：[用户指南](https://github.com/eryajf/chatgpt-dingtalk/blob/main/docs/userGuide.md)\n\n这是一个[开源项目](https://github.com/eryajf/chatgpt-dingtalk/)，觉得不错你可以来波素质三连."
 ```
 
 ## 常见问题
