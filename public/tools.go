@@ -4,6 +4,7 @@ import (
 	"io/ioutil"
 	"os"
 	"strings"
+	"time"
 )
 
 // 将内容写入到文件，如果文件名带路径，则会判断路径是否存在，不存在则创建
@@ -62,4 +63,8 @@ func JudgeAdminUsers(s string) bool {
 		}
 	}
 	return false
+}
+
+func GetReadTime(t time.Time) string {
+	return t.Format("2006-01-02 15:04:05")
 }
