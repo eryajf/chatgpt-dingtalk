@@ -72,6 +72,10 @@ func Start() {
 				return process.ImageGenerate(&msgObj)
 			case strings.HasPrefix(msgObj.Text.Content, "#查对话"):
 				return process.SelectHistory(&msgObj)
+			case strings.HasPrefix(msgObj.Text.Content, "#域名"):
+				return process.DomainMsg(&msgObj)
+			case strings.HasPrefix(msgObj.Text.Content, "#证书"):
+				return process.DomainCertMsg(&msgObj)
 			default:
 				msgObj.Text.Content, err = process.GeneratePrompt(msgObj.Text.Content)
 				// err不为空：提示词之后没有文本 -> 直接返回提示词所代表的内容
