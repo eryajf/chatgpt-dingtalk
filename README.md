@@ -397,7 +397,7 @@ help: "欢迎使用本工具\n\n你可以查看：[用户指南](https://github.
 
 我创建了一个钉钉的交流群，欢迎进群交流。
 
-![](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230405_182618.jpg)
+![](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230405_191425.jpg)
 
 ## 感谢
 
