@@ -74,12 +74,18 @@ func GetReadTime(t time.Time) string {
 }
 
 func CheckRequest(ts, sg string) bool {
-	appSecret := Config.AppSecret
-	if appSecret == "" {
+	appSecrets := Config.AppSecrets
+	// 如果没有指定，则默认不做校验
+	if len(appSecrets) == 0 {
 		return true
 	}
-	stringToSign := fmt.Sprintf("%s\n%s", ts, appSecret)
-	mac := hmac.New(sha256.New, []byte(appSecret))
-	_, _ = mac.Write([]byte(stringToSign))
-	return base64.StdEncoding.EncodeToString(mac.Sum(nil)) == sg
+	for _, secret := range appSecrets {
+		stringToSign := fmt.Sprintf("%s\n%s", ts, secret)
+		mac := hmac.New(sha256.New, []byte(secret))
+		_, _ = mac.Write([]byte(stringToSign))
+		if base64.StdEncoding.EncodeToString(mac.Sum(nil)) == sg {
+			return true
+		}
+	}
+	return false
 }
