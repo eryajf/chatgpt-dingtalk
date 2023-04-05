@@ -57,6 +57,10 @@ func JudgeUsers(s string) bool {
 
 // JudgeAdminUsers 判断用户是否为系统管理员
 func JudgeAdminUsers(s string) bool {
+	// 如果secret或者用户的userid都为空的话，那么默认没有管理员
+	if len(Config.AppSecrets) == 0 || s == "" {
+		return false
+	}
 	// 如果没有指定，则没有人是管理员
 	if len(Config.AdminUsers) == 0 {
 		return false
