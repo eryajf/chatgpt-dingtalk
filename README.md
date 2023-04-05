@@ -390,6 +390,12 @@ help: "欢迎使用本工具\n\n你可以查看：[用户指南](https://github.
 
 `🗣 重要重要` 一些常见的问题，我单独开issue放在这里：[👉点我👈](https://github.com/eryajf/chatgpt-dingtalk/issues/44)，可以查看这里辅助你解决问题，如果里边没有，请对历史issue进行搜索(不要提交重复的issue)，也欢迎大家补充。
 
+## 进群交流
+
+我创建了一个钉钉的交流群，欢迎进群交流。
+
+![](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230405_143527.jpg)
+
 ## 感谢
 
 这个项目能够成立，离不开这些开源项目：
