@@ -117,7 +117,15 @@ func Start() {
 		root := "./data/chatHistory/"
 		return c.Attachment(filepath.Join(root, filename), "")
 	})
+	// 服务器健康检测
+	app.Route("/").GET(func(c *ship.Context) error {
+		//返回消息优雅一点，告诉用户欢迎使用ding ding机器人服务 服务状态oK
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"status": "ok",
+			"msg":    "欢迎使用钉钉机器人",
+		})
 
+	})
 	port := ":" + public.Config.Port
 	srv := &http.Server{
 		Addr:    port,
