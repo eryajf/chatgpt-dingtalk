@@ -16,7 +16,7 @@ import (
 // SelectHistory 查询会话历史
 func SelectHistory(rmsg *dingbot.ReceiveMsg) error {
 	name := strings.TrimSpace(strings.Split(rmsg.Text.Content, ":")[1])
-	if !public.JudgeAdminUsers(rmsg.SenderNick) {
+	if !public.JudgeAdminUsers(rmsg.SenderStaffId) {
 		_, err := rmsg.ReplyToDingtalk(string(dingbot.MARKDOWN), "**🤷 抱歉，您没有查询对话记录的权限，只有程序管理员可以查询！**")
 		if err != nil {
 			logger.Error(fmt.Errorf("send message error: %v", err))
