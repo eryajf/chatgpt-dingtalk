@@ -49,6 +49,14 @@ func ProcessRequest(rmsg *dingbot.ReceiveMsg) error {
 				logger.Warning(fmt.Errorf("send message error: %v", err))
 			}
 		case "图片":
+			if public.Config.AzureOn {
+				_, err := rmsg.ReplyToDingtalk(string(dingbot.
+					MARKDOWN), "azure 模式下暂不支持图片创作功能")
+				if err != nil {
+					logger.Warning(fmt.Errorf("send message error: %v", err))
+				}
+				return err
+			}
 			_, err := rmsg.ReplyToDingtalk(string(dingbot.MARKDOWN), "发送以 **#图片** 开头的内容，将会触发绘画能力，图片生成之后，将会保存在程序根目录下的 **images目录** \n 如果你绘图没有思路，可以在这两个网站寻找灵感。\n - [https://lexica.art/](https://lexica.art/)\n- [https://www.clickprompt.org/zh-CN/](https://www.clickprompt.org/zh-CN/)")
 			if err != nil {
 				logger.Warning(fmt.Errorf("send message error: %v", err))
