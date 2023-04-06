@@ -79,10 +79,11 @@ func GetReadTime(t time.Time) string {
 
 func CheckRequest(ts, sg string) bool {
 	appSecrets := Config.AppSecrets
-	// 如果没有指定，则默认不做校验
-	if len(appSecrets) == 0 {
+	// 如果没有指定或者outgoing类型机器人下使用，则默认不做校验
+	if len(appSecrets) == 0 || sg == "" {
 		return true
 	}
+	// 校验appSecret
 	for _, secret := range appSecrets {
 		stringToSign := fmt.Sprintf("%s\n%s", ts, secret)
 		mac := hmac.New(sha256.New, []byte(secret))
