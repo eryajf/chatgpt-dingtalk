@@ -14,6 +14,12 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+//azure_on: false
+//azure_api_version: "2023-03-15-preview"
+//azure_resource_name: "dp-test"
+//azure_deployment_name: "test"
+//azure_openai_token: "280933eeecf443c1818d3a6b1c87a9d4"
+
 // Configuration 项目配置
 type Configuration struct {
 	// 日志级别，info或者debug
@@ -48,6 +54,12 @@ type Configuration struct {
 	AppSecrets []string `yaml:"app_secrets"`
 	// 自定义帮助信息
 	Help string `yaml:"help"`
+	// AzureOpenAI 配置
+	AzureOn             bool   `yaml:"azure_on"`
+	AzureApiVersion     string `yaml:"azure_api_version"`
+	AzureResourceName   string `yaml:"azure_resource_name"`
+	AzureDeploymentName string `yaml:"azure_deployment_name"`
+	AzureOpenAIToken    string `yaml:"azure_openai_token"`
 }
 
 var config *Configuration
@@ -140,6 +152,27 @@ func LoadConfig() *Configuration {
 		if help != "" {
 			config.Help = help
 		}
+		azureOn := os.Getenv("AZURE_ON")
+		if azureOn != "" {
+			config.AzureOn = azureOn == "true"
+		}
+		azureApiVersion := os.Getenv("AZURE_API_VERSION")
+		if azureApiVersion != "" {
+			config.AzureApiVersion = azureApiVersion
+		}
+		azureResourceName := os.Getenv("AZURE_RESOURCE_NAME")
+		if azureResourceName != "" {
+			config.AzureResourceName = azureResourceName
+		}
+		azureDeploymentName := os.Getenv("AZURE_DEPLOYMENT_NAME")
+		if azureDeploymentName != "" {
+			config.AzureDeploymentName = azureDeploymentName
+		}
+		azureOpenaiToken := os.Getenv("AZURE_OPENAI_TOKEN")
+		if azureOpenaiToken != "" {
+			config.AzureOpenAIToken = azureOpenaiToken
+		}
+
 	})
 
 	// 一些默认值
