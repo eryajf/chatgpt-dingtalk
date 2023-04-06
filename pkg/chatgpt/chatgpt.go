@@ -48,7 +48,6 @@ func New(userId string) *ChatGPT {
 			public.Config.AzureDeploymentName,
 		)
 	} else {
-		config := openai.DefaultConfig(public.Config.ApiKey)
 		if public.Config.HttpProxy != "" {
 			config.HTTPClient.Transport = &http.Transport{
 				// 设置代理
