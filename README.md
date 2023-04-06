@@ -174,7 +174,10 @@ $ docker run -itd --name chatgpt -p 8090:8090 \
   -e DEFAULT_MODE="单聊" -e MAX_REQUEST=0 -e PORT=8090 \
   -e SERVICE_URL="你当前服务外网可访问的URL" -e CHAT_TYPE="0" \
   -e ALLOW_GROUPS=a,b -e ALLOW_USERS=a,b ADMIN_USERS=a,b -e APP_SECRETS="xxx,yyy" \
-  -e HELP: "欢迎使用本工具\n\n你可以查看：[用户指南](https://github.com/eryajf/chatgpt-dingtalk/blob/main/docs/userGuide.md)\n\n这是一个[开源项目](https://github.com/eryajf/chatgpt-dingtalk/)，觉得不错你可以来波素质三连."  \
+  -e AZURE_ON="false" -e AZURE_API_VERSION="" -e AZURE_RESOURCE_NAME="" \
+  -e AZURE_DEPLOYMENT_NAME="" -e AZURE_OPENAI_TOKEN="" \
+  -e HELP="欢迎使用本工具\n\n你可以查看：[用户指南](https://github.com/eryajf/chatgpt-dingtalk/blob/main/docs/userGuide.md)\n\n这是一个[开源项目](https://github.com/eryajf/chatgpt-dingtalk/)
+  ，觉得不错你可以来波素质三连."  \
   --restart=always  dockerproxy.com/eryajf/chatgpt-dingtalk:latest
 ```
 
