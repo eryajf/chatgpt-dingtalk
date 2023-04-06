@@ -34,6 +34,8 @@
   suffix: ""
 - title: "#linux命令"
   prefix: "我希望你只用 linux 命令回复。不要写解释。我想："
+- title: "#Linux命令"
+  prefix: "我希望你只用 Linux 命令回复。不要写解释。我想："
   suffix: ""
 - title: "#英语学术润色"
   prefix: "Below is a paragraph from an academic paper. Polish the writing to meet the academic style, improve the spelling, grammar, clarity, concision and overall readability. When neccessary, rewrite the whole sentence. Furthermore, list all modification and explain the reasons to do so in markdown table.\n"
