@@ -15,6 +15,9 @@
 <img src="https://camo.githubusercontent.com/82291b0fe831bfc6781e07fc5090cbd0a8b912bb8b8d4fec0696c881834f81ac/68747470733a2f2f70726f626f742e6d656469612f394575424971676170492e676966" width="800"  height="3">
 </div><br>
 
+![](https://user-images.githubusercontent.com/33259379/223607306-2ac836a2-7ce5-4a12-a16e-bec40b22d8d6.png)
+
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **目录**
@@ -104,7 +107,10 @@
 
 但是这个模式貌似是部分开放的(目前来看貌似是部分人有创建这个类型的白名单)，所以如果你在钉钉群聊中添加`自定义机器人`的时候，看到和我一样的信息，则说明无法使用这种方式：
 
-![image_20230325_162017](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230325_162017.jpg)
+<details>
+    <summary>🖼 点我查看示例图</summary>
+    <img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230325_162017.jpg">
+</details>
 
 `📢 注意`
 
@@ -117,7 +123,10 @@
 创建步骤参考文档：[企业内部开发机器人](https://open.dingtalk.com/document/robots/enterprise-created-chatbot)，或者根据如下步骤进行配置。
 
 1. 创建机器人。
-   ![image_20221209_163616](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20221209_163616.png)
+    <details>
+      <summary>🖼 点我查看示例图</summary>
+      <img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20221209_163616.png">
+    </details>
 
    > `📢 注意1：`可能现在创建机器人的时候名字为`chatgpt`会被钉钉限制，请用其他名字命名。
    > `📢 注意2：`第四步骤点击创建应用的时候，务必选择使用旧版，从而创建旧版机器人。
@@ -125,20 +134,28 @@
    步骤比较简单，这里就不赘述了。
 
 2. 配置机器人回调接口。
-   ![image_20221209_163652](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20221209_163652.png)
+    <details>
+      <summary>🖼 点我查看示例图</summary>
+      <img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20221209_163652.png">
+    </details>
 
    创建完毕之后，点击机器人开发管理，然后配置将要部署的服务所在服务器的出口IP，以及将要给服务配置的域名。
 
   ` 如果提示：` 消息接收地址校验失败（请确保公网可访问该地址，如无有效SSL证书，可选择禁用证书校验），那么可以先输入一个`https://`，然后就能看到`禁用https`的选项了，选择禁用，然后再把地址改成`http`就好了。
 
 3. 发布机器人。
-   ![image_20221209_163709](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20221209_163709.png)
+    <details>
+      <summary>🖼 点我查看示例图</summary>
+      <img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20221209_163709.png">
+    </details>
 
    点击版本管理与发布，然后点击上线，这个时候就能在钉钉的群里中添加这个机器人了。
 
 4. 群聊添加机器人。
-
-   ![image_20221209_163724](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20221209_163724.png)
+    <details>
+      <summary>🖼 点我查看示例图</summary>
+      <img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20221209_163724.png">
+    </details>
 
 ### 第二步，部署应用
 
@@ -277,19 +294,29 @@ $ tail -f run.log
 
 > 由 [@Raytow](https://github.com/Raytow) 同学发现，在机器人自动生成的测试群里无法直接私聊机器人，在其他群里单独添加这个机器人，然后再点击就可以跟它私聊了。
 
-![image](https://user-images.githubusercontent.com/33259379/223607306-2ac836a2-7ce5-4a12-a16e-bec40b22d8d6.png)
+<details>
+    <summary>🖼 点我查看示例图</summary>
+    <img src="https://user-images.githubusercontent.com/33259379/223607306-2ac836a2-7ce5-4a12-a16e-bec40b22d8d6.png">
+</details>
+
 
 ### 帮助列表
 
 > 艾特机器人发送空内容或者帮助，会返回帮助列表。
 
-![image_20230216_221253](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230216_221253.png)
+<details>
+    <summary>🖼 点我查看示例图</summary>
+    <img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230216_221253.png">
+</details>
 
 ### 切换模式
 
 > 发送指定关键字，可以切换不同的模式。
 
-![image_20230215_184655](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230215_184655.png)
+<details>
+    <summary>🖼 点我查看示例图</summary>
+    <img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230215_184655.png">
+</details>
 
 > 📢 注意：串聊模式下，群里每个人的聊天上下文是独立的。
 > 📢 注意：默认对话模式为单聊，因此不必发送单聊即可进入单聊模式，而要进入串聊，则需要发送串聊关键字进行切换，当串聊内容超过最大限制的时候，你可以发送重置，然后再次进入串聊模式。
@@ -298,17 +325,26 @@ $ tail -f run.log
 
 > 艾特机器人发送 `余额` 二字，会返回当前key对应的账号的剩余额度以及可用日期。
 
-![image_20230304_222522](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230304_222522.jpg)
+<details>
+    <summary>🖼 点我查看示例图</summary>
+    <img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230304_222522.jpg">
+</details>
 
 ### 日常问题
 
-![image_20221209_163739](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20221209_163739.png)
+<details>
+    <summary>🖼 点我查看示例图</summary>
+    <img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20221209_163739.png">
+</details>
 
 ### 通过内置prompt聊天
 
 > 发送模板两个字，会返回当前内置支持的prompt列表。
 
-![image_20230323_152703](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230323_152703.jpg)
+<details>
+    <summary>🖼 点我查看示例图</summary>
+    <img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230323_152703.jpg">
+</details>
 
 > 如果你发现有比较优秀的prompt，欢迎PR。注意：一些与钉钉使用场景不是很匹配的，就不要提交了。
 
@@ -316,9 +352,12 @@ $ tail -f run.log
 
 > 发送以 `#图片`开头的内容，将会触发绘画能力，图片生成之后，将会保存在程序根目录下的`images目录`下。
 >
-> 如果你绘图没有思路，可以在[这里 https://www.clickprompt.org/zh-CN/](https://www.clickprompt.org/zh-CN/)以及[这里 https://lexica.art/](https://lexica.art/)找到一些不错的prompt。
+> 如果你绘图没有思路，可以在[这里](https://www.clickprompt.org/zh-CN/)以及[这里](https://lexica.art/)找到一些不错的prompt。
 
-![image_20230323_150547](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230323_150547.jpg)
+<details>
+    <summary>🖼 点我查看示例图</summary>
+    <img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230323_150547.jpg">
+</details>
 
 ### 支持 gpt-4
 
@@ -326,7 +365,10 @@ $ tail -f run.log
 
 > 以下是gpt-3.5与gpt-4对数学计算方面的区别。
 
-![image_20230330_180308](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230330_180308.jpg)
+<details>
+    <summary>🖼 点我查看示例图</summary>
+    <img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230330_180308.jpg">
+</details>
 
 感谢[@PIRANHACHAN](https://github.com/PIRANHACHAN)同学提供的gpt-4的key，使得项目在gpt-4的对接上能够进行验证测试，达到了可用状态。
 
