@@ -117,7 +117,7 @@ func Do(mode string, rmsg *dingbot.ReceiveMsg) error {
 			logger.Info(fmt.Errorf("gpt request error: %v", err))
 			if strings.Contains(fmt.Sprintf("%v", err), "maximum text length exceeded") {
 				public.UserService.ClearUserSessionContext(rmsg.GetSenderIdentifier())
-				_, err = rmsg.ReplyToDingtalk(string(dingbot.TEXT), fmt.Sprintf("请求openai失败了，错误信息：%v，看起来是超过最大对话限制了，已自动重置您的对话", err))
+				_, err = rmsg.ReplyToDingtalk(string(dingbot.TEXT), fmt.Sprintf("请求openai失败了，错误信息：%v，看起来是超过最大对话限制了，已自动重置您的对话，现在您可以继续提问了。", err))
 				if err != nil {
 					logger.Warning(fmt.Errorf("send message error: %v", err))
 					return err
@@ -173,7 +173,7 @@ func Do(mode string, rmsg *dingbot.ReceiveMsg) error {
 			logger.Info(fmt.Sprintf("gpt request error: %v", err))
 			if strings.Contains(fmt.Sprintf("%v", err), "maximum text length exceeded") {
 				public.UserService.ClearUserSessionContext(rmsg.GetSenderIdentifier())
-				_, err = rmsg.ReplyToDingtalk(string(dingbot.TEXT), fmt.Sprintf("请求openai失败了，错误信息：%v，看起来是超过最大对话限制了，已自动重置您的对话", err))
+				_, err = rmsg.ReplyToDingtalk(string(dingbot.TEXT), fmt.Sprintf("请求openai失败了，错误信息：%v，看起来是超过最大对话限制了，已自动重置您的对话，现在您可以继续提问了。", err))
 				if err != nil {
 					logger.Warning(fmt.Errorf("send message error: %v", err))
 					return err

@@ -46,7 +46,7 @@ func SelectHistory(rmsg *dingbot.ReceiveMsg) error {
 		if chatTmp.ChatType == 1 {
 			rst += fmt.Sprintf("## 🙋 %s 问\n\n**时间:** %v\n\n**问题为:** %s\n\n", chatTmp.Username, ctime, chatTmp.Content)
 		} else {
-			rst += fmt.Sprintf("## 🤖 机器人答\n\n**时间:** %v\n\n**回答如下：** \n\n%s\n\n", ctime, chatTmp.Content)
+			rst += fmt.Sprintf("## 🤖 机器人 答\n\n**时间:** %v\n\n**回答如下：** \n\n%s\n\n", ctime, chatTmp.Content)
 		}
 		// TODO: 答案应该严格放在问题之后，目前只根据ID排序进行的陈列，当一个用户同时提出多个问题时，最终展示的可能会有点问题
 	}
@@ -57,7 +57,7 @@ func SelectHistory(rmsg *dingbot.ReceiveMsg) error {
 	}
 	// 回复@我的用户
 	reply := fmt.Sprintf("- 在线查看: [点我](%s)\n- 下载文件: [点我](%s)\n- 在线预览请安装插件:[Markdown Preview Plus](https://chrome.google.com/webstore/detail/markdown-preview-plus/febilkbfcbhebfnokafefeacimjdckgl)", public.Config.ServiceURL+"/history/"+fileName, public.Config.ServiceURL+"/download/"+fileName)
-	logger.Info(fmt.Sprintf("🤖 %s得到的答案: %#v", rmsg.SenderNick, reply))
+	logger.Info(fmt.Sprintf("🤖 %s 得到的答案: %#v", rmsg.SenderNick, reply))
 	_, err = rmsg.ReplyToDingtalk(string(dingbot.MARKDOWN), reply)
 	if err != nil {
 		logger.Error(fmt.Errorf("send message error: %v", err))
