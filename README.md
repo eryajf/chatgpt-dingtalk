@@ -475,17 +475,17 @@ help: "欢迎使用本工具\n\n你可以查看：[用户指南](https://github.
         </a>
     </td>
     <td align="center">
-        <a href="https://github.com/laorange">
-            <img src="https://avatars.githubusercontent.com/u/68316902?v=4" width="100;" alt="laorange"/>
-            <br />
-            <sub><b>辣橙</b></sub>
-        </a>
-    </td>
-    <td align="center">
         <a href="https://github.com/ffinly">
             <img src="https://avatars.githubusercontent.com/u/29793346?v=4" width="100;" alt="ffinly"/>
             <br />
             <sub><b>Finly</b></sub>
+        </a>
+    </td>
+    <td align="center">
+        <a href="https://github.com/laorange">
+            <img src="https://avatars.githubusercontent.com/u/68316902?v=4" width="100;" alt="laorange"/>
+            <br />
+            <sub><b>辣橙</b></sub>
         </a>
     </td>
     <td align="center">
