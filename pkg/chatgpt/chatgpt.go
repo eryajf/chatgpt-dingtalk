@@ -48,10 +48,6 @@ func New(userId string) *ChatGPT {
 			public.Config.AzureDeploymentName,
 		)
 	} else {
-		// 改为赋值
-		config.HTTPClient.Transport = nil
-		config.BaseURL = ""
-
 		if public.Config.HttpProxy != "" {
 			config.HTTPClient.Transport = &http.Transport{
 				// 设置代理
