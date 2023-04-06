@@ -14,12 +14,6 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-//azure_on: false
-//azure_api_version: "2023-03-15-preview"
-//azure_resource_name: "dp-test"
-//azure_deployment_name: "test"
-//azure_openai_token: "280933eeecf443c1818d3a6b1c87a9d4"
-
 // Configuration 项目配置
 type Configuration struct {
 	// 日志级别，info或者debug
