@@ -14,7 +14,7 @@ require (
 )
 
 require (
-	github.com/avast/retry-go v2.7.0+incompatible // indirect
+	github.com/avast/retry-go v3.0.0+incompatible // indirect
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
 	github.com/charmbracelet/lipgloss v0.7.1 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
@@ -30,7 +30,7 @@ require (
 	github.com/muesli/termenv v0.15.1 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230126093431-47fa9a501578 // indirect
 	github.com/rivo/uniseg v0.2.0 // indirect
-	github.com/sashabaranov/go-openai v1.5.7 // indirect
+	github.com/sashabaranov/go-openai v1.6.1 // indirect
 	golang.org/x/net v0.0.0-20211029224645-99673261e6eb // indirect
 	golang.org/x/sys v0.6.0 // indirect
 	modernc.org/libc v1.22.2 // indirect

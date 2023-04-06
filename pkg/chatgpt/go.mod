@@ -8,6 +8,8 @@ require (
 	github.com/sashabaranov/go-openai v1.6.1
 )
 
+replace github.com/eryajf/chatgpt-dingtalk v1.0.11 => ../..
+
 require (
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
 	github.com/charmbracelet/lipgloss v0.7.1 // indirect
