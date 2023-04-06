@@ -34,6 +34,7 @@
   suffix: ""
 - title: "#linux命令"
   prefix: "我希望你只用 linux 命令回复。不要写解释。我想："
+  suffix: ""
 - title: "#Linux命令"
   prefix: "我希望你只用 Linux 命令回复。不要写解释。我想："
   suffix: ""
