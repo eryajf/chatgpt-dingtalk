@@ -2,6 +2,7 @@ package process
 
 import (
 	"fmt"
+	"github.com/eryajf/chatgpt-dingtalk/public"
 	"strings"
 
 	"github.com/eryajf/chatgpt-dingtalk/pkg/db"
@@ -12,6 +13,14 @@ import (
 
 // ImageGenerate openai生成图片
 func ImageGenerate(rmsg *dingbot.ReceiveMsg) error {
+	if public.Config.AzureOn {
+		_, err := rmsg.ReplyToDingtalk(string(dingbot.
+			MARKDOWN), "azure 模式下暂不支持图片创作功能")
+		if err != nil {
+			logger.Warning(fmt.Errorf("send message error: %v", err))
+		}
+		return err
+	}
 	qObj := db.Chat{
 		Username:      rmsg.SenderNick,
 		Source:        rmsg.GetChatTitle(),

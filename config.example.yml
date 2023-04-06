@@ -32,3 +32,16 @@ admin_users: []
 app_secrets: []
 # 帮助信息，放在配置文件，可供自定义
 help: "欢迎使用本工具\n\n你可以查看：[用户指南](https://github.com/eryajf/chatgpt-dingtalk/blob/main/docs/userGuide.md)\n\n这是一个[开源项目](https://github.com/eryajf/chatgpt-dingtalk/)，觉得不错你可以来波素质三连."
+
+
+# Azure OpenAI 配置
+# 例如 curl https://forkway-test.openai.azure.com/openai/deployments/test-dev/chat/completions\?api-version\=2023-03-15-preview \
+# azure_api_version: "2023-03-15-preview"
+# azure_resource_name: "forkway-test"
+# azure_deployment_name: "test-dev"
+azure_on: false # 如果是true，则会走azure的openai接口
+azure_api_version: "2023-03-15-preview"
+azure_resource_name: "xxxx"
+azure_deployment_name: "xxxx"
+azure_openai_token: "xxxx"
+

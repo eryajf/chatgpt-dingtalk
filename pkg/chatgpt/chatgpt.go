@@ -40,15 +40,25 @@ func New(userId string) *ChatGPT {
 	}()
 
 	config := openai.DefaultConfig(public.Config.ApiKey)
-	if public.Config.HttpProxy != "" {
-		config.HTTPClient.Transport = &http.Transport{
-			// 设置代理
-			Proxy: func(req *http.Request) (*url.URL, error) {
-				return url.Parse(public.Config.HttpProxy)
-			}}
-	}
-	if public.Config.BaseURL != "" {
-		config.BaseURL = public.Config.BaseURL + "/v1"
+	if public.Config.AzureOn {
+		config = openai.DefaultAzureConfig(
+			public.Config.AzureOpenAIToken,
+			"https://"+public.Config.AzureResourceName+".openai."+
+				"azure.com/",
+			public.Config.AzureDeploymentName,
+		)
+	} else {
+		config := openai.DefaultConfig(public.Config.ApiKey)
+		if public.Config.HttpProxy != "" {
+			config.HTTPClient.Transport = &http.Transport{
+				// 设置代理
+				Proxy: func(req *http.Request) (*url.URL, error) {
+					return url.Parse(public.Config.HttpProxy)
+				}}
+		}
+		if public.Config.BaseURL != "" {
+			config.BaseURL = public.Config.BaseURL + "/v1"
+		}
 	}
 
 	return &ChatGPT{
