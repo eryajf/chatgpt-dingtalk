@@ -440,6 +440,13 @@ help: "欢迎使用本工具\n\n你可以查看：[用户指南](https://github.
         </a>
     </td>
     <td align="center">
+        <a href="https://github.com/ffinly">
+            <img src="https://avatars.githubusercontent.com/u/29793346?v=4" width="100;" alt="ffinly"/>
+            <br />
+            <sub><b>Finly</b></sub>
+        </a>
+    </td>
+    <td align="center">
         <a href="https://github.com/luoxufeiyan">
             <img src="https://avatars.githubusercontent.com/u/6621172?v=4" width="100;" alt="luoxufeiyan"/>
             <br />
@@ -459,15 +466,15 @@ help: "欢迎使用本工具\n\n你可以查看：[用户指南](https://github.
             <br />
             <sub><b>RiverRay</b></sub>
         </a>
-    </td>
+    </td></tr>
+<tr>
     <td align="center">
         <a href="https://github.com/iblogc">
             <img src="https://avatars.githubusercontent.com/u/3283023?v=4" width="100;" alt="iblogc"/>
             <br />
             <sub><b>Iblogc</b></sub>
         </a>
-    </td></tr>
-<tr>
+    </td>
     <td align="center">
         <a href="https://github.com/WinMin">
             <img src="https://avatars.githubusercontent.com/u/18380453?v=4" width="100;" alt="WinMin"/>
