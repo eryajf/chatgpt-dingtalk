@@ -2,12 +2,10 @@ package chatgpt
 
 import (
 	"fmt"
-	"github.com/eryajf/chatgpt-dingtalk/public"
 	"testing"
 )
 
 func TestChatGPT_ChatWithContext(t *testing.T) {
-	public.InitSvc()
 	chat := New("")
 	defer chat.Close()
 	//go func() {
