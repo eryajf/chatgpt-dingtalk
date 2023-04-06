@@ -39,7 +39,7 @@ help: "欢迎使用本工具\n\n你可以查看：[用户指南](https://github.
 # azure_api_version: "2023-03-15-preview"
 # azure_resource_name: "forkway-test"
 # azure_deployment_name: "test-dev"
-azure_on: false
+azure_on: false # 如果是true，则会走azure的openai接口
 azure_api_version: "2023-03-15-preview"
 azure_resource_name: "xxxx"
 azure_deployment_name: "xxxx"
