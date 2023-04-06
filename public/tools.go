@@ -88,7 +88,9 @@ func CheckRequest(ts, sg string) bool {
 		stringToSign := fmt.Sprintf("%s\n%s", ts, secret)
 		mac := hmac.New(sha256.New, []byte(secret))
 		_, _ = mac.Write([]byte(stringToSign))
-		return base64.StdEncoding.EncodeToString(mac.Sum(nil)) == sg
+		if base64.StdEncoding.EncodeToString(mac.Sum(nil)) == sg {
+			return true
+		}
 	}
 	return false
 }
