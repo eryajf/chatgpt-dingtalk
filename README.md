@@ -174,7 +174,10 @@ $ docker run -itd --name chatgpt -p 8090:8090 \
   -e DEFAULT_MODE="单聊" -e MAX_REQUEST=0 -e PORT=8090 \
   -e SERVICE_URL="你当前服务外网可访问的URL" -e CHAT_TYPE="0" \
   -e ALLOW_GROUPS=a,b -e ALLOW_USERS=a,b ADMIN_USERS=a,b -e APP_SECRETS="xxx,yyy" \
-  -e HELP: "欢迎使用本工具\n\n你可以查看：[用户指南](https://github.com/eryajf/chatgpt-dingtalk/blob/main/docs/userGuide.md)\n\n这是一个[开源项目](https://github.com/eryajf/chatgpt-dingtalk/)，觉得不错你可以来波素质三连."  \
+  -e AZURE_ON="false" -e AZURE_API_VERSION="" -e AZURE_RESOURCE_NAME="" \
+  -e AZURE_DEPLOYMENT_NAME="" -e AZURE_OPENAI_TOKEN="" \
+  -e HELP="欢迎使用本工具\n\n你可以查看：[用户指南](https://github.com/eryajf/chatgpt-dingtalk/blob/main/docs/userGuide.md)\n\n这是一个[开源项目](https://github.com/eryajf/chatgpt-dingtalk/)
+  ，觉得不错你可以来波素质三连."  \
   --restart=always  dockerproxy.com/eryajf/chatgpt-dingtalk:latest
 ```
 
@@ -427,6 +430,18 @@ admin_users: []
 app_secrets: []
 # 帮助信息，放在配置文件，可供自定义
 help: "欢迎使用本工具\n\n你可以查看：[用户指南](https://github.com/eryajf/chatgpt-dingtalk/blob/main/docs/userGuide.md)\n\n这是一个[开源项目](https://github.com/eryajf/chatgpt-dingtalk/)，觉得不错你可以来波素质三连."
+
+# Azure OpenAI 配置
+# 例如 curl https://forkway-test.openai.azure.com/openai/deployments/test-dev/chat/completions\?api-version\=2023-03-15-preview \
+# azure_api_version: "2023-03-15-preview"
+# azure_resource_name: "forkway-test"
+# azure_deployment_name: "test-dev"
+azure_on: false # 如果是true，则会走azure的openai接口
+azure_api_version: "2023-03-15-preview"
+azure_resource_name: "xxxx"
+azure_deployment_name: "xxxx"
+azure_openai_token: "xxxx"
+
 ```
 
 ## 常见问题
@@ -475,17 +490,17 @@ help: "欢迎使用本工具\n\n你可以查看：[用户指南](https://github.
         </a>
     </td>
     <td align="center">
-        <a href="https://github.com/laorange">
-            <img src="https://avatars.githubusercontent.com/u/68316902?v=4" width="100;" alt="laorange"/>
-            <br />
-            <sub><b>辣橙</b></sub>
-        </a>
-    </td>
-    <td align="center">
         <a href="https://github.com/ffinly">
             <img src="https://avatars.githubusercontent.com/u/29793346?v=4" width="100;" alt="ffinly"/>
             <br />
             <sub><b>Finly</b></sub>
+        </a>
+    </td>
+    <td align="center">
+        <a href="https://github.com/laorange">
+            <img src="https://avatars.githubusercontent.com/u/68316902?v=4" width="100;" alt="laorange"/>
+            <br />
+            <sub><b>辣橙</b></sub>
         </a>
     </td>
     <td align="center">
