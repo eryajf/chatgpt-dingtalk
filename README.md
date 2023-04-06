@@ -497,6 +497,13 @@ azure_openai_token: "xxxx"
         </a>
     </td>
     <td align="center">
+        <a href="https://github.com/Leizhenpeng">
+            <img src="https://avatars.githubusercontent.com/u/50035229?v=4" width="100;" alt="Leizhenpeng"/>
+            <br />
+            <sub><b>RiverRay</b></sub>
+        </a>
+    </td>
+    <td align="center">
         <a href="https://github.com/laorange">
             <img src="https://avatars.githubusercontent.com/u/68316902?v=4" width="100;" alt="laorange"/>
             <br />
@@ -515,13 +522,6 @@ azure_openai_token: "xxxx"
             <img src="https://avatars.githubusercontent.com/u/20675747?v=4" width="100;" alt="fantasticmao"/>
             <br />
             <sub><b>Mao Mao</b></sub>
-        </a>
-    </td>
-    <td align="center">
-        <a href="https://github.com/Leizhenpeng">
-            <img src="https://avatars.githubusercontent.com/u/50035229?v=4" width="100;" alt="Leizhenpeng"/>
-            <br />
-            <sub><b>RiverRay</b></sub>
         </a>
     </td></tr>
 <tr>
