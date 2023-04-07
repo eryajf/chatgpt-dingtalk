@@ -58,7 +58,7 @@ func GetBalance() (string, error) {
 	expireDate := time.Unix(sub.AccessUntil, 0).Format("2006-01-02 15:04:05")
 	used := data.TotalUsage / 100
 	totalAvailable := sub.HardLimitUsd - used
-	msg := fmt.Sprintf("💵 已用: 💲%v\n💵 剩余: 💲%v\n🕰 到期时间: %v\n", fmt.Sprintf("%.2f", used), fmt.Sprintf("%.2f", totalAvailable), expireDate)
+	msg := fmt.Sprintf("💵 已用: 💲%v\n💵 剩余: 💲%v\n🕰 到期时间: %v", fmt.Sprintf("%.2f", used), fmt.Sprintf("%.2f", totalAvailable), expireDate)
 	// 放入缓存
 	UserService.SetUserMode("system_balance", msg)
 	return msg, nil
