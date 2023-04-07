@@ -12,7 +12,7 @@ var once sync.Once
 
 func InitLogger(level string) {
 	once.Do(func() {
-		Logger = log.New(os.Stderr)
+		Logger = log.NewWithOptions(os.Stderr, log.Options{ReportTimestamp: true})
 	})
 	if level == "debug" {
 		Logger.SetLevel(log.DebugLevel)
