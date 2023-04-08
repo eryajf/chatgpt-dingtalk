@@ -511,25 +511,39 @@ azure_openai_token: "xxxx"
         </a>
     </td>
     <td align="center">
+        <a href="https://github.com/AydenLii">
+            <img src="https://avatars.githubusercontent.com/u/90502440?v=4" width="100;" alt="AydenLii"/>
+            <br />
+            <sub><b>AydenLii</b></sub>
+        </a>
+    </td>
+    <td align="center">
         <a href="https://github.com/luoxufeiyan">
             <img src="https://avatars.githubusercontent.com/u/6621172?v=4" width="100;" alt="luoxufeiyan"/>
             <br />
             <sub><b>Hugh Gao</b></sub>
         </a>
-    </td>
+    </td></tr>
+<tr>
     <td align="center">
         <a href="https://github.com/fantasticmao">
             <img src="https://avatars.githubusercontent.com/u/20675747?v=4" width="100;" alt="fantasticmao"/>
             <br />
             <sub><b>Mao Mao</b></sub>
         </a>
-    </td></tr>
-<tr>
+    </td>
     <td align="center">
         <a href="https://github.com/iblogc">
             <img src="https://avatars.githubusercontent.com/u/3283023?v=4" width="100;" alt="iblogc"/>
             <br />
             <sub><b>Iblogc</b></sub>
+        </a>
+    </td>
+    <td align="center">
+        <a href="https://github.com/cnmill">
+            <img src="https://avatars.githubusercontent.com/u/21098695?v=4" width="100;" alt="cnmill"/>
+            <br />
+            <sub><b>Mill Peng</b></sub>
         </a>
     </td>
     <td align="center">
