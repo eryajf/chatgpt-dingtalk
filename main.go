@@ -56,9 +56,8 @@ func Start() {
 			}
 			return nil
 		}
-		// 不在允许群组，不在允许用户（包括在黑名单），拒绝会话
-		// 移除掉多余的管理员判断（ !public.JudgeAdminUsers(msgObj.SenderStaffId)）
-		if !public.JudgeGroup(msgObj.GetChatTitle()) && !public.JudgeUsers(msgObj.SenderStaffId) {
+		// 不在允许群组，不在允许用户（包括在黑名单），满足任一条件，拒绝会话；管理员不受限制
+		if (!public.JudgeGroup(msgObj.GetChatTitle()) || !public.JudgeUsers(msgObj.SenderStaffId)) && !public.JudgeAdminUsers(msgObj.SenderStaffId) {
 			_, err = msgObj.ReplyToDingtalk(string(dingbot.TEXT), "抱歉，您不在该机器人对话功能的白名单当中！")
 			if err != nil {
 				logger.Warning(fmt.Errorf("send message error: %v", err))
