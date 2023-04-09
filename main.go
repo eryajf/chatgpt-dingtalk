@@ -56,7 +56,7 @@ func Start() {
 			}
 			return nil
 		}
-		if !public.JudgeGroup(msgObj.GetChatTitle()) && !public.JudgeUsers(msgObj.SenderNick) && !public.JudgeAdminUsers(msgObj.SenderStaffId) {
+		if !public.JudgeGroup(msgObj.GetChatTitle()) && !public.JudgeUsers(msgObj.SenderStaffId) && !public.JudgeAdminUsers(msgObj.SenderStaffId) {
 			_, err = msgObj.ReplyToDingtalk(string(dingbot.TEXT), "抱歉，您不在该机器人对话功能的白名单当中！")
 			if err != nil {
 				logger.Warning(fmt.Errorf("send message error: %v", err))

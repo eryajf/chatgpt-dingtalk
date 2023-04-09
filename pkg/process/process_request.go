@@ -225,14 +225,19 @@ func CheckRequestTimes(rmsg *dingbot.ReceiveMsg) bool {
 		return true
 	}
 	count := public.UserService.GetUseRequestCount(rmsg.GetSenderIdentifier())
-	// 判断访问次数是否超过限制
-	if count >= public.Config.MaxRequest {
-		logger.Info(fmt.Sprintf("亲爱的: %s，您今日请求次数已达上限，请明天再来，交互发问资源有限，请务必斟酌您的问题，给您带来不便，敬请谅解!", rmsg.SenderNick))
-		_, err := rmsg.ReplyToDingtalk(string(dingbot.TEXT), fmt.Sprintf("一个好的问题，胜过十个好的答案！\n亲爱的: %s，您今日请求次数已达上限，请明天再来，交互发问资源有限，请务必斟酌您的问题，给您带来不便，敬请谅解!", rmsg.SenderNick))
-		if err != nil {
-			logger.Warning(fmt.Errorf("send message error: %v", err))
+	// 用户是管理员或VIP用户，不判断访问次数是否超过限制
+	if public.JudgeAdminUsers(rmsg.SenderStaffId) || public.JudgeVipUsers(rmsg.SenderStaffId) {
+		return true
+	} else {
+		// 用户不是管理员和VIP用户，判断访问次数是否超过限制
+		if count >= public.Config.MaxRequest {
+			logger.Info(fmt.Sprintf("亲爱的: %s，您今日请求次数已达上限，请明天再来，交互发问资源有限，请务必斟酌您的问题，给您带来不便，敬请谅解!", rmsg.SenderNick))
+			_, err := rmsg.ReplyToDingtalk(string(dingbot.TEXT), fmt.Sprintf("一个好的问题，胜过十个好的答案！\n亲爱的: %s，您今日请求次数已达上限，请明天再来，交互发问资源有限，请务必斟酌您的问题，给您带来不便，敬请谅解!", rmsg.SenderNick))
+			if err != nil {
+				logger.Warning(fmt.Errorf("send message error: %v", err))
+			}
+			return false
 		}
-		return false
 	}
 	// 访问次数未超过限制，将计数加1
 	public.UserService.SetUseRequestCount(rmsg.GetSenderIdentifier(), count+1)
