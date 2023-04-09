@@ -44,6 +44,15 @@ func JudgeGroup(s string) bool {
 
 // JudgeUsers 判断用户名称是否在白名单
 func JudgeUsers(s string) bool {
+	// 优先判断黑名单，黑名单用户返回：不在白名单
+	if len(Config.DenyUsers) != 0 {
+		for _, v := range Config.DenyUsers {
+			if v == s {
+				return false
+			}
+		}
+	}
+	// 白名单配置逻辑处理
 	if len(Config.AllowUsers) == 0 {
 		return true
 	}
