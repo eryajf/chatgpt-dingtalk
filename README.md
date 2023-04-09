@@ -216,7 +216,7 @@ $ docker run -itd --name chatgpt -p 8090:8090 \
   -e HTTP_PROXY="http://host.docker.internal:15732" \
   -e DEFAULT_MODE="单聊" -e MAX_REQUEST=0 -e PORT=8090 \
   -e SERVICE_URL="你当前服务外网可访问的URL" -e CHAT_TYPE="0" \
-  -e ALLOW_GROUPS=a,b -e ALLOW_USERS=a,b -e ADMIN_USERS=a,b -e APP_SECRETS="xxx,yyy" \
+  -e ALLOW_GROUPS=a,b -e ALLOW_USERS=a,b -e DENY_USERS=a,b -e VIP_USERS=a,b -e ADMIN_USERS=a,b -e APP_SECRETS="xxx,yyy" \
   -e AZURE_ON="false" -e AZURE_API_VERSION="" -e AZURE_RESOURCE_NAME="" \
   -e AZURE_DEPLOYMENT_NAME="" -e AZURE_OPENAI_TOKEN="" \
   -e HELP="欢迎使用本工具\n\n你可以查看：[用户指南](https://github.com/eryajf/chatgpt-dingtalk/blob/main/docs/userGuide.md)\n\n这是一个[开源项目](https://github.com/eryajf/chatgpt-dingtalk/)
@@ -227,7 +227,7 @@ $ docker run -itd --name chatgpt -p 8090:8090 \
 > 运行命令中映射的配置文件参考下边的[配置文件说明](#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%AF%B4%E6%98%8E)。
 
 - `📢 注意：`如果使用docker部署，那么PORT参数不需要进行任何调整。
-- `📢 注意：`ALLOW_GROUPS,ALLOW_USERS,ADMIN_USERS三个参数为数组，如果需要指定多个，可用英文逗号分割。
+- `📢 注意：`ALLOW_GROUPS,ALLOW_USERS,DENY_USERS,VIP_USERS,ADMIN_USERS 参数为数组，如果需要指定多个，可用英文逗号分割。outgoing机器人模式下这些参数无效。
 - `📢 注意：`如果服务器节点本身就在国外或者自定义了`BASE_URL`，那么就把`HTTP_PROXY`参数留空即可。
 - `📢 注意：`如果使用docker部署，那么proxy地址可以直接使用如上方式部署，`host.docker.internal`会指向容器所在宿主机的IP，只需要更改端口为你的代理端口即可。参见：[Docker容器如何优雅地访问宿主机网络](https://wiki.eryajf.net/pages/674f53/)
 
@@ -463,10 +463,16 @@ chat_type: "0"
 # 对话聊天时，如下三个满足其一即可通过校验
 allow_groups:
   - "学无止境"
-# 哪些用户可以进行对话，如果留空，则表示允许所有用户，如果要限制，则列表中写用户的名称，比如 ["张三","李四"]
-allow_users: ["张三","李四"]
-# 指定哪些人为此系统的管理员，如果留空，则表示没有人是管理员，如果要限制，则列表中写用户的userid
+# 以下 allow_users、deny_users、vip_users、admin_users 配置中填写的是用户的userid，outgoing机器人模式下不适用这些配置
 # 比如 ["1301691029702722","1301691029702733"]，这个信息需要在钉钉管理后台的通讯录当中获取：https://oa.dingtalk.com/contacts.htm#/contacts
+# 哪些用户可以进行对话，如果留空，则表示允许所有用户，如果要限制，则列表中写用户的userid
+allow_users: []
+# 哪些用户不可以进行对话，如果留空，则表示允许所有用户（如allow_user有配置，需满足相应条件），如果要限制，则列表中写用户的userid，黑名单优先级高于白名单
+deny_users: []
+# 哪些用户可以进行无限对话，如果留空，则表示只允许管理员（如max_request配置为0，则允许所有人）
+# 如果要针对指定VIP用户放开限制（如max_request配置不为0），则列表中写用户的userid
+vip_users: []
+# 指定哪些人为此系统的管理员，如果留空，则表示没有人是管理员，如果要限制，则列表中写用户的userid
 # 注意：如果下边的app_secrets为空，以及使用outgoing的方式配置机器人，这两种情况下，都表示没有人是管理员
 admin_users: []
 # 钉钉机器人在应用信息中的AppSecret，为了校验回调的请求是否合法，如果留空，将会忽略校验，则该接口将会存在其他人也能随意调用的安全隐患，因此强烈建议配置正确的secret，如果你的服务对接给多个机器人，这里可以配置多个机器人的secret

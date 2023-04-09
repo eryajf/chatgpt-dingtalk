@@ -18,11 +18,14 @@ services:
       SERVICE_URL: ""  # 指定服务的地址，就是当前服务可供外网访问的地址(或者直接理解为你配置在钉钉回调那里的地址)，用于生成图片时给钉钉做渲染
       CHAT_TYPE: "0" # 限定对话类型 0：不限 1：只能单聊 2：只能群聊
       ALLOW_GROUPS: "" # 哪些群组可以进行对话，如果留空，则表示允许所有群组，如果要限制，则填写群组的名字，比如 "aa,bb"
-      ALLOW_USERS: "" # 哪些用户可以进行对话，如果留空，则表示允许所有用户，如果要限制，则填写用户的名字，比如 "张三,李四"
-      # 指定哪些人为此系统的管理员，如果留空，则表示没有人是管理员，如果要限制，则列表中写用户的userid
-      # 比如 "1301691029702722,1301691029702733"，这个信息需要在钉钉管理后台的通讯录当中获取：https://oa.dingtalk.com/contacts.htm#/contacts
+      # 以下 ALLOW_USERS、DENY_USERS、VIP_USERS、ADMIN_USERS 配置中填写的是用户的userid
+      # 比如 ["1301691029702722","1301691029702733"]，这个信息需要在钉钉管理后台的通讯录当中获取：https://oa.dingtalk.com/contacts.htm#/contacts
+      # 哪些用户可以进行对话，如果留空，则表示允许所有用户，如果要限制，则列表中写用户的userid
+      ALLOW_USERS: "" # 哪些用户可以进行对话，如果留空，则表示允许所有用户，如果要限制，则填写用户的userid
+      DENY_USERS: "" # 哪些用户不可以进行对话，如果留空，则表示允许所有用户（如allow_user有配置，需满足相应条件），如果要限制，则列表中写用户的userid，黑名单优先级高于白名单
+      VIP_USERS: "" # 哪些用户可以进行无限对话，如果留空，则表示只允许管理员（如max_request配置为0，则允许所有人），如果要针对指定VIP用户放开限制（如max_request配置不为0），则列表中写用户的userid
+      ADMIN_USERS: "" # 指定哪些人为此系统的管理员，如果留空，则表示没有人是管理员，如果要限制，则列表中写用户的userid
       # 注意：如果下边的app_secrets为空，以及使用outgoing的方式配置机器人，这两种情况下，都表示没有人是管理员
-      ADMIN_USERS: ""
       APP_SECRETS: "" # 钉钉机器人在应用信息中的AppSecret，为了校验回调的请求是否合法，如果留空，将会忽略校验，则该接口将会存在其他人也能随意调用的安全隐患，因此强烈建议配置正确的secret，如果你的服务对接给多个机器人，这里可以配置多个机器人的secret，比如 "xxxx,yyyy"
       AZURE_ON: "false" # 是否走Azure OpenAi API, 默认false ,如果为true，则需要配置下边的四个参数
       AZURE_API_VERSION: "" # Azure OpenAi API 版本，比如 "2023-03-15-preview"

@@ -42,6 +42,10 @@ type Configuration struct {
 	AllowGroups []string `yaml:"allow_groups"`
 	// 哪些用户可以进行对话
 	AllowUsers []string `yaml:"allow_users"`
+	// 哪些用户不可以进行对话
+	DenyUsers []string `yaml:"deny_users"`
+	// 哪些Vip用户可以进行无限对话
+	VipUsers []string `yaml:"vip_users"`
 	// 指定哪些人为此系统的管理员，必须指定，否则所有人都是
 	AdminUsers []string `yaml:"admin_users"`
 	// 钉钉机器人在应用信息中的AppSecret，为了校验回调的请求是否合法，如果你的服务对接给多个机器人，这里可以配置多个机器人的secret
@@ -133,6 +137,14 @@ func LoadConfig() *Configuration {
 		allowUsers := os.Getenv("ALLOW_USERS")
 		if allowUsers != "" {
 			config.AllowUsers = strings.Split(allowUsers, ",")
+		}
+		denyUsers := os.Getenv("DENY_USERS")
+		if denyUsers != "" {
+			config.DenyUsers = strings.Split(denyUsers, ",")
+		}
+		vipUsers := os.Getenv("VIP_USERS")
+		if vipUsers != "" {
+			config.VipUsers = strings.Split(vipUsers, ",")
 		}
 		adminUsers := os.Getenv("ADMIN_USERS")
 		if adminUsers != "" {

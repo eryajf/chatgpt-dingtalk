@@ -44,6 +44,15 @@ func JudgeGroup(s string) bool {
 
 // JudgeUsers 判断用户名称是否在白名单
 func JudgeUsers(s string) bool {
+	// 优先判断黑名单，黑名单用户返回：不在白名单
+	if len(Config.DenyUsers) != 0 {
+		for _, v := range Config.DenyUsers {
+			if v == s {
+				return false
+			}
+		}
+	}
+	// 白名单配置逻辑处理
 	if len(Config.AllowUsers) == 0 {
 		return true
 	}
@@ -66,6 +75,30 @@ func JudgeAdminUsers(s string) bool {
 		return false
 	}
 	for _, v := range Config.AdminUsers {
+		if v == s {
+			return true
+		}
+	}
+	return false
+}
+
+// JudgeVipUsers 判断用户是否为VIP用户
+func JudgeVipUsers(s string) bool {
+	// 如果secret或者用户的userid都为空的话，那么默认不是VIP用户
+	if len(Config.AppSecrets) == 0 || s == "" {
+		return false
+	}
+	// 管理员默认是VIP用户
+	for _, v := range Config.AdminUsers {
+		if v == s {
+			return true
+		}
+	}
+	// 如果没有指定，则没有人是VIP用户
+	if len(Config.VipUsers) == 0 {
+		return false
+	}
+	for _, v := range Config.VipUsers {
 		if v == s {
 			return true
 		}
