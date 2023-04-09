@@ -42,6 +42,8 @@ type Configuration struct {
 	AllowGroups []string `yaml:"allow_groups"`
 	// 哪些用户可以进行对话
 	AllowUsers []string `yaml:"allow_users"`
+	// 哪些用户不可以进行对话
+	DenyUsers []string `yaml:"deny_users"`
 	// 哪些Vip用户可以进行无限对话
 	VipUsers []string `yaml:"vip_users"`
 	// 指定哪些人为此系统的管理员，必须指定，否则所有人都是
@@ -135,6 +137,10 @@ func LoadConfig() *Configuration {
 		allowUsers := os.Getenv("ALLOW_USERS")
 		if allowUsers != "" {
 			config.AllowUsers = strings.Split(allowUsers, ",")
+		}
+		denyUsers := os.Getenv("DENY_USERS")
+		if denyUsers != "" {
+			config.DenyUsers = strings.Split(denyUsers, ",")
 		}
 		vipUsers := os.Getenv("VIP_USERS")
 		if vipUsers != "" {
