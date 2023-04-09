@@ -232,7 +232,7 @@ func CheckRequestTimes(rmsg *dingbot.ReceiveMsg) bool {
 		// 用户不是管理员和VIP用户，判断访问次数是否超过限制
 		if count >= public.Config.MaxRequest {
 			logger.Info(fmt.Sprintf("亲爱的: %s，您今日请求次数已达上限，请明天再来，交互发问资源有限，请务必斟酌您的问题，给您带来不便，敬请谅解!", rmsg.SenderNick))
-			_, err := rmsg.ReplyToDingtalk(string(dingbot.TEXT), fmt.Sprintf("一个好的问题，胜过十个好的答案！\n亲爱的: %s，您今日请求次数已达上限，请明天再来，交互发问资源有限，请务必斟酌您的问题，给您带来不便，敬请谅解!", rmsg.SenderNick))
+			_, err := rmsg.ReplyToDingtalk(string(dingbot.MARKDOWN), fmt.Sprintf("[Staple] **一个好的问题，胜过十个好的答案！** \n\n亲爱的%s:\n\n您今日请求次数已达上限，请明天再来，交互发问资源有限，请务必斟酌您的问题，给您带来不便，敬请谅解！\n\n如有需要，可联系管理员升级为VIP用户。", rmsg.SenderNick))
 			if err != nil {
 				logger.Warning(fmt.Errorf("send message error: %v", err))
 			}
