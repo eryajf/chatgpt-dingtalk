@@ -49,7 +49,7 @@ func Start() {
 		logger.Debug(fmt.Sprintf("dingtalk callback parameters: %#v", msgObj))
 
 		if public.Config.ChatType != "0" && msgObj.ConversationType != public.Config.ChatType {
-			_, err = msgObj.ReplyToDingtalk(string(dingbot.TEXT), "抱歉，管理员禁用了这种聊天方式，请选择其他聊天方式与机器人对话！")
+			_, err = msgObj.ReplyToDingtalk(string(dingbot.MARKDOWN), "** 🤷 很抱歉，管理员禁用了这种聊天方式，请选择其他聊天方式与机器人对话！**")
 			if err != nil {
 				logger.Warning(fmt.Errorf("send message error: %v", err))
 				return err
@@ -58,7 +58,7 @@ func Start() {
 		}
 		// 不在允许群组，不在允许用户（包括在黑名单），满足任一条件，拒绝会话；管理员不受限制
 		if (!public.JudgeGroup(msgObj.GetChatTitle()) || !public.JudgeUsers(msgObj.SenderStaffId)) && !public.JudgeAdminUsers(msgObj.SenderStaffId) {
-			_, err = msgObj.ReplyToDingtalk(string(dingbot.TEXT), "抱歉，您不在该机器人对话功能的白名单当中！")
+			_, err = msgObj.ReplyToDingtalk(string(dingbot.MARKDOWN), "** 🤷 很抱歉，您的身份信息未被认证通过，无法使用机器人对话功能。**\n>如需继续使用，请联系管理员申请访问权限。")
 			if err != nil {
 				logger.Warning(fmt.Errorf("send message error: %v", err))
 				return err
