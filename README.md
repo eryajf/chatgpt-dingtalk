@@ -420,7 +420,7 @@ chat_type: "0"
 # 对话聊天时，如下三个满足其一即可通过校验
 allow_groups:
   - "学无止境"
-# 以下 allow_users、vip_users、admin_users 配置中填写的是用户的userid
+# 以下 allow_users、deny_users、vip_users、admin_users 配置中填写的是用户的userid
 # 比如 ["1301691029702722","1301691029702733"]，这个信息需要在钉钉管理后台的通讯录当中获取：https://oa.dingtalk.com/contacts.htm#/contacts
 # 哪些用户可以进行对话，如果留空，则表示允许所有用户，如果要限制，则列表中写用户的userid
 allow_users: []
