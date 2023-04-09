@@ -184,7 +184,7 @@ $ docker run -itd --name chatgpt -p 8090:8090 \
 > 运行命令中映射的配置文件参考下边的[配置文件说明](#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%AF%B4%E6%98%8E)。
 
 - `📢 注意：`如果使用docker部署，那么PORT参数不需要进行任何调整。
-- `📢 注意：`ALLOW_GROUPS,ALLOW_USERS,DENY_USERS,VIP_USERS,ADMIN_USERS 参数为数组，如果需要指定多个，可用英文逗号分割。
+- `📢 注意：`ALLOW_GROUPS,ALLOW_USERS,DENY_USERS,VIP_USERS,ADMIN_USERS 参数为数组，如果需要指定多个，可用英文逗号分割。outgoing机器人模式下这些参数无效。
 - `📢 注意：`如果服务器节点本身就在国外或者自定义了`BASE_URL`，那么就把`HTTP_PROXY`参数留空即可。
 - `📢 注意：`如果使用docker部署，那么proxy地址可以直接使用如上方式部署，`host.docker.internal`会指向容器所在宿主机的IP，只需要更改端口为你的代理端口即可。参见：[Docker容器如何优雅地访问宿主机网络](https://wiki.eryajf.net/pages/674f53/)
 
@@ -420,7 +420,7 @@ chat_type: "0"
 # 对话聊天时，如下三个满足其一即可通过校验
 allow_groups:
   - "学无止境"
-# 以下 allow_users、deny_users、vip_users、admin_users 配置中填写的是用户的userid
+# 以下 allow_users、deny_users、vip_users、admin_users 配置中填写的是用户的userid，outgoing机器人模式下不适用这些配置
 # 比如 ["1301691029702722","1301691029702733"]，这个信息需要在钉钉管理后台的通讯录当中获取：https://oa.dingtalk.com/contacts.htm#/contacts
 # 哪些用户可以进行对话，如果留空，则表示允许所有用户，如果要限制，则列表中写用户的userid
 allow_users: []
