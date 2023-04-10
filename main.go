@@ -34,8 +34,11 @@ func Start() {
 			return ship.ErrBadRequest.New(fmt.Errorf("bind to receivemsg failed : %v", err))
 		}
 		// 先校验回调是否合法
-		if !public.CheckRequest(c.GetReqHeader("timestamp"), c.GetReqHeader("sign")) {
+		if !public.CheckRequest(c.GetReqHeader("timestamp"), c.GetReqHeader("sign")) && msgObj.SenderStaffId != "" {
 			logger.Warning("该请求不合法，可能是其他企业或者未经允许的应用调用所致，请知悉！")
+			return nil
+		} else if !public.JudgeOutgoingGroup(msgObj.ConversationID) && msgObj.SenderStaffId == "" {
+			logger.Warning("该请求不合法，可能是未经允许的普通群outgoing机器人调用所致，请知悉！")
 			return nil
 		}
 		// 再校验回调参数是否有价值
@@ -57,9 +60,33 @@ func Start() {
 			}
 			return nil
 		}
+
+		// 查询群ID，发送指令后，可通过查看日志来获取
+		if msgObj.ConversationType == "2" && msgObj.Text.Content == "群ID" {
+			if msgObj.RobotCode == "normal" {
+				logger.Info(fmt.Sprintf("🙋 outgoing机器人 在『%s』群的ConversationID为: %#v", msgObj.ConversationTitle, msgObj.ConversationID))
+			} else {
+				logger.Info(fmt.Sprintf("🙋 企业内部机器人 在『%s』群的ConversationID为: %#v", msgObj.ConversationTitle, msgObj.ConversationID))
+			}
+			//_, err = msgObj.ReplyToDingtalk(string(dingbot.MARKDOWN), msgObj.ConversationID)
+			if err != nil {
+				logger.Warning(fmt.Errorf("send message error: %v", err))
+				return err
+			}
+			return nil
+		}
+
 		// 不在允许群组，不在允许用户（包括在黑名单），满足任一条件，拒绝会话；管理员不受限制
-		if (!public.JudgeGroup(msgObj.GetChatTitle()) || !public.JudgeUsers(msgObj.SenderStaffId)) && !public.JudgeAdminUsers(msgObj.SenderStaffId) {
-			logger.Info(fmt.Sprintf("🙋 %s身份信息未被验证通过", msgObj.SenderNick))
+		if !public.JudgeGroup(msgObj.ConversationID) && !public.JudgeAdminUsers(msgObj.SenderStaffId) && msgObj.SenderStaffId != "" {
+			logger.Info(fmt.Sprintf("🙋『%s』群组未被验证通过，群ID: %#v，userid：%#v, 昵称: %#v，消息: %#v", msgObj.ConversationTitle, msgObj.ConversationID, msgObj.SenderStaffId, msgObj.SenderNick, msgObj.Text.Content))
+			_, err = msgObj.ReplyToDingtalk(string(dingbot.MARKDOWN), "**🤷 抱歉，该群组未被认证通过，无法使用机器人对话功能。**\n>如需继续使用，请联系管理员申请访问权限。")
+			if err != nil {
+				logger.Warning(fmt.Errorf("send message error: %v", err))
+				return err
+			}
+			return nil
+		} else if !public.JudgeUsers(msgObj.SenderStaffId) && !public.JudgeAdminUsers(msgObj.SenderStaffId) && msgObj.SenderStaffId != "" {
+			logger.Info(fmt.Sprintf("🙋 %s身份信息未被验证通过，userid：%#v，消息: %#v", msgObj.SenderNick, msgObj.SenderStaffId, msgObj.Text.Content))
 			_, err = msgObj.ReplyToDingtalk(string(dingbot.MARKDOWN), "**🤷 抱歉，您的身份信息未被认证通过，无法使用机器人对话功能。**\n>如需继续使用，请联系管理员申请访问权限。")
 			if err != nil {
 				logger.Warning(fmt.Errorf("send message error: %v", err))
@@ -127,7 +154,6 @@ func Start() {
 			"status": "ok",
 			"msg":    "欢迎使用钉钉机器人",
 		})
-
 	})
 	port := ":" + public.Config.Port
 	srv := &http.Server{

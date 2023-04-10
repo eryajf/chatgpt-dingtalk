@@ -40,6 +40,8 @@ type Configuration struct {
 	ChatType string `yaml:"chat_type"`
 	// 哪些群组可以进行对话
 	AllowGroups []string `yaml:"allow_groups"`
+	// 哪些outgoing群组可以进行对话
+	AllowOutgoingGroups []string `yaml:"allow_outgoing_groups"`
 	// 哪些用户可以进行对话
 	AllowUsers []string `yaml:"allow_users"`
 	// 哪些用户不可以进行对话
@@ -130,9 +132,13 @@ func LoadConfig() *Configuration {
 		if chatType != "" {
 			config.ChatType = chatType
 		}
-		allowGroup := os.Getenv("ALLOW_GROUPS")
-		if allowGroup != "" {
-			config.AllowGroups = strings.Split(allowGroup, ",")
+		allowGroups := os.Getenv("ALLOW_GROUPS")
+		if allowGroups != "" {
+			config.AllowGroups = strings.Split(allowGroups, ",")
+		}
+		allowOutgoingGroups := os.Getenv("ALLOW_OUTGOING_GROUPS")
+		if allowOutgoingGroups != "" {
+			config.AllowOutgoingGroups = strings.Split(allowOutgoingGroups, ",")
 		}
 		allowUsers := os.Getenv("ALLOW_USERS")
 		if allowUsers != "" {
