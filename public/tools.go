@@ -29,7 +29,7 @@ func WriteToFile(path string, data []byte) error {
 	return nil
 }
 
-// JudgeGroup 判断群聊名称是否在白名单
+// JudgeGroup 判断群ID是否在白名单
 func JudgeGroup(s string) bool {
 	if len(Config.AllowGroups) == 0 {
 		return true
@@ -42,7 +42,20 @@ func JudgeGroup(s string) bool {
 	return false
 }
 
-// JudgeUsers 判断用户名称是否在白名单
+// JudgeOutgoingGroup 判断群ID是否在为outgoing白名单
+func JudgeOutgoingGroup(s string) bool {
+	if len(Config.AllowOutgoingGroups) == 0 {
+		return true
+	}
+	for _, v := range Config.AllowOutgoingGroups {
+		if v == s {
+			return true
+		}
+	}
+	return false
+}
+
+// JudgeUsers 判断用户是否在白名单
 func JudgeUsers(s string) bool {
 	// 优先判断黑名单，黑名单用户返回：不在白名单
 	if len(Config.DenyUsers) != 0 {

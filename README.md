@@ -216,7 +216,7 @@ $ docker run -itd --name chatgpt -p 8090:8090 \
   -e HTTP_PROXY="http://host.docker.internal:15732" \
   -e DEFAULT_MODE="单聊" -e MAX_REQUEST=0 -e PORT=8090 \
   -e SERVICE_URL="你当前服务外网可访问的URL" -e CHAT_TYPE="0" \
-  -e ALLOW_GROUPS=a,b -e ALLOW_USERS=a,b -e DENY_USERS=a,b -e VIP_USERS=a,b -e ADMIN_USERS=a,b -e APP_SECRETS="xxx,yyy" \
+  -e ALLOW_GROUPS=a,b -e ALLOW_OUTGOING_GROUPS=a,b -e ALLOW_USERS=a,b -e DENY_USERS=a,b -e VIP_USERS=a,b -e ADMIN_USERS=a,b -e APP_SECRETS="xxx,yyy" \
   -e AZURE_ON="false" -e AZURE_API_VERSION="" -e AZURE_RESOURCE_NAME="" \
   -e AZURE_DEPLOYMENT_NAME="" -e AZURE_OPENAI_TOKEN="" \
   -e HELP="欢迎使用本工具\n\n你可以查看：[用户指南](https://github.com/eryajf/chatgpt-dingtalk/blob/main/docs/userGuide.md)\n\n这是一个[开源项目](https://github.com/eryajf/chatgpt-dingtalk/)
@@ -459,10 +459,14 @@ port: "8090"
 service_url: "http://chat.eryajf.net"
 # 限定对话类型 0：不限 1：只能单聊 2：只能群聊
 chat_type: "0"
-# 哪些群组可以进行对话，如果留空，则表示允许所有群组，如果要限制，则写群组的名称，比如 ["aa","bb"]
-# 对话聊天时，如下三个满足其一即可通过校验
-allow_groups:
-  - "学无止境"
+# 哪些群组可以进行对话（仅在chat_type为0、2时有效），如果留空，则表示允许所有群组，如果要限制，则列表中写群ID（ConversationID）
+# 群ID，可在群组中 @机器人 群ID 来查看日志获取，例如日志会输出：[🙋 企业内部机器人 在『测试』群的ConversationID为: "cidrabcdefgh1234567890AAAAA"]，获取后可填写该参数并重启程序
+allow_groups: []
+# 哪些普通群（使用outgoing机器人）可以进行对话，如果留空，则表示允许所有群组，如果要限制，则列表中写群ID（ConversationID）
+# 群ID，可在群组中 @机器人 群ID 来查看日志获取，例如日志会输出：[🙋 outgoing机器人 在『测试』群的ConversationID为: "cidrabcdefgh1234567890AAAAA"]，获取后可填写该参数并重启程序
+# 如果不想支持outgoing机器人功能，这里可以随意设置一个内部群组，例如：cidrabcdefgh1234567890AAAAA；或随意一个字符串，例如：disabled
+# 建议该功能默认关闭：除非你必须要用到outgoing机器人
+allow_outgoing_groups: ["disabled"]
 # 以下 allow_users、deny_users、vip_users、admin_users 配置中填写的是用户的userid，outgoing机器人模式下不适用这些配置
 # 比如 ["1301691029702722","1301691029702733"]，这个信息需要在钉钉管理后台的通讯录当中获取：https://oa.dingtalk.com/contacts.htm#/contacts
 # 哪些用户可以进行对话，如果留空，则表示允许所有用户，如果要限制，则列表中写用户的userid
