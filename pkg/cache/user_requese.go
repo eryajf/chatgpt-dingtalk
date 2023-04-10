@@ -8,7 +8,7 @@ import (
 func (s *UserService) SetUseRequestCount(userId string, current int) {
 	expiration := time.Now().Add(time.Hour * 24).Truncate(time.Hour * 24)
 	duration := expiration.Sub(time.Now())
-	// 设置缓存失效时间设置为第二天零点
+	// 设置缓存失效时间为第二天零点
 	s.cache.Set(userId+"_request", current, duration)
 }
 
