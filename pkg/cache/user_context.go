@@ -2,7 +2,7 @@ package cache
 
 import "github.com/patrickmn/go-cache"
 
-// SetUserSessionContext 设置用户会话上下文文本，question用户提问内容，GTP回复内容
+// SetUserSessionContext 设置用户会话上下文文本，question用户提问内容，GPT回复内容
 func (s *UserService) SetUserSessionContext(userId string, content string) {
 	s.cache.Set(userId+"_content", content, cache.DefaultExpiration)
 }
@@ -16,7 +16,7 @@ func (s *UserService) GetUserSessionContext(userId string) string {
 	return sessionContext.(string)
 }
 
-// ClearUserSessionContext 清空GTP上下文，接收文本中包含 SessionClearToken
+// ClearUserSessionContext 清空GPT上下文，接收文本中包含 SessionClearToken
 func (s *UserService) ClearUserSessionContext(userId string) {
 	s.cache.Delete(userId + "_content")
 }
