@@ -16,7 +16,7 @@ func (s *UserService) GetAnswerID(userId, chattitle string) uint {
 	return sessionContext.(uint)
 }
 
-// ClearUserSessionContext 清空GTP上下文，接收文本中包含 SessionClearToken
+// ClearUserSessionContext 清空GPT上下文，接收文本中包含 SessionClearToken
 func (s *UserService) ClearAnswerID(userId, chattitle string) {
 	s.cache.Delete(userId + "_" + chattitle)
 }

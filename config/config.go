@@ -18,7 +18,7 @@ import (
 type Configuration struct {
 	// 日志级别，info或者debug
 	LogLevel string `yaml:"log_level"`
-	// gtp apikey
+	// gpt apikey
 	ApiKey string `yaml:"api_key"`
 	// 请求的 URL 地址
 	BaseURL string `yaml:"base_url"`
