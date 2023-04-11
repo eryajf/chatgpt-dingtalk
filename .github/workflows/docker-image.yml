@@ -58,8 +58,8 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           # 给清单打上多个标签
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.GITHUB_REPOSITORY_NAME_PART }}:${{ env.GITHUB_REF_NAME }}
-            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.GITHUB_REPOSITORY_NAME_PART }}:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/chatgpt-dingtalk:${{ env.GITHUB_REF_NAME }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/chatgpt-dingtalk:latest
 
       # 镜像推送到 ghcr
       - name: Login to the GitHub Container Registry
@@ -76,5 +76,5 @@ jobs:
           push: true
           platforms: linux/amd64,linux/arm64
           tags: |
-            ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/${{ env.GITHUB_REPOSITORY_NAME_PART }}:${{ env.GITHUB_REF_NAME }}
-            ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/${{ env.GITHUB_REPOSITORY_NAME_PART }}:latest
+            ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/chatgpt-dingtalk:${{ env.GITHUB_REF_NAME }}
+            ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/chatgpt-dingtalk:latest
