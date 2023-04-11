@@ -6,7 +6,10 @@ import (
 
 // SetUseRequestCount 设置用户请求次数
 func (s *UserService) SetUseRequestCount(userId string, current int) {
-	s.cache.Set(userId+"_request", current, time.Hour*24)
+	expiration := time.Now().Add(time.Hour * 24).Truncate(time.Hour * 24)
+	duration := expiration.Sub(time.Now())
+	// 设置缓存失效时间为第二天零点
+	s.cache.Set(userId+"_request", current, duration)
 }
 
 // GetUseRequestCount 获取当前用户已请求次数
