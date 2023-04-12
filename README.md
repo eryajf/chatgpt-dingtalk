@@ -25,39 +25,47 @@
 
 如果你对以下领域感兴趣，那么你就是我们正在寻找的人啦！
 
-#### 前端小伙伴们
+#### 设计小伙伴
+- 参与使用在线设计工具协作：Figma、Mastergo、JS Design或Pixso。
+- 有B端设计经验就更棒啦！
+- 加入熟悉的团队：成员已经为超过百款设计插件进行交付，我们是设计师最可靠的搭档，坚决抵制奇怪的需求。
+- 尽享优厚福利：第一时间接触最新的AI设计插件，更有其他丰厚的福利等你来拿。
 
-- React！React！React！
+#### 前端小伙伴
+- Vue or React ~
 - 如果你还有一些B端开发经验那就更棒啦！
-- 创意？没关系，我们有设计师！
+- 创意？没关系，我们有楼上的设计师！
 
-#### 后端小伙伴们
-
+#### 后端小伙伴
 - Golang语言，了解不用说！
 - 熟练掌握gin框架，开发后端就跟呼吸一样自然！
 - 对钉钉、飞书、企微等平台的SDK有所了解，能够开发和集成一系列令人惊叹的功能！
 - 精通平台化细节思维，让你开发的高效服务端热更新脚本惊艳全场！
 - 轻松驾驭Docker容器化技术，随心所欲地部署代码！
 - 有一些支付功能开发经验，真正能让钞票砰砰砰地飞！
-- 对Linux脚本和socket编程了如指掌，就像自己的手指一样灵活！
+- 了解部分Linux脚本和socket编程
 - 上述满足一些即可
 
-#### 测试小伙伴们
+#### 算法小伙伴
+- NLP和CV领域的算法达人
 
-- 不是小姐姐也没关系哦~
+#### 测试小伙伴
+- 重点参与内测产品的功能测试
+- 欢迎没有代码技能的小伙伴
 
 
 gpt应用没思路？要不试试加入我们的项目组，成为这个充满活力、热情的团队的一员吧！
 
 我们队员有
-- [EX-chatGPT的作者](https://github.com/circlestarzero/EX-chatGPT)-->[cc](https://github.com/circlestarzero)
-- [钉钉GPT的作者](https://github.com/eryajf/chatgpt-dingtalk)-->[eryajf](https://github.com/eryajf)
-- [飞书GPT的作者](https://github.com/Leizhenpeng/feishu-chatgpt)-->[river](https://space.bilibili.com/66891783)
+- [EX-chatGPT](https://github.com/circlestarzero/EX-chatGPT)和[ChatPaper的维护者](https://github.com/kaixindelele/ChatPaper)-->[cc](https://github.com/circlestarzero)
+- [钉钉GPT的维护者](https://github.com/eryajf/chatgpt-dingtalk)-->[eryajf](https://github.com/eryajf)
+- [飞书GPT的维护者](https://github.com/Leizhenpeng/feishu-chatgpt)-->[river](https://space.bilibili.com/66891783)
+- [上百款在线设计插件的开发者](https://mastergo.com/community/profile/72319417503384?tab=plugin)-->山山
 - 正在心动的你！
 
-有费用！不会白嫖！
 
-想来玩就戳我 **[邮件](mailto:eryajf@163.com)** 吧~~
+想来玩就戳微信吧~~`laolei_forkway`~~
+
 
 ---
 
