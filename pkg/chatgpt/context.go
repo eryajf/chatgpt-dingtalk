@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/base64"
 	"encoding/gob"
+	"github.com/pandodao/tokenizer-go"
 	"image/png"
 	"os"
 	"strings"
@@ -133,7 +134,7 @@ func (c *ChatContext) SetPreset(preset string) {
 
 func (c *ChatGPT) ChatWithContext(question string) (answer string, err error) {
 	question = question + "."
-	if len(question) > c.maxQuestionLen {
+	if tokenizer.MustCalToken(question) > c.maxQuestionLen {
 		return "", OverMaxQuestionLength
 	}
 	if c.ChatContext.seqTimes >= c.ChatContext.maxSeqTimes {
@@ -156,7 +157,7 @@ func (c *ChatGPT) ChatWithContext(question string) (answer string, err error) {
 	promptTable = append(promptTable, "\n"+c.ChatContext.restartSeq+question)
 	prompt := strings.Join(promptTable, "\n")
 	prompt += c.ChatContext.startSeq
-	if len(prompt) > c.maxText-c.maxAnswerLen {
+	if tokenizer.MustCalToken(prompt) > c.maxText-c.maxAnswerLen {
 		return "", OverMaxTextLength
 	}
 	model := public.Config.Model
@@ -172,7 +173,7 @@ func (c *ChatGPT) ChatWithContext(question string) (answer string, err error) {
 					Content: prompt,
 				},
 			},
-			MaxTokens:   3072,
+			MaxTokens:   c.maxAnswerLen,
 			Temperature: 0.6,
 			User:        c.userId,
 		}
