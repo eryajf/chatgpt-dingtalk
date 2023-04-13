@@ -9,6 +9,7 @@ import (
 	"os"
 	"strings"
 	"time"
+	"unicode/utf8"
 )
 
 // 将内容写入到文件，如果文件名带路径，则会判断路径是否存在，不存在则创建
@@ -139,4 +140,36 @@ func CheckRequest(ts, sg string) bool {
 		}
 	}
 	return false
+}
+
+// JudgeSensitiveWord 判断内容是否包含敏感词
+func JudgeSensitiveWord(s string) bool {
+	if len(Config.SensitiveWords) == 0 {
+		return false
+	}
+	for _, v := range Config.SensitiveWords {
+		if strings.Contains(s, v) {
+			return true
+		}
+	}
+	return false
+}
+
+// SolveSensitiveWord 将敏感词用*号占位
+func SolveSensitiveWord(s string) string {
+	for _, v := range Config.SensitiveWords {
+		if strings.Contains(s, v) {
+			return strings.Replace(s, v, printStars(utf8.RuneCountInString(v)), -1)
+		}
+	}
+	return s
+}
+
+// 将对应敏感词替换为*
+func printStars(num int) string {
+	s := ""
+	for i := 0; i < num; i++ {
+		s += "*"
+	}
+	return s
 }

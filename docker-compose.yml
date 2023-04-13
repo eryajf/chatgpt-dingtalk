@@ -31,6 +31,7 @@ services:
       ADMIN_USERS: "" # 指定哪些人为此系统的管理员，如果留空，则表示没有人是管理员，如果要限制，则列表中写用户的userid
       # 注意：如果下边的app_secrets为空，以及使用outgoing的方式配置机器人，这两种情况下，都表示没有人是管理员
       APP_SECRETS: "" # 钉钉机器人在应用信息中的AppSecret，为了校验回调的请求是否合法，如果留空，将会忽略校验，则该接口将会存在其他人也能随意调用的安全隐患，因此强烈建议配置正确的secret，如果你的服务对接给多个机器人，这里可以配置多个机器人的secret，比如 "xxxx,yyyy"
+      SENSITIVE_WORDS: "" # 敏感词，提问时触发，则不允许提问，回答的内容中触发，则以 *** 代替
       AZURE_ON: "false" # 是否走Azure OpenAi API, 默认false ,如果为true，则需要配置下边的四个参数
       AZURE_API_VERSION: "" # Azure OpenAi API 版本，比如 "2023-03-15-preview"
       AZURE_RESOURCE_NAME: "" # Azure OpenAi API 资源名称，比如 "openai"

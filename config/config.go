@@ -52,6 +52,8 @@ type Configuration struct {
 	AdminUsers []string `yaml:"admin_users"`
 	// 钉钉机器人在应用信息中的AppSecret，为了校验回调的请求是否合法，如果你的服务对接给多个机器人，这里可以配置多个机器人的secret
 	AppSecrets []string `yaml:"app_secrets"`
+	// 敏感词，提问时触发，则不允许提问，回答的内容中触发，则以 *** 代替
+	SensitiveWords []string `yaml:"sensitive_words"`
 	// 自定义帮助信息
 	Help string `yaml:"help"`
 	// AzureOpenAI 配置
@@ -159,6 +161,10 @@ func LoadConfig() *Configuration {
 		appSecrets := os.Getenv("APP_SECRETS")
 		if appSecrets != "" {
 			config.AppSecrets = strings.Split(appSecrets, ",")
+		}
+		sensitiveWords := os.Getenv("SENSITIVE_WORDS")
+		if sensitiveWords != "" {
+			config.SensitiveWords = strings.Split(sensitiveWords, ",")
 		}
 		help := os.Getenv("HELP")
 		if help != "" {
