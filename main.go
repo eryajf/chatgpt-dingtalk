@@ -94,7 +94,7 @@ func Start() {
 			}
 			return nil
 		}
-		if len(msgObj.Text.Content) == 1 || msgObj.Text.Content == "帮助" {
+		if len(msgObj.Text.Content) == 1 || msgObj.Text.Content == "帮助" || len(msgObj.Text.Content) == 0 && msgObj.ConversationType == "2" {
 			// 欢迎信息
 			_, err := msgObj.ReplyToDingtalk(string(dingbot.MARKDOWN), public.Config.Help)
 			if err != nil {
