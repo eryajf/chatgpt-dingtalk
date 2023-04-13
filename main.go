@@ -48,6 +48,14 @@ func Start() {
 		}
 		// 去除问题的前后空格
 		msgObj.Text.Content = strings.TrimSpace(msgObj.Text.Content)
+		if public.JudgeSensitiveWord(msgObj.Text.Content) {
+			_, err = msgObj.ReplyToDingtalk(string(dingbot.MARKDOWN), "**🤷 抱歉，您提问的问题中包含敏感词汇，请审核自己的对话内容之后再进行！**")
+			if err != nil {
+				logger.Warning(fmt.Errorf("send message error: %v", err))
+				return err
+			}
+			return nil
+		}
 		// 打印钉钉回调过来的请求明细，调试时打开
 		logger.Debug(fmt.Sprintf("dingtalk callback parameters: %#v", msgObj))
 

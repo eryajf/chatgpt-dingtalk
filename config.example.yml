@@ -42,6 +42,8 @@ vip_users: []
 admin_users: []
 # 钉钉机器人在应用信息中的AppSecret，为了校验回调的请求是否合法，如果留空，将会忽略校验，则该接口将会存在其他人也能随意调用的安全隐患，因此强烈建议配置正确的secret，如果你的服务对接给多个机器人，这里可以配置多个机器人的secret
 app_secrets: []
+# 敏感词，提问时触发，则不允许提问，回答的内容中触发，则以 *** 代替
+sensitive_words: []
 # 帮助信息，放在配置文件，可供自定义
 help: "欢迎使用本工具\n\n你可以查看：[用户指南](https://github.com/eryajf/chatgpt-dingtalk/blob/main/docs/userGuide.md)\n\n这是一个[开源项目](https://github.com/eryajf/chatgpt-dingtalk/)，觉得不错你可以来波素质三连."
 
