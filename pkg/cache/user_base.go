@@ -36,5 +36,5 @@ type UserService struct {
 
 // NewUserService 创建新的业务层
 func NewUserService() UserServiceInterface {
-	return &UserService{cache: cache.New(time.Second*public.Config.SessionTimeout, time.Hour*1)}
+	return &UserService{cache: cache.New(public.Config.SessionTimeout, time.Hour*1)}
 }
