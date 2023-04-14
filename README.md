@@ -153,71 +153,11 @@
 
 ## 使用教程
 
-### 第一步，创建机器人
-
-#### 方案一：outgoing类型机器人
-
-钉钉群内的机器人有一个outgoing模式，当你创建机器人的时候，可以选择启用这个模式，然后直接配置回调地址，免去在管理后台创建应用的步骤，就可以直接投入使用。
-
-官方文档：[自定义机器人接入](https://open.dingtalk.com/document/orgapp/custom-robot-access)
-
-但是这个模式貌似是部分开放的(目前来看貌似是部分人有创建这个类型的白名单)，所以如果你在钉钉群聊中添加`自定义机器人`的时候，看到和我一样的信息，则说明无法使用这种方式：
-
-<details>
-    <summary>🖼 点我查看示例图</summary>
-    <img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230325_162017.jpg">
-</details>
-
-`📢 注意`
-
-- 如果你的和我一样，那么就只能放弃这种方案，往下看第二种对接方案。
-- 如果使用这种方案，那么就不能与机器人私聊对话，只能局限在群聊当中艾特机器人聊天。
-- 如果使用这种方案，则在群聊当中并不能达到真正的艾特发消息人的效果，因为这种机器人回调过来的关键信息为空。
-
-#### 方案二：企业内部应用
-
-创建步骤参考文档：[企业内部开发机器人](https://open.dingtalk.com/document/robots/enterprise-created-chatbot)，或者根据如下步骤进行配置。
-
-1. 创建机器人。
-    <details>
-      <summary>🖼 点我查看示例图</summary>
-      <img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20221209_163616.png">
-    </details>
-
-   > `📢 注意1：`可能现在创建机器人的时候名字为`chatgpt`会被钉钉限制，请用其他名字命名。
-   > `📢 注意2：`第四步骤点击创建应用的时候，务必选择使用旧版，从而创建旧版机器人。
-
-   步骤比较简单，这里就不赘述了。
-
-2. 配置机器人回调接口。
-    <details>
-      <summary>🖼 点我查看示例图</summary>
-      <img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20221209_163652.png">
-    </details>
-
-   创建完毕之后，点击机器人开发管理，然后配置将要部署的服务所在服务器的出口IP，以及将要给服务配置的域名。
-
-  ` 如果提示：` 消息接收地址校验失败（请确保公网可访问该地址，如无有效SSL证书，可选择禁用证书校验），那么可以先输入一个`https://`，然后就能看到`禁用https`的选项了，选择禁用，然后再把地址改成`http`就好了。
-
-3. 发布机器人。
-    <details>
-      <summary>🖼 点我查看示例图</summary>
-      <img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20221209_163709.png">
-    </details>
-
-   点击版本管理与发布，然后点击上线，这个时候就能在钉钉的群里中添加这个机器人了。
-
-4. 群聊添加机器人。
-    <details>
-      <summary>🖼 点我查看示例图</summary>
-      <img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20221209_163724.png">
-    </details>
-
-### 第二步，部署应用
+### 第一步，部署应用
 
 #### docker部署
 
-你可以使用docker快速运行本项目。
+推荐你使用docker快速运行本项目。
 
 ```
 第一种：基于环境变量运行
@@ -261,7 +201,7 @@ $ docker run -itd --name chatgpt -p 8090:8090  -v `pwd`/config.yml:/app/config.y
 第三种：使用 docker compose 运行
 $ wget https://raw.githubusercontent.com/eryajf/chatgpt-dingtalk/main/docker-compose.yml
 
-$ nano docker-compose.yml # 编辑 APIKEY 等信息
+$ vim docker-compose.yml # 编辑 APIKEY 等信息
 
 $ docker compose up -d
 ```
@@ -288,45 +228,19 @@ server {
 
 部署完成之后，就可以在群里艾特机器人进行体验了。
 
-`📢 注意`:Nginx代理步骤是个可选步骤，你也可以直接通过服务器外网IP:PORT作为回调地址。
+`📢 注意:` 配置Nginx代理步骤是个可选步骤，你也可以直接通过服务器外网IP:PORT作为回调地址。
 
 Nginx配置完毕之后，可以先手动请求一下，通过服务日志输出判断服务是否正常可用：
 
 ```sh
-$ curl --location --request POST 'http://chat.eryajf.net/' \
-  --header 'Content-type: application/json' \
-  -d '{
-    "conversationId": "xxx",
-    "atUsers": [
-        {
-            "dingtalkId": "xxx",
-            "staffId":"xxx"
-        }
-    ],
-    "chatbotCorpId": "dinge8a565xxxx",
-    "chatbotUserId": "$:LWCP_v1:$Cxxxxx",
-    "msgId": "msg0xxxxx",
-    "senderNick": "eryajf",
-    "isAdmin": true,
-    "senderStaffId": "user123",
-    "sessionWebhookExpiredTime": 1613635652738,
-    "createAt": 1613630252678,
-    "senderCorpId": "dinge8a565xxxx",
-    "conversationType": "2",
-    "senderId": "$:LWCP_v1:$Ff09GIxxxxx",
-    "conversationTitle": "机器人测试-TEST",
-    "isInAtList": true,
-    "sessionWebhook": "https://oapi.dingtalk.com/robot/sendBySession?session=xxxxx",
-    "text": {
-        "content": " 你好"
-    },
-    "msgtype": "text"
-}'
+$ curl -s 'http://chat.eryajf.net/'
+{
+  "msg": "欢迎使用钉钉机器人",
+  "status": "ok"
+}
 ```
 
 如果手动请求没有问题，那么就可以在钉钉群里与机器人进行对话了。
-
-> **📢 注意：** 如果配置文件中`app_secret`不为空，那么这里curl请求将会校验失败，理论上只要服务能够正常被访问，那么直接在钉钉管理后台配置回调就可以了，如果想通过curl进行调试，则注意需把对应配置项留空。
 
 #### 二进制部署
 
@@ -345,6 +259,68 @@ $ ./chatgpt-dingtalk  # 直接运行
 $ nohup ./chatgpt-dingtalk &> run.log &
 $ tail -f run.log
 ```
+
+
+### 第二步，创建机器人
+
+#### 方案一：outgoing类型机器人
+
+钉钉群内的机器人有一个outgoing模式，当你创建机器人的时候，可以选择启用这个模式，然后直接配置回调地址，免去在管理后台创建应用的步骤，就可以直接投入使用。
+
+官方文档：[自定义机器人接入](https://open.dingtalk.com/document/orgapp/custom-robot-access)
+
+但是这个模式貌似是部分开放的(目前来看貌似是部分人有创建这个类型的白名单)，所以如果你在钉钉群聊中添加`自定义机器人`的时候，看到和我一样的信息，则说明无法使用这种方式：
+
+<details>
+    <summary>🖼 点我查看示例图</summary>
+    <img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230325_162017.jpg">
+</details>
+
+`📢 注意`
+
+- 如果你的和我一样，那么就只能放弃这种方案，往下看第二种对接方案。
+- 如果使用这种方案，那么就不能与机器人私聊对话，只能局限在群聊当中艾特机器人聊天。
+- 如果使用这种方案，则在群聊当中并不能达到真正的艾特发消息人的效果，因为这种机器人回调过来的关键信息为空。
+
+#### 方案二：企业内部应用
+
+创建步骤参考文档：[企业内部开发机器人](https://open.dingtalk.com/document/robots/enterprise-created-chatbot)，或者根据如下步骤进行配置。
+
+1. 创建机器人。
+    <details>
+      <summary>🖼 点我查看示例图</summary>
+      <img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20221209_163616.png">
+    </details>
+
+   > `📢 注意1：`可能现在创建机器人的时候名字为`chatgpt`会被钉钉限制，请用其他名字命名。
+   > `📢 注意2：`第四步骤点击创建应用的时候，务必选择使用旧版，从而创建旧版机器人，如果选择新版，则机器人的功能集成在了应用当中的消息推送模块儿。
+
+   步骤比较简单，这里就不赘述了。
+
+2. 配置机器人回调接口。
+    <details>
+      <summary>🖼 点我查看示例图</summary>
+      <img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20221209_163652.png">
+    </details>
+
+   创建完毕之后，点击机器人开发管理，然后配置将要部署的服务所在服务器的出口IP，以及将要给服务配置的域名。
+
+  `📢 注意：` 添加消息接收地址的时候，务必确保服务在正常运行且可通过回调地址访问，否则保存时将会失败。
+  `📢 如果提示：` 消息接收地址校验失败（请确保公网可访问该地址，如无有效SSL证书，可选择禁用证书校验），那么可以先输入一个`https://`，然后就能看到`禁用https`的选项了，选择禁用，然后再把地址改成`http`就好了。
+
+3. 发布机器人。
+    <details>
+      <summary>🖼 点我查看示例图</summary>
+      <img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20221209_163709.png">
+    </details>
+
+   点击版本管理与发布，然后点击上线，这个时候就能在钉钉的群里中添加这个机器人了。
+
+4. 群聊添加机器人。
+    <details>
+      <summary>🖼 点我查看示例图</summary>
+      <img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20221209_163724.png">
+    </details>
 
 ## 亮点特色
 
