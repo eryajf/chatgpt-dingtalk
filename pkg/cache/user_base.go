@@ -3,7 +3,7 @@ package cache
 import (
 	"time"
 
-	"github.com/eryajf/chatgpt-dingtalk/public"
+	"github.com/eryajf/chatgpt-dingtalk/config"
 	"github.com/patrickmn/go-cache"
 )
 
@@ -36,5 +36,8 @@ type UserService struct {
 
 // NewUserService 创建新的业务层
 func NewUserService() UserServiceInterface {
-	return &UserService{cache: cache.New(public.Config.SessionTimeout, time.Hour*1)}
+	var Config *config.Configuration
+	// 加载配置
+	Config = config.LoadConfig()
+	return &UserService{cache: cache.New(Config.SessionTimeout, time.Hour*1)}
 }
