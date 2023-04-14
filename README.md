@@ -532,56 +532,56 @@ azure_openai_token: "xxxx"
 <tr>
     <td align="center">
         <a href="https://github.com/eryajf">
-            <img src="https://avatars.githubusercontent.com/u/33259379?v=4" width="65;" alt="eryajf"/>
+            <img src="https://avatars.githubusercontent.com/u/33259379?v=4" width="75;" alt="eryajf"/>
             <br />
             <sub><b>二丫讲梵</b></sub>
         </a>
     </td>
     <td align="center">
         <a href="https://github.com/ffinly">
-            <img src="https://avatars.githubusercontent.com/u/29793346?v=4" width="65;" alt="ffinly"/>
+            <img src="https://avatars.githubusercontent.com/u/29793346?v=4" width="75;" alt="ffinly"/>
             <br />
             <sub><b>Finly</b></sub>
         </a>
     </td>
     <td align="center">
         <a href="https://github.com/Leizhenpeng">
-            <img src="https://avatars.githubusercontent.com/u/50035229?v=4" width="65;" alt="Leizhenpeng"/>
+            <img src="https://avatars.githubusercontent.com/u/50035229?v=4" width="75;" alt="Leizhenpeng"/>
             <br />
             <sub><b>RiverRay</b></sub>
         </a>
     </td>
     <td align="center">
         <a href="https://github.com/laorange">
-            <img src="https://avatars.githubusercontent.com/u/68316902?v=4" width="65;" alt="laorange"/>
+            <img src="https://avatars.githubusercontent.com/u/68316902?v=4" width="75;" alt="laorange"/>
             <br />
             <sub><b>辣橙</b></sub>
         </a>
     </td>
     <td align="center">
         <a href="https://github.com/AydenLii">
-            <img src="https://avatars.githubusercontent.com/u/90502440?v=4" width="65;" alt="AydenLii"/>
+            <img src="https://avatars.githubusercontent.com/u/90502440?v=4" width="75;" alt="AydenLii"/>
             <br />
             <sub><b>AydenLii</b></sub>
         </a>
     </td>
     <td align="center">
         <a href="https://github.com/luoxufeiyan">
-            <img src="https://avatars.githubusercontent.com/u/6621172?v=4" width="65;" alt="luoxufeiyan"/>
+            <img src="https://avatars.githubusercontent.com/u/6621172?v=4" width="75;" alt="luoxufeiyan"/>
             <br />
             <sub><b>Hugh Gao</b></sub>
         </a>
     </td>
     <td align="center">
         <a href="https://github.com/fantasticmao">
-            <img src="https://avatars.githubusercontent.com/u/20675747?v=4" width="65;" alt="fantasticmao"/>
+            <img src="https://avatars.githubusercontent.com/u/20675747?v=4" width="75;" alt="fantasticmao"/>
             <br />
             <sub><b>Mao Mao</b></sub>
         </a>
     </td>
     <td align="center">
         <a href="https://github.com/iblogc">
-            <img src="https://avatars.githubusercontent.com/u/3283023?v=4" width="65;" alt="iblogc"/>
+            <img src="https://avatars.githubusercontent.com/u/3283023?v=4" width="75;" alt="iblogc"/>
             <br />
             <sub><b>Iblogc</b></sub>
         </a>
@@ -589,14 +589,14 @@ azure_openai_token: "xxxx"
 <tr>
     <td align="center">
         <a href="https://github.com/cnmill">
-            <img src="https://avatars.githubusercontent.com/u/21098695?v=4" width="65;" alt="cnmill"/>
+            <img src="https://avatars.githubusercontent.com/u/21098695?v=4" width="75;" alt="cnmill"/>
             <br />
             <sub><b>Mill Peng</b></sub>
         </a>
     </td>
     <td align="center">
         <a href="https://github.com/WinMin">
-            <img src="https://avatars.githubusercontent.com/u/18380453?v=4" width="65;" alt="WinMin"/>
+            <img src="https://avatars.githubusercontent.com/u/18380453?v=4" width="75;" alt="WinMin"/>
             <br />
             <sub><b>Swing</b></sub>
         </a>
