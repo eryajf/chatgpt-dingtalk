@@ -3,6 +3,7 @@ package cache
 import (
 	"time"
 
+	"github.com/eryajf/chatgpt-dingtalk/public"
 	"github.com/patrickmn/go-cache"
 )
 
