@@ -57,7 +57,7 @@ func ProcessRequest(rmsg *dingbot.ReceiveMsg) error {
 				}
 				return err
 			}
-			_, err := rmsg.ReplyToDingtalk(string(dingbot.MARKDOWN), "发送以 **#图片** 开头的内容，将会触发绘画能力，图片生成之后，将会保存在程序根目录下的 **images目录** \n 如果你绘图没有思路，可以在这两个网站寻找灵感。\n - [https://lexica.art/](https://lexica.art/)\n- [https://www.clickprompt.org/zh-CN/](https://www.clickprompt.org/zh-CN/)")
+			_, err := rmsg.ReplyToDingtalk(string(dingbot.MARKDOWN), "发送以 **#图片** 开头的内容，将会触发绘画能力，图片生成之后，将会通过消息回复给您。建议尽可能描述需要生成的图片内容及相关细节。\n 如果你绘图没有思路，可以在这两个网站寻找灵感。\n - [https://lexica.art/](https://lexica.art/)\n- [https://www.clickprompt.org/zh-CN/](https://www.clickprompt.org/zh-CN/)")
 			if err != nil {
 				logger.Warning(fmt.Errorf("send message error: %v", err))
 			}
@@ -150,7 +150,7 @@ func Do(mode string, rmsg *dingbot.ReceiveMsg) error {
 				reply = public.SolveSensitiveWord(reply)
 			}
 			// 回复@我的用户
-			_, err = rmsg.ReplyToDingtalk(string(dingbot.TEXT), reply)
+			_, err = rmsg.ReplyToDingtalk(string(dingbot.MARKDOWN), FormatMarkdown(reply))
 			if err != nil {
 				logger.Warning(fmt.Errorf("send message error: %v", err))
 				return err
@@ -211,7 +211,7 @@ func Do(mode string, rmsg *dingbot.ReceiveMsg) error {
 				reply = public.SolveSensitiveWord(reply)
 			}
 			// 回复@我的用户
-			_, err = rmsg.ReplyToDingtalk(string(dingbot.TEXT), reply)
+			_, err = rmsg.ReplyToDingtalk(string(dingbot.MARKDOWN), FormatMarkdown(reply))
 			if err != nil {
 				logger.Warning(fmt.Errorf("send message error: %v", err))
 				return err
@@ -222,6 +222,21 @@ func Do(mode string, rmsg *dingbot.ReceiveMsg) error {
 
 	}
 	return nil
+}
+
+// FormatMarkdown 格式化Markdown
+// 主要修复ChatGPT返回多行代码块，钉钉会将代码块中的#当作Markdown语法里的标题来处理，这里进行下转义
+func FormatMarkdown(md string) string {
+	lines := strings.Split(md, "\n")
+	codeblock := false
+	for i, line := range lines {
+		if strings.HasPrefix(line, "```") {
+			codeblock = !codeblock
+		} else if codeblock && strings.HasPrefix(line, "#") {
+			lines[i] = "\\" + lines[i]
+		}
+	}
+	return strings.Join(lines, "\n")
 }
 
 // CheckRequestTimes 分析处理请求逻辑
