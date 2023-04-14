@@ -45,10 +45,6 @@ func ProcessRequest(rmsg *dingbot.ReceiveMsg) error {
 				logger.Warning(fmt.Errorf("send message error: %v", err))
 			}
 		case "模板":
-			// 清空用户对话上下文
-			public.UserService.ClearUserSessionContext(rmsg.GetSenderIdentifier())
-			// 清空用户对话的答案ID
-			public.UserService.ClearAnswerID(rmsg.SenderNick, rmsg.GetChatTitle())
 			var title string
 			for _, v := range *public.Prompt {
 				title = title + v.Title + " | "
