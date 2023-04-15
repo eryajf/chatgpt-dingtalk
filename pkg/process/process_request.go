@@ -2,6 +2,7 @@ package process
 
 import (
 	"fmt"
+	"html"
 	"strings"
 	"time"
 
@@ -247,14 +248,22 @@ func FormatTimeDuation(duration time.Duration) string {
 
 // FormatMarkdown 格式化Markdown
 // 主要修复ChatGPT返回多行代码块，钉钉会将代码块中的#当作Markdown语法里的标题来处理，这里进行下转义
+// 如果Markdown格式内存在html，钉钉无法显示Markdown格式内的html代码，这里将Markdown中的html标签转义
 func FormatMarkdown(md string) string {
 	lines := strings.Split(md, "\n")
 	codeblock := false
 	for i, line := range lines {
 		if strings.HasPrefix(line, "```") {
 			codeblock = !codeblock
-		} else if codeblock && strings.HasPrefix(line, "#") {
-			lines[i] = "\\" + lines[i]
+		}
+		if codeblock {
+			lines[i] = strings.ReplaceAll(line, "#", "\\#")
+		}
+	}
+	// 如果Markdown内存在html，将Markdown中的html标签转义
+	if strings.Contains(md, "<") {
+		for i, line := range lines {
+			lines[i] = html.EscapeString(line)
 		}
 	}
 	return strings.Join(lines, "\n")
