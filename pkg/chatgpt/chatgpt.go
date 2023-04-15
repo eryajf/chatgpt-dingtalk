@@ -28,7 +28,7 @@ func New(userId string) *ChatGPT {
 	var ctx context.Context
 	var cancel func()
 
-	ctx, cancel = context.WithTimeout(context.Background(), 600)
+	ctx, cancel = context.WithTimeout(context.Background(), 600*time.Second)
 	timeOutChan := make(chan struct{}, 1)
 	go func() {
 		<-ctx.Done()
