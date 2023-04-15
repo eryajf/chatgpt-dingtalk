@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
-	"path/filepath"
 	"strings"
 	"time"
 
@@ -14,7 +13,7 @@ import (
 	"github.com/eryajf/chatgpt-dingtalk/pkg/logger"
 	"github.com/eryajf/chatgpt-dingtalk/pkg/process"
 	"github.com/eryajf/chatgpt-dingtalk/public"
-	"github.com/xgfone/ship/v5"
+	"github.com/gin-gonic/gin"
 )
 
 func init() {
@@ -26,25 +25,25 @@ func main() {
 }
 
 func Start() {
-	app := ship.Default()
-	app.Route("/").POST(func(c *ship.Context) error {
+	app := gin.Default()
+	app.POST("/", func(c *gin.Context) {
 		var msgObj dingbot.ReceiveMsg
 		err := c.Bind(&msgObj)
 		if err != nil {
-			return ship.ErrBadRequest.New(fmt.Errorf("bind to receivemsg failed : %v", err))
+			return
 		}
 		// 先校验回调是否合法
-		if !public.CheckRequest(c.GetReqHeader("timestamp"), c.GetReqHeader("sign")) && msgObj.SenderStaffId != "" {
+		if !public.CheckRequest(c.GetHeader("timestamp"), c.GetHeader("sign")) && msgObj.SenderStaffId != "" {
 			logger.Warning("该请求不合法，可能是其他企业或者未经允许的应用调用所致，请知悉！")
-			return nil
+			return
 		} else if !public.JudgeOutgoingGroup(msgObj.ConversationID) && msgObj.SenderStaffId == "" {
 			logger.Warning("该请求不合法，可能是未经允许的普通群outgoing机器人调用所致，请知悉！")
-			return nil
+			return
 		}
 		// 再校验回调参数是否有价值
 		if msgObj.Text.Content == "" || msgObj.ChatbotUserID == "" {
 			logger.Warning("从钉钉回调过来的内容为空，根据过往的经验，或许重新创建一下机器人，能解决这个问题")
-			return ship.ErrBadRequest.New(fmt.Errorf("从钉钉回调过来的内容为空，根据过往的经验，或许重新创建一下机器人，能解决这个问题"))
+			return
 		}
 		// 去除问题的前后空格
 		msgObj.Text.Content = strings.TrimSpace(msgObj.Text.Content)
@@ -53,9 +52,9 @@ func Start() {
 			_, err = msgObj.ReplyToDingtalk(string(dingbot.MARKDOWN), "**🤷 抱歉，您提问的问题中包含敏感词汇，请审核自己的对话内容之后再进行！**")
 			if err != nil {
 				logger.Warning(fmt.Errorf("send message error: %v", err))
-				return err
+				return
 			}
-			return nil
+			return
 		}
 		// 打印钉钉回调过来的请求明细，调试时打开
 		logger.Debug(fmt.Sprintf("dingtalk callback parameters: %#v", msgObj))
@@ -65,9 +64,9 @@ func Start() {
 			_, err = msgObj.ReplyToDingtalk(string(dingbot.MARKDOWN), "**🤷 抱歉，管理员禁用了这种聊天方式，请选择其他聊天方式与机器人对话！**")
 			if err != nil {
 				logger.Warning(fmt.Errorf("send message error: %v", err))
-				return err
+				return
 			}
-			return nil
+			return
 		}
 
 		// 查询群ID，发送指令后，可通过查看日志来获取
@@ -80,9 +79,9 @@ func Start() {
 			//_, err = msgObj.ReplyToDingtalk(string(dingbot.MARKDOWN), msgObj.ConversationID)
 			if err != nil {
 				logger.Warning(fmt.Errorf("send message error: %v", err))
-				return err
+				return
 			}
-			return nil
+			return
 		}
 
 		// 不在允许群组，不在允许用户（包括在黑名单），满足任一条件，拒绝会话；管理员不受限制
@@ -91,37 +90,57 @@ func Start() {
 			_, err = msgObj.ReplyToDingtalk(string(dingbot.MARKDOWN), "**🤷 抱歉，该群组未被认证通过，无法使用机器人对话功能。**\n>如需继续使用，请联系管理员申请访问权限。")
 			if err != nil {
 				logger.Warning(fmt.Errorf("send message error: %v", err))
-				return err
+				return
 			}
-			return nil
+			return
 		} else if !public.JudgeUsers(msgObj.SenderStaffId) && !public.JudgeAdminUsers(msgObj.SenderStaffId) && msgObj.SenderStaffId != "" {
 			logger.Info(fmt.Sprintf("🙋 %s身份信息未被验证通过，userid：%#v，消息: %#v", msgObj.SenderNick, msgObj.SenderStaffId, msgObj.Text.Content))
 			_, err = msgObj.ReplyToDingtalk(string(dingbot.MARKDOWN), "**🤷 抱歉，您的身份信息未被认证通过，无法使用机器人对话功能。**\n>如需继续使用，请联系管理员申请访问权限。")
 			if err != nil {
 				logger.Warning(fmt.Errorf("send message error: %v", err))
-				return err
+				return
 			}
-			return nil
+			return
 		}
 		if len(msgObj.Text.Content) == 0 || msgObj.Text.Content == "帮助" {
 			// 欢迎信息
 			_, err := msgObj.ReplyToDingtalk(string(dingbot.MARKDOWN), public.Config.Help)
 			if err != nil {
 				logger.Warning(fmt.Errorf("send message error: %v", err))
-				return ship.ErrBadRequest.New(fmt.Errorf("send message error: %v", err))
+				return
 			}
 		} else {
 			logger.Info(fmt.Sprintf("🙋 %s发起的问题: %#v", msgObj.SenderNick, msgObj.Text.Content))
 			// 除去帮助之外的逻辑分流在这里处理
 			switch {
 			case strings.HasPrefix(msgObj.Text.Content, "#图片"):
-				return process.ImageGenerate(&msgObj)
+				err := process.ImageGenerate(&msgObj)
+				if err != nil {
+					logger.Warning(fmt.Errorf("process request: %v", err))
+					return
+				}
+				return
 			case strings.HasPrefix(msgObj.Text.Content, "#查对话"):
-				return process.SelectHistory(&msgObj)
+				err := process.SelectHistory(&msgObj)
+				if err != nil {
+					logger.Warning(fmt.Errorf("process request: %v", err))
+					return
+				}
+				return
 			case strings.HasPrefix(msgObj.Text.Content, "#域名"):
-				return process.DomainMsg(&msgObj)
+				err := process.DomainMsg(&msgObj)
+				if err != nil {
+					logger.Warning(fmt.Errorf("process request: %v", err))
+					return
+				}
+				return
 			case strings.HasPrefix(msgObj.Text.Content, "#证书"):
-				return process.DomainCertMsg(&msgObj)
+				err := process.DomainCertMsg(&msgObj)
+				if err != nil {
+					logger.Warning(fmt.Errorf("process request: %v", err))
+					return
+				}
+				return
 			default:
 				msgObj.Text.Content, err = process.GeneratePrompt(msgObj.Text.Content)
 				// err不为空：提示词之后没有文本 -> 直接返回提示词所代表的内容
@@ -129,39 +148,41 @@ func Start() {
 					_, err = msgObj.ReplyToDingtalk(string(dingbot.TEXT), msgObj.Text.Content)
 					if err != nil {
 						logger.Warning(fmt.Errorf("send message error: %v", err))
-						return err
+						return
 					}
-					return nil
+					return
 				}
-				return process.ProcessRequest(&msgObj)
+				err := process.ProcessRequest(&msgObj)
+				if err != nil {
+					logger.Warning(fmt.Errorf("process request: %v", err))
+					return
+				}
+				return
 			}
 		}
-		return nil
 	})
 	// 解析生成后的图片
-	app.Route("/images/:filename").GET(func(c *ship.Context) error {
+	app.GET("/images/:filename", func(c *gin.Context) {
 		filename := c.Param("filename")
-		root := "./data/images/"
-		return c.File(filepath.Join(root, filename))
+		c.File("./data/images/" + filename)
 	})
 	// 解析生成后的历史聊天
-	app.Route("/history/:filename").GET(func(c *ship.Context) error {
+	app.GET("/history/:filename", func(c *gin.Context) {
 		filename := c.Param("filename")
-		root := "./data/chatHistory/"
-		return c.File(filepath.Join(root, filename))
+		c.File("./data/chatHistory/" + filename)
 	})
 	// 直接下载文件
-	app.Route("/download/:filename").GET(func(c *ship.Context) error {
+	app.GET("/download/:filename", func(c *gin.Context) {
 		filename := c.Param("filename")
-		root := "./data/chatHistory/"
-		return c.Attachment(filepath.Join(root, filename), "")
+		c.Header("Content-Disposition", "attachment; filename="+filename)
+		c.Header("Content-Type", "application/octet-stream")
+		c.File("./data/chatHistory/" + filename)
 	})
 	// 服务器健康检测
-	app.Route("/").GET(func(c *ship.Context) error {
-		//返回消息优雅一点，告诉用户欢迎使用ding ding机器人服务 服务状态oK
-		return c.JSON(http.StatusOK, map[string]interface{}{
-			"status": "ok",
-			"msg":    "欢迎使用钉钉机器人",
+	app.GET("/", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"status":  "ok",
+			"message": "🚀 欢迎使用钉钉机器人 🤖",
 		})
 	})
 	port := ":" + public.Config.Port
