@@ -232,6 +232,7 @@ func Do(mode string, rmsg *dingbot.ReceiveMsg) error {
 	}
 	return nil
 }
+
 // FormatTimeDuation 格式化时间
 // 主要提示单聊/群聊切换时多久后恢复默认聊天模式
 func FormatTimeDuation(duration time.Duration) string {
@@ -247,8 +248,8 @@ func FormatTimeDuation(duration time.Duration) string {
 }
 
 // FormatMarkdown 格式化Markdown
-// 主要修复ChatGPT返回多行代码块，钉钉会将代码块中的#当作Markdown语法里的标题来处理，这里进行下转义
-// 如果Markdown格式内存在html，钉钉无法显示Markdown格式内的html代码，这里将Markdown中的html标签转义
+// 主要修复ChatGPT返回多行代码块，钉钉会将代码块中的#当作Markdown语法里的标题来处理，进行转义；如果Markdown格式内存在html，将Markdown中的html标签转义
+// 代码块缩进问题暂无法解决，因不管是四个空格，还是Tab，在钉钉上均会顶格显示，建议复制代码后用IDE进行代码格式化，针对缩进严格的语言，例如Python，不确定的建议手机端查看下代码块的缩进
 func FormatMarkdown(md string) string {
 	lines := strings.Split(md, "\n")
 	codeblock := false
