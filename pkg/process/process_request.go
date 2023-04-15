@@ -3,6 +3,7 @@ package process
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/eryajf/chatgpt-dingtalk/pkg/db"
 	"github.com/eryajf/chatgpt-dingtalk/pkg/dingbot"
@@ -15,16 +16,20 @@ import (
 func ProcessRequest(rmsg *dingbot.ReceiveMsg) error {
 	if CheckRequestTimes(rmsg) {
 		content := strings.TrimSpace(rmsg.Text.Content)
+		timeoutStr := ""
+		if content != public.Config.DefaultMode {
+			timeoutStr = fmt.Sprintf("\n\n>%s 后将恢复默认聊天模式：%s", FormatTimeDuation(public.Config.SessionTimeout), public.Config.DefaultMode)
+		}
 		switch content {
 		case "单聊":
 			public.UserService.SetUserMode(rmsg.GetSenderIdentifier(), content)
-			_, err := rmsg.ReplyToDingtalk(string(dingbot.MARKDOWN), fmt.Sprintf("**[Concentrate] 现在进入与 %s 的单聊模式**", rmsg.SenderNick))
+			_, err := rmsg.ReplyToDingtalk(string(dingbot.MARKDOWN), fmt.Sprintf("**[Concentrate] 现在进入与 %s 的单聊模式**%s", rmsg.SenderNick, timeoutStr))
 			if err != nil {
 				logger.Warning(fmt.Errorf("send message error: %v", err))
 			}
 		case "串聊":
 			public.UserService.SetUserMode(rmsg.GetSenderIdentifier(), content)
-			_, err := rmsg.ReplyToDingtalk(string(dingbot.MARKDOWN), fmt.Sprintf("**[Concentrate] 现在进入与 %s 的串聊模式**", rmsg.SenderNick))
+			_, err := rmsg.ReplyToDingtalk(string(dingbot.MARKDOWN), fmt.Sprintf("**[Concentrate] 现在进入与 %s 的串聊模式**%s", rmsg.SenderNick, timeoutStr))
 			if err != nil {
 				logger.Warning(fmt.Errorf("send message error: %v", err))
 			}
@@ -62,25 +67,28 @@ func ProcessRequest(rmsg *dingbot.ReceiveMsg) error {
 				logger.Warning(fmt.Errorf("send message error: %v", err))
 			}
 		case "余额":
-			cacheMsg := public.UserService.GetUserMode("system_balance")
-			if cacheMsg == "" {
-				rst, err := public.GetBalance()
-				if err != nil {
-					logger.Warning(fmt.Errorf("get balance error: %v", err))
-					return err
+			if public.JudgeAdminUsers(rmsg.SenderStaffId) {
+				cacheMsg := public.UserService.GetUserMode("system_balance")
+				if cacheMsg == "" {
+					rst, err := public.GetBalance()
+					if err != nil {
+						logger.Warning(fmt.Errorf("get balance error: %v", err))
+						return err
+					}
+					cacheMsg = rst
 				}
-				cacheMsg = rst
-			}
-			// cacheMsg := "官方暂时改写了余额接口，因此暂不提供查询余额功能！2023-04-03"
-			_, err := rmsg.ReplyToDingtalk(string(dingbot.TEXT), cacheMsg)
-			if err != nil {
-				logger.Warning(fmt.Errorf("send message error: %v", err))
+				_, err := rmsg.ReplyToDingtalk(string(dingbot.TEXT), cacheMsg)
+				if err != nil {
+					logger.Warning(fmt.Errorf("send message error: %v", err))
+				}
 			}
 		case "查对话":
-			msg := "使用如下指令进行查询:\n\n---\n\n**#查对话 username:张三**\n\n---\n\n需要注意格式必须严格与上边一致，否则将会查询失败\n\n只有程序系统管理员有权限查询，即config.yml中的admin_users指定的人员。"
-			_, err := rmsg.ReplyToDingtalk(string(dingbot.MARKDOWN), msg)
-			if err != nil {
-				logger.Warning(fmt.Errorf("send message error: %v", err))
+			if public.JudgeAdminUsers(rmsg.SenderStaffId) {
+				msg := "使用如下指令进行查询:\n\n---\n\n**#查对话 username:张三**\n\n---\n\n需要注意格式必须严格与上边一致，否则将会查询失败\n\n只有程序系统管理员有权限查询，即config.yml中的admin_users指定的人员。"
+				_, err := rmsg.ReplyToDingtalk(string(dingbot.MARKDOWN), msg)
+				if err != nil {
+					logger.Warning(fmt.Errorf("send message error: %v", err))
+				}
 			}
 		default:
 			if public.FirstCheck(rmsg) {
@@ -222,6 +230,19 @@ func Do(mode string, rmsg *dingbot.ReceiveMsg) error {
 
 	}
 	return nil
+}
+// FormatTimeDuation 格式化时间
+// 主要提示单聊/群聊切换时多久后恢复默认聊天模式
+func FormatTimeDuation(duration time.Duration) string {
+	minutes := int64(duration.Minutes())
+	seconds := int64(duration.Seconds()) - minutes*60
+	timeoutStr := ""
+	if seconds == 0 {
+		timeoutStr = fmt.Sprintf("%d分钟", minutes)
+	} else {
+		timeoutStr = fmt.Sprintf("%d分%d秒", minutes, seconds)
+	}
+	return timeoutStr
 }
 
 // FormatMarkdown 格式化Markdown

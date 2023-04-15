@@ -28,11 +28,7 @@ func New(userId string) *ChatGPT {
 	var ctx context.Context
 	var cancel func()
 
-	if public.Config.SessionTimeout == 0 {
-		ctx, cancel = context.WithCancel(context.Background())
-	} else {
-		ctx, cancel = context.WithTimeout(context.Background(), public.Config.SessionTimeout)
-	}
+	ctx, cancel = context.WithTimeout(context.Background(), 600)
 	timeOutChan := make(chan struct{}, 1)
 	go func() {
 		<-ctx.Done()
