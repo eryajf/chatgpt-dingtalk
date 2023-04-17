@@ -508,6 +508,10 @@ azure_openai_token: "xxxx"
 > 本项目曾在 | [2022-12-12](https://github.com/bonfy/github-trending/blob/master/2022/2022-12-12.md#go) | [2022-12-18](https://github.com/bonfy/github-trending/blob/master/2022/2022-12-18.md#go) | [2022-12-19](https://github.com/bonfy/github-trending/blob/master/2022/2022-12-19.md#go) | [2022-12-20](https://github.com/bonfy/github-trending/blob/master/2022/2022-12-20.md#go) | [2023-02-09](https://github.com/bonfy/github-trending/blob/master/2023-02-09.md#go) | [2023-02-10](https://github.com/bonfy/github-trending/blob/master/2023-02-10.md#go) | [2023-02-11](https://github.com/bonfy/github-trending/blob/master/2023-02-11.md#go) | [2023-02-12](https://github.com/bonfy/github-trending/blob/master/2023-02-12.md#go) | [2023-02-13](https://github.com/bonfy/github-trending/blob/master/2023-02-13.md#go) | [2023-02-14](https://github.com/bonfy/github-trending/blob/master/2023-02-14.md#go) | [2023-02-15](https://github.com/bonfy/github-trending/blob/master/2023-02-15.md#go) | [2023-03-04](https://github.com/bonfy/github-trending/blob/master/2023-03-04.md#go) | [2023-03-05](https://github.com/bonfy/github-trending/blob/master/2023-03-05.md#go) | [2023-03-19](https://github.com/bonfy/github-trending/blob/master/2023-03-19.md#go) | [2023-03-22](https://github.com/bonfy/github-trending/blob/master/2023-03-22.md#go) | [2023-03-25](https://github.com/bonfy/github-trending/blob/master/2023-03-25.md#go) | [2023-03-26](https://github.com/bonfy/github-trending/blob/master/2023-03-26.md#go) | [2023-03-27](https://github.com/bonfy/github-trending/blob/master/2023-03-27.md#go) | [2023-03-29](https://github.com/bonfy/github-trending/blob/master/2023-03-29.md#go), 这些天里，登上GitHub Trending。而且还在持续登榜中，可见最近openai的热度。
 > ![image_20230316_114915](https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230316_114915.jpg)
 
+## Star历史
+
+[![Star History Chart](https://api.star-history.com/svg?repos=ConnectAI-E/Dingtalk-OpenAI&type=Date)](https://star-history.com/#ConnectAI-E/Dingtalk-OpenAI&Date)
+
 ## 贡献者列表
 
 <div align="center">
