@@ -155,7 +155,7 @@ func JudgeSensitiveWord(s string) bool {
 	return false
 }
 
-// SolveSensitiveWord 将敏感词用*号占位
+// SolveSensitiveWord 将敏感词用 🚫 占位
 func SolveSensitiveWord(s string) string {
 	for _, v := range Config.SensitiveWords {
 		if strings.Contains(s, v) {
@@ -165,11 +165,11 @@ func SolveSensitiveWord(s string) string {
 	return s
 }
 
-// 将对应敏感词替换为*
+// 将对应敏感词替换为 🚫
 func printStars(num int) string {
 	s := ""
 	for i := 0; i < num; i++ {
-		s += "*"
+		s += "🚫"
 	}
 	return s
 }
