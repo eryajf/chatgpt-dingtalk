@@ -602,6 +602,13 @@ azure_openai_token: "xxxx"
         </a>
     </td>
     <td align="center">
+        <a href="https://github.com/stoneflying">
+            <img src="https://avatars.githubusercontent.com/u/38101022?v=4" width="75;" alt="stoneflying"/>
+            <br />
+            <sub><b>Stoneflying</b></sub>
+        </a>
+    </td>
+    <td align="center">
         <a href="https://github.com/WinMin">
             <img src="https://avatars.githubusercontent.com/u/18380453?v=4" width="75;" alt="WinMin"/>
             <br />
