@@ -253,20 +253,19 @@ func FormatTimeDuation(duration time.Duration) string {
 func FormatMarkdown(md string) string {
 	lines := strings.Split(md, "\n")
 	codeblock := false
+	existHtml := strings.Contains(md, "<")
+
 	for i, line := range lines {
 		if strings.HasPrefix(line, "```") {
 			codeblock = !codeblock
 		}
 		if codeblock {
 			lines[i] = strings.ReplaceAll(line, "#", "\\#")
-		}
-	}
-	// 如果Markdown内存在html，将Markdown中的html标签转义
-	if strings.Contains(md, "<") {
-		for i, line := range lines {
+		} else if existHtml {
 			lines[i] = html.EscapeString(line)
 		}
 	}
+
 	return strings.Join(lines, "\n")
 }
 
