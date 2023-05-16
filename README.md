@@ -1,3 +1,16 @@
+<p align='center'>
+  😀Connect-AI-E开源马拉松正式开始评审环节啦😀
+</p>
+
+<p align='center'>
+  快来pick你最喜欢的开源项目吧!
+</p>
+  
+<p align='center'>
+   https://wenjuan.feishu.cn/m/cfm?t=s6hfGkEr4pMi-8ph5
+</p>
+
+
 <div align="center">
 <h1>ChatGPT Dingtalk</h1>
 
