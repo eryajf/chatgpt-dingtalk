@@ -2,8 +2,12 @@ package chatgpt
 
 import (
 	"bytes"
+	"context"
 	"encoding/base64"
 	"encoding/gob"
+	"errors"
+	"fmt"
+	"github.com/eryajf/chatgpt-dingtalk/pkg/dingbot"
 	"github.com/pandodao/tokenizer-go"
 	"image/png"
 	"os"
@@ -218,7 +222,7 @@ func (c *ChatGPT) ChatWithContext(question string) (answer string, err error) {
 		return resp.Choices[0].Text, nil
 	}
 }
-func (c *ChatGPT) GenreateImage(prompt string) (string, error) {
+func (c *ChatGPT) GenreateImage(ctx context.Context, prompt string) (string, error) {
 	model := public.Config.Model
 	if model == openai.GPT3Dot5Turbo0301 ||
 		model == openai.GPT3Dot5Turbo ||
@@ -247,6 +251,13 @@ func (c *ChatGPT) GenreateImage(prompt string) (string, error) {
 		}
 
 		imageName := time.Now().Format("20060102-150405") + ".png"
+		clientId, _ := ctx.Value(public.DingTalkClientIdKeyName).(string)
+		client := public.DingTalkClientManager.GetClientByOAuthClientID(clientId)
+		mediaResult, uploadErr := &dingbot.MediaUploadResult{}, errors.New(fmt.Sprintf("unknown clientId: %s", clientId))
+		if client != nil {
+			mediaResult, uploadErr = client.UploadMedia(imgBytes, imageName, dingbot.MediaTypeImage, dingbot.MimeTypeImagePng)
+		}
+
 		err = os.MkdirAll("data/images", 0755)
 		if err != nil {
 			return "", err
@@ -260,8 +271,11 @@ func (c *ChatGPT) GenreateImage(prompt string) (string, error) {
 		if err := png.Encode(file, imgData); err != nil {
 			return "", err
 		}
-
-		return public.Config.ServiceURL + "/images/" + imageName, nil
+		if uploadErr == nil {
+			return mediaResult.MediaID, nil
+		} else {
+			return public.Config.ServiceURL + "/images/" + imageName, nil
+		}
 	}
 	return "", nil
 }

@@ -14,6 +14,11 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+type Credential struct {
+	ClientID     string `yaml:"client_id"`
+	ClientSecret string `yaml:"client_secret"`
+}
+
 // Configuration 项目配置
 type Configuration struct {
 	// 日志级别，info或者debug
@@ -62,6 +67,8 @@ type Configuration struct {
 	AzureResourceName   string `yaml:"azure_resource_name"`
 	AzureDeploymentName string `yaml:"azure_deployment_name"`
 	AzureOpenAIToken    string `yaml:"azure_openai_token"`
+	// 钉钉应用鉴权凭据
+	Credentials []Credential `yaml:"credentials"`
 }
 
 var config *Configuration
