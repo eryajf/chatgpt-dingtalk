@@ -189,6 +189,7 @@ $ docker run -itd --name chatgpt -p 8090:8090 \
   -e SENSITIVE_WORDS="aa,bb" \
   -e AZURE_ON="false" -e AZURE_API_VERSION="" -e AZURE_RESOURCE_NAME="" \
   -e AZURE_DEPLOYMENT_NAME="" -e AZURE_OPENAI_TOKEN="" \
+  -e DINGTALK_CREDENTIALS="your_client_id1:secret1,your_client_id2:secret2" \
   -e HELP="欢迎使用本工具\n\n你可以查看：[用户指南](https://github.com/eryajf/chatgpt-dingtalk/blob/main/docs/userGuide.md)\n\n这是一个[开源项目](https://github.com/eryajf/chatgpt-dingtalk/)
   ，觉得不错你可以来波素质三连."  \
   --restart=always  dockerproxy.com/eryajf/chatgpt-dingtalk:latest
@@ -504,6 +505,15 @@ azure_api_version: "2023-03-15-preview"
 azure_resource_name: "xxxx"
 azure_deployment_name: "xxxx"
 azure_openai_token: "xxxx"
+
+# 钉钉应用鉴权凭据信息，支持多个应用。通过请求时候鉴权来识别是来自哪个机器人应用的消息
+# 设置credentials 之后，即具备了访问钉钉平台绝大部分 OpenAPI 的能力；例如上传图片到钉钉平台，提升图片体验，结合 Stream 模式简化服务部署
+# client_id 对应钉钉平台 AppKey/SuiteKey；client_secret 对应 AppSecret/SuiteSecret
+# 建议采用 credentials 代替 app_secrets 配置项，以获得钉钉 OpenAPI 访问能力
+credentials:
+  -
+    client_id: "put-your-client-id-here"
+    client_secret: "put-your-client-secret-here"
 
 ```
 

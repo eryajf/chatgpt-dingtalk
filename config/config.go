@@ -197,6 +197,18 @@ func LoadConfig() *Configuration {
 		if azureOpenaiToken != "" {
 			config.AzureOpenAIToken = azureOpenaiToken
 		}
+		credentials := os.Getenv("DINGTALK_CREDENTIALS")
+		if credentials != "" {
+			if config.Credentials == nil {
+				config.Credentials = []Credential{}
+			}
+			for _, idSecret := range strings.Split(credentials, ",") {
+				items := strings.SplitN(idSecret, ":", 2)
+				if len(items) == 2 {
+					config.Credentials = append(config.Credentials, Credential{ClientID: items[0], ClientSecret: items[1]})
+				}
+			}
+		}
 
 	})
 

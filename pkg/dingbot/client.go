@@ -138,14 +138,14 @@ func (c *DingTalkClient) UploadMedia(content []byte, filename, mediaType, mimeTy
 		return nil, err
 	}
 	_, err = part.Write(content)
+	writer.WriteField("type", mediaType)
 	err = writer.Close()
 	if err != nil {
 		return nil, err
 	}
 
 	// Create a new HTTP request to upload the media file
-	url := fmt.Sprintf("https://oapi.dingtalk.com/media/upload?access_token=%s&type=%s",
-		url2.QueryEscape(accessToken), url2.QueryEscape(mediaType))
+	url := fmt.Sprintf("https://oapi.dingtalk.com/media/upload?access_token=%s", url2.QueryEscape(accessToken))
 	req, err := http.NewRequest("POST", url, body)
 	if err != nil {
 		return nil, err
