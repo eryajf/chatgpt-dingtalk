@@ -1,18 +1,54 @@
 <p align='center'>
-  😀Connect-AI-E开源马拉松正式开始评审环节啦😀
+    <img src='https://github.com/ConnectAI-E/Feishu-OpenAI/assets/50035229/7178f68e-2e97-46a6-b692-a2c43191b45b' alt='' width='800'/>
+</p>
+
+
+<details align='center'>
+    <summary> 📷 点击展开企联AI完整功能</summary>
+    <br>
+    <p align='center'>
+    <img src='https://github.com/ConnectAI-E/Feishu-OpenAI/assets/50035229/8a589e42-c092-4878-83c3-dc12a801c2d6' alt='语音对话' width='800'/>
+    <img src='https://github.com/ConnectAI-E/Feishu-OpenAI/assets/50035229/7178f68e-2e97-46a6-b692-a2c43191b45b' alt='文字成图' width='800'/>
+    <img src='https://github.com/ConnectAI-E/Feishu-OpenAI/assets/50035229/92712155-eb0c-4dce-a005-c05a21dd8280' alt='文字成图' width='800'/>
+    <img src='https://github.com/ConnectAI-E/Feishu-OpenAI/assets/50035229/25cf595f-eaaf-4a52-8066-02afdc9fcdad' alt='余额查询' width='800'/>
+    <img src='https://github.com/ConnectAI-E/Feishu-OpenAI/assets/50035229/9ce7b941-2806-484c-94dc-0abc8e735a7f' alt='帮助菜单' width='800'/>
+    <img src='https://github.com/ConnectAI-E/Feishu-OpenAI/assets/50035229/d5128f44-53cc-4a49-9fd1-573bbb1fddff' alt='帮助菜单' width='800'/>
+    <img src='https://github.com/ConnectAI-E/Feishu-OpenAI/assets/50035229/43b52857-bde9-4c56-8cf1-bdafe31d4aaa' alt='帮助菜单' width='800'/>
+    </p>
+</details>
+
+
+<p align='center'>
+   钉钉 ×（GPT-3.5 + DALL·E + Whisper）
+<br>
+<br>
+    🚀 DingDing OpenAI 🚀
 </p>
 
 <p align='center'>
-  快来pick你最喜欢的开源项目吧!
+  😀企联AI共创计划正式开启😀
 </p>
   
 <p align='center'>
-   https://wenjuan.feishu.cn/m/cfm?t=s6hfGkEr4pMi-8ph5
+   https://fork-way.feishu.cn/docx/Gvztd1iVXoXOsVxF2ujcnPPenDf
 </p>
 
 
-<div align="center">
-<h1>ChatGPT Dingtalk</h1>
+## 商业支持
+
+如果开源版无法满足您公司的需求，推荐您尝试的商业共创版
+
+- 内置开箱即用的Azure Openai: 无需部署到海外，即可获得数十倍的性能提升
+- 掌控全局的Admin Panel: AI资源管理、对话日志查询、风险词规避和对话权限管理
+- 专人技术支持: 配备专业部署交付人员与后期一对一维护服务
+- 同时提供在线Saas版/企业级私有部署
+
+查看更多内容: https://connect-ai.forkway.cn
+
+企业客户咨询：13995928702(River)
+  
+  
+<p> 🌉 基于GO语言实现的钉钉集成ChatGPT机器人 🌉</p>
 
 [![Auth](https://img.shields.io/badge/Auth-eryajf-ff69b4)](https://github.com/eryajf)
 [![Go Version](https://img.shields.io/github/go-mod/go-version/eryajf/chatgpt-dingtalk)](https://github.com/eryajf/chatgpt-dingtalk)
@@ -23,7 +59,7 @@
 [![Docker Pulls](https://img.shields.io/docker/pulls/eryajf/chatgpt-dingtalk)](https://hub.docker.com/r/eryajf/chatgpt-dingtalk)
 [![GitHub license](https://img.shields.io/github/license/eryajf/chatgpt-dingtalk)](https://github.com/eryajf/chatgpt-dingtalk/blob/main/LICENSE)
 
-<p> 🌉 基于GO语言实现的钉钉集成ChatGPT机器人 🌉</p>
+
 
 <img src="https://camo.githubusercontent.com/82291b0fe831bfc6781e07fc5090cbd0a8b912bb8b8d4fec0696c881834f81ac/68747470733a2f2f70726f626f742e6d656469612f394575424971676170492e676966" width="800"  height="3">
 </div><br>
