@@ -14,6 +14,11 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+type Credential struct {
+	ClientID     string `yaml:"client_id"`
+	ClientSecret string `yaml:"client_secret"`
+}
+
 // Configuration 项目配置
 type Configuration struct {
 	// 日志级别，info或者debug
@@ -62,6 +67,8 @@ type Configuration struct {
 	AzureResourceName   string `yaml:"azure_resource_name"`
 	AzureDeploymentName string `yaml:"azure_deployment_name"`
 	AzureOpenAIToken    string `yaml:"azure_openai_token"`
+	// 钉钉应用鉴权凭据
+	Credentials []Credential `yaml:"credentials"`
 }
 
 var config *Configuration
@@ -189,6 +196,18 @@ func LoadConfig() *Configuration {
 		azureOpenaiToken := os.Getenv("AZURE_OPENAI_TOKEN")
 		if azureOpenaiToken != "" {
 			config.AzureOpenAIToken = azureOpenaiToken
+		}
+		credentials := os.Getenv("DINGTALK_CREDENTIALS")
+		if credentials != "" {
+			if config.Credentials == nil {
+				config.Credentials = []Credential{}
+			}
+			for _, idSecret := range strings.Split(credentials, ",") {
+				items := strings.SplitN(idSecret, ":", 2)
+				if len(items) == 2 {
+					config.Credentials = append(config.Credentials, Credential{ClientID: items[0], ClientSecret: items[1]})
+				}
+			}
 		}
 
 	})

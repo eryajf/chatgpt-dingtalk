@@ -124,6 +124,23 @@ func GetReadTime(t time.Time) string {
 	return t.Format("2006-01-02 15:04:05")
 }
 
+func CheckRequestWithCredentials(ts, sg string) (clientId string, pass bool) {
+	clientId, pass = "", false
+	credentials := Config.Credentials
+	if credentials == nil || len(credentials) == 0 {
+		return "", true
+	}
+	for _, credential := range Config.Credentials {
+		stringToSign := fmt.Sprintf("%s\n%s", ts, credential.ClientSecret)
+		mac := hmac.New(sha256.New, []byte(credential.ClientSecret))
+		_, _ = mac.Write([]byte(stringToSign))
+		if base64.StdEncoding.EncodeToString(mac.Sum(nil)) == sg {
+			return credential.ClientID, true
+		}
+	}
+	return
+}
+
 func CheckRequest(ts, sg string) bool {
 	appSecrets := Config.AppSecrets
 	// 如果没有指定或者outgoing类型机器人下使用，则默认不做校验

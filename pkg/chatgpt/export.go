@@ -1,6 +1,7 @@
 package chatgpt
 
 import (
+	"context"
 	"time"
 
 	"github.com/avast/retry-go"
@@ -58,7 +59,7 @@ func ContextQa(question, userId string) (chat *ChatGPT, answer string, err error
 }
 
 // ImageQa 生成图片
-func ImageQa(question, userId string) (answer string, err error) {
+func ImageQa(ctx context.Context, question, userId string) (answer string, err error) {
 	chat := New(userId)
 	defer chat.Close()
 	// 定义一个重试策略
@@ -70,7 +71,7 @@ func ImageQa(question, userId string) (answer string, err error) {
 	// 使用重试策略进行重试
 	err = retry.Do(
 		func() error {
-			answer, err = chat.GenreateImage(question)
+			answer, err = chat.GenreateImage(ctx, question)
 			if err != nil {
 				return err
 			}

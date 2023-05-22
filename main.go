@@ -33,6 +33,14 @@ func Start() {
 			return
 		}
 		// 先校验回调是否合法
+		clientId, checkOk := public.CheckRequestWithCredentials(c.GetHeader("timestamp"), c.GetHeader("sign"))
+		if !checkOk {
+			logger.Warning("该请求不合法，可能是其他企业或者未经允许的应用调用所致，请知悉！")
+			return
+		}
+		// 通过 context 传递 OAuth ClientID，用于后续流程中调用钉钉OpenAPI
+		c.Set(public.DingTalkClientIdKeyName, clientId)
+		// 为了兼容存量老用户，暂时保留 public.CheckRequest 方法，将来升级到 Stream 模式后，建议去除该方法，采用上面的 CheckRequestWithCredentials
 		if !public.CheckRequest(c.GetHeader("timestamp"), c.GetHeader("sign")) && msgObj.SenderStaffId != "" {
 			logger.Warning("该请求不合法，可能是其他企业或者未经允许的应用调用所致，请知悉！")
 			return
@@ -114,7 +122,7 @@ func Start() {
 			// 除去帮助之外的逻辑分流在这里处理
 			switch {
 			case strings.HasPrefix(msgObj.Text.Content, "#图片"):
-				err := process.ImageGenerate(&msgObj)
+				err := process.ImageGenerate(c, &msgObj)
 				if err != nil {
 					logger.Warning(fmt.Errorf("process request: %v", err))
 					return

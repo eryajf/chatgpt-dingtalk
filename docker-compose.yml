@@ -37,6 +37,7 @@ services:
       AZURE_RESOURCE_NAME: "" # Azure OpenAi API 资源名称，比如 "openai"
       AZURE_DEPLOYMENT_NAME: "" # Azure OpenAi API 部署名称，比如 "openai"
       AZURE_OPENAI_TOKEN: "" # Azure token
+      DINGTALK_CREDENTIALS: "" # 钉钉应用访问凭证，比如 "client_id1:secret1,client_id2:secret2"
       HELP: "欢迎使用本工具\n\n你可以查看：[用户指南](https://github.com/eryajf/chatgpt-dingtalk/blob/main/docs/userGuide.md)\n\n这是一个[开源项目](https://github.com/eryajf/chatgpt-dingtalk/)，觉得不错你可以来波素质三连." # 帮助信息，放在配置文件，可供自定义
     volumes:
       - ./data:/app/data
