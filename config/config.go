@@ -25,6 +25,8 @@ type Configuration struct {
 	LogLevel string `yaml:"log_level"`
 	// gpt apikey
 	ApiKey string `yaml:"api_key"`
+	// 运行模式
+	RunMode string `yaml:"run_mode"`
 	// 请求的 URL 地址
 	BaseURL string `yaml:"base_url"`
 	// 使用模型
@@ -96,6 +98,10 @@ func LoadConfig() *Configuration {
 		apiKey := os.Getenv("APIKEY")
 		if apiKey != "" {
 			config.ApiKey = apiKey
+		}
+		runMode := os.Getenv("RUN_MODE")
+		if runMode != "" {
+			config.RunMode = runMode
 		}
 		baseURL := os.Getenv("BASE_URL")
 		if baseURL != "" {
@@ -215,6 +221,9 @@ func LoadConfig() *Configuration {
 	// 一些默认值
 	if config.LogLevel == "" {
 		config.LogLevel = "info"
+	}
+	if config.RunMode == "" {
+		config.LogLevel = "http"
 	}
 	if config.Model == "" {
 		config.Model = "gpt-3.5-turbo"
