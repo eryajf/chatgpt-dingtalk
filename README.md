@@ -673,6 +673,13 @@ credentials:
             <br />
             <sub><b>Swing</b></sub>
         </a>
+    </td>
+    <td align="center">
+        <a href="https://github.com/chzealot">
+            <img src="https://avatars.githubusercontent.com/u/22822?v=4" width="75;" alt="chzealot"/>
+            <br />
+            <sub><b>金喜@DingTalk</b></sub>
+        </a>
     </td></tr>
 </table>
 <!-- readme: collaborators,contributors -end -->
