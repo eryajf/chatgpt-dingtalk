@@ -10,10 +10,8 @@ jobs:
     strategy:
       matrix:
         goos: [linux, windows, darwin] # 需要打包的系统
-        goarch: ["386", amd64, arm64] # 需要打包的架构
+        goarch: [amd64, arm64] # 需要打包的架构
         exclude: # 排除某些平台和架构
-          - goarch: "386"
-            goos: darwin
           - goarch: arm64
             goos: windows
     steps:
