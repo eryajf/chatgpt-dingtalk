@@ -28,7 +28,7 @@
 <p align='center'>
   😀企联AI共创计划正式开启😀
 </p>
-  
+
 <p align='center'>
    https://fork-way.feishu.cn/docx/Gvztd1iVXoXOsVxF2ujcnPPenDf
 </p>
@@ -46,8 +46,8 @@
 查看更多内容: https://connect-ai.forkway.cn
 
 企业客户咨询：13995928702(River)
-  
-  
+
+
 <p> 🌉 基于GO语言实现的钉钉集成ChatGPT机器人 🌉</p>
 
 [![Auth](https://img.shields.io/badge/Auth-eryajf-ff69b4)](https://github.com/eryajf)
@@ -101,14 +101,14 @@ AIGC的热潮正在各行各业掀起巨大的变革，我们看到各大社群�
   - A奖励：小队完成度奖励，鼓励小队长参与项目，能够在指定时间内完成课题规定的基本内容，队长应获得一定的奖励。
   - B奖励：项目优秀度奖励，根据项目复杂度、组内配合度、产品创意度，以及期中和期末用户体验打分，评选出部分优秀项目的队长和核心队员，并给予相应奖励。
   - C奖励：成员活跃度奖励，考虑到设计和测试身份的特殊性，无法单独带领项目。因此，我们将评选出优秀设计师和优秀测试反馈员，以表彰他们在项目中的积极参与和贡献。
- 
+
  做出下面奖励安排
   - A奖励项目完成度：京东E卡300 * 10
   - B奖励项目优秀度：
     - 杰出奖: iPhone14 * 1 + 京东E卡300 * 3
     - 优秀奖: PS5 * 1 + 京东E卡300 * 3
   - C奖励成员活跃度：京东E卡300 * 4
- 
+
 我们队员有
 - [EX-chatGPT](https://github.com/circlestarzero/EX-chatGPT)和[ChatPaper的维护者](https://github.com/kaixindelele/ChatPaper)-->[cc](https://github.com/circlestarzero)
 - [钉钉GPT的维护者](https://github.com/eryajf/chatgpt-dingtalk)-->[eryajf](https://github.com/eryajf)
@@ -222,7 +222,7 @@ $ docker run -itd --name chatgpt -p 8090:8090 \
   -e DEFAULT_MODE="单聊" -e MAX_REQUEST=0 -e PORT=8090 \
   -e SERVICE_URL="你当前服务外网可访问的URL" -e CHAT_TYPE="0" \
   -e ALLOW_GROUPS=a,b -e ALLOW_OUTGOING_GROUPS=a,b -e ALLOW_USERS=a,b -e DENY_USERS=a,b -e VIP_USERS=a,b -e ADMIN_USERS=a,b -e APP_SECRETS="xxx,yyy" \
-  -e SENSITIVE_WORDS="aa,bb" \
+  -e SENSITIVE_WORDS="aa,bb" -e RUN_MODE="http" \
   -e AZURE_ON="false" -e AZURE_API_VERSION="" -e AZURE_RESOURCE_NAME="" \
   -e AZURE_DEPLOYMENT_NAME="" -e AZURE_OPENAI_TOKEN="" \
   -e DINGTALK_CREDENTIALS="your_client_id1:secret1,your_client_id2:secret2" \
@@ -486,6 +486,8 @@ $ go run main.go
 log_level: "info"
 # openai api_key
 api_key: "xxxxxxxxx"
+# 运行模式，http 或者 stream ，当前默认为http，等stream全面开放之后，这个模式将会是默认的启动模式
+run_mode: "http"
 # 如果你使用官方的接口地址 https://api.openai.com，则留空即可，如果你想指定请求url的地址，可通过这个参数进行配置，注意需要带上 http 协议
 base_url: ""
 # 指定模型，默认为 gpt-3.5-turbo , 可选参数有： "gpt-4-0314", "gpt-4", "gpt-3.5-turbo-0301", "gpt-3.5-turbo"，如果使用gpt-4，请确认自己是否有接口调用白名单

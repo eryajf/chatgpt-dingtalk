@@ -2,6 +2,8 @@
 log_level: "info"
 # openai api_key
 api_key: "xxxxxxxxx"
+# 运行模式，http 或者 stream ，当前默认为http，等stream全面开放之后，这个模式将会是默认的启动模式
+run_mode: "http"
 # 如果你使用官方的接口地址 https://api.openai.com，则留空即可，如果你想指定请求url的地址，可通过这个参数进行配置，注意需要带上 http 协议
 base_url: ""
 # 指定模型，默认为 gpt-3.5-turbo , 可选参数有： "gpt-4-0314", "gpt-4", "gpt-3.5-turbo-0301", "gpt-3.5-turbo"，如果使用gpt-4，请确认自己是否有接口调用白名单
