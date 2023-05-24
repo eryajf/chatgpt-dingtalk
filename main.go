@@ -35,12 +35,15 @@ func main() {
 		select {}
 	}
 }
+
+// 启动为 stream 模式
 func StartStream(clientId, clientSecret string) {
+	receiver := NewChatReceiver(clientId, clientSecret)
 	loger.SetLogger(loger.NewStdTestLogger())
 	cli := client.NewStreamClient(
 		client.WithAppCredential(client.NewAppCredentialConfig(clientId, clientSecret)),
 		client.WithUserAgent(client.NewDingtalkGoSDKUserAgent()),
-		client.WithSubscription(utils.SubscriptionTypeKCallback, payload.BotMessageCallbackTopic, chatbot.NewDefaultChatBotFrameHandler(OnChatReceive).OnEventReceived),
+		client.WithSubscription(utils.SubscriptionTypeKCallback, payload.BotMessageCallbackTopic, chatbot.NewDefaultChatBotFrameHandler(receiver.OnChatReceive).OnEventReceived),
 	)
 	err := cli.Start(context.Background())
 	if err != nil {
@@ -49,10 +52,21 @@ func StartStream(clientId, clientSecret string) {
 
 	defer cli.Close()
 
-	select {}
 }
 
-func OnChatReceive(ctx context.Context, data *chatbot.BotCallbackDataModel) (err error) {
+type ChatReceiver struct {
+	clientId     string
+	clientSecret string
+}
+
+func NewChatReceiver(clientId, clientSecret string) *ChatReceiver {
+	return &ChatReceiver{
+		clientId:     clientId,
+		clientSecret: clientSecret,
+	}
+}
+
+func (r *ChatReceiver) OnChatReceive(ctx context.Context, data *chatbot.BotCallbackDataModel) (err error) {
 	msgObj := dingbot.ReceiveMsg{
 		ConversationID: data.ConversationId,
 		AtUsers: []struct {
@@ -74,7 +88,7 @@ func OnChatReceive(ctx context.Context, data *chatbot.BotCallbackDataModel) (err
 		RobotCode:                 "",
 		Msgtype:                   dingbot.MsgType(data.Msgtype),
 	}
-	clientId := public.Config.Credentials[0].ClientID
+	clientId := r.clientId
 	var c gin.Context
 	c.Set(public.DingTalkClientIdKeyName, clientId)
 	DoRequest(msgObj, &c)
@@ -162,14 +176,6 @@ func DoRequest(msgObj dingbot.ReceiveMsg, c *gin.Context) {
 		// 通过 context 传递 OAuth ClientID，用于后续流程中调用钉钉OpenAPI
 		c.Set(public.DingTalkClientIdKeyName, clientId)
 	}
-	// 为了兼容存量老用户，暂时保留 public.CheckRequest 方法，将来升级到 Stream 模式后，建议去除该方法，采用上面的 CheckRequestWithCredentials
-	// if !public.CheckRequest(c.GetHeader("timestamp"), c.GetHeader("sign")) && msgObj.SenderStaffId != "" {
-	// 	logger.Warning("该请求不合法，可能是其他企业或者未经允许的应用调用所致，请知悉！")
-	// 	return
-	// } else if !public.JudgeOutgoingGroup(msgObj.ConversationID) && msgObj.SenderStaffId == "" {
-	// 	logger.Warning("该请求不合法，可能是未经允许的普通群outgoing机器人调用所致，请知悉！")
-	// 	return
-	// }
 	// 再校验回调参数是否有价值
 	if msgObj.Text.Content == "" || msgObj.ChatbotUserID == "" {
 		logger.Warning("从钉钉回调过来的内容为空，根据过往的经验，或许重新创建一下机器人，能解决这个问题")
@@ -206,11 +212,6 @@ func DoRequest(msgObj dingbot.ReceiveMsg, c *gin.Context) {
 		} else {
 			logger.Info(fmt.Sprintf("🙋 企业内部机器人 在『%s』群的ConversationID为: %#v", msgObj.ConversationTitle, msgObj.ConversationID))
 		}
-		// _, err := msgObj.ReplyToDingtalk(string(dingbot.MARKDOWN), msgObj.ConversationID)
-		// if err != nil {
-		// 	logger.Warning(fmt.Errorf("send message error: %v", err))
-		// 	return
-		// }
 		return
 	}
 
