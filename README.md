@@ -197,6 +197,7 @@ AIGC的热潮正在各行各业掀起巨大的变革，我们看到各大社群�
 - 👹 白名单机制：通过配置指定，支持指定群组名称和用户名称作为白名单，从而实现可控范围与机器人对话
 - 💂‍♀️ 管理员机制：通过配置指定管理员，部分敏感操作，以及一些应用配置，管理员有权限进行操作
 - ㊙️ 敏感词过滤：通过配置指定敏感词，提问时触发，则不允许提问，回答的内容中触发，则以 🚫 代替
+- 🚇 stream模式：指定钉钉的stream模式，当前该模式还在灰度当中，后续钉钉官方会全面开放
 
 ## 使用前提
 
@@ -484,17 +485,17 @@ $ go run main.go
 ```yaml
 # 应用的日志级别，info or debug
 log_level: "info"
-# openai api_key
-api_key: "xxxxxxxxx"
 # 运行模式，http 或者 stream ，当前默认为http，等stream全面开放之后，这个模式将会是默认的启动模式
 run_mode: "http"
-# 如果你使用官方的接口地址 https://api.openai.com，则留空即可，如果你想指定请求url的地址，可通过这个参数进行配置，注意需要带上 http 协议
+# openai api_key,如果你是用的是azure，则该配置项可以留空或者直接忽略
+api_key: "xxxxxxxxx"
+# 如果你使用官方的接口地址 https://api.openai.com，则留空即可，如果你想指定请求url的地址，可通过这个参数进行配置，注意需要带上 http 协议，如果你是用的是azure，则该配置项可以留空或者直接忽略
 base_url: ""
-# 指定模型，默认为 gpt-3.5-turbo , 可选参数有： "gpt-4-0314", "gpt-4", "gpt-3.5-turbo-0301", "gpt-3.5-turbo"，如果使用gpt-4，请确认自己是否有接口调用白名单
+# 指定模型，默认为 gpt-3.5-turbo , 可选参数有： "gpt-4-0314", "gpt-4", "gpt-3.5-turbo-0301", "gpt-3.5-turbo"，如果使用gpt-4，请确认自己是否有接口调用白名单，如果你是用的是azure，则该配置项可以留空或者直接忽略
 model: "gpt-3.5-turbo"
 # 会话超时时间,默认600秒,在会话时间内所有发送给机器人的信息会作为上下文
 session_timeout: 600
-# 指定请求时使用的代理，如果为空，则不使用代理，注意需要带上 http 协议 或 socks5 协议
+# 指定请求时使用的代理，如果为空，则不使用代理，注意需要带上 http 协议 或 socks5 协议，如果你是用的是azure，则该配置项可以留空或者直接忽略
 http_proxy: ""
 # 指定默认的对话模式，可根据实际需求进行自定义，如果不设置，默认为单聊，即无上下文关联的对话模式
 default_mode: "单聊"
@@ -502,8 +503,8 @@ default_mode: "单聊"
 max_request: 0
 # 指定服务启动端口，默认为 8090，一般在二进制宿主机部署时，遇到端口冲突时使用
 port: "8090"
-# 指定服务的地址，就是当前服务可供外网访问的地址(或者直接理解为你配置在钉钉回调那里的地址)，用于生成图片时给钉钉做渲染
-service_url: "http://chat.eryajf.net"
+# 指定服务的地址，就是当前服务可供外网访问的地址(或者直接理解为你配置在钉钉回调那里的地址)，用于生成图片时给钉钉做渲染，最新版本中将图片上传到了钉钉服务器，理论上你可以忽略该配置项
+service_url: "http://xxxxxx"
 # 限定对话类型 0：不限 1：只能单聊 2：只能群聊
 chat_type: "0"
 # 哪些群组可以进行对话（仅在chat_type为0、2时有效），如果留空，则表示允许所有群组，如果要限制，则列表中写群ID（ConversationID）
@@ -513,7 +514,7 @@ allow_groups: []
 # 群ID，可在群组中 @机器人 群ID 来查看日志获取，例如日志会输出：[🙋 outgoing机器人 在『测试』群的ConversationID为: "cidrabcdefgh1234567890AAAAA"]，获取后可填写该参数并重启程序
 # 如果不想支持outgoing机器人功能，这里可以随意设置一个内部群组，例如：cidrabcdefgh1234567890AAAAA；或随意一个字符串，例如：disabled
 # 建议该功能默认关闭：除非你必须要用到outgoing机器人
-allow_outgoing_groups: ["disabled"]
+allow_outgoing_groups: []
 # 以下 allow_users、deny_users、vip_users、admin_users 配置中填写的是用户的userid，outgoing机器人模式下不适用这些配置
 # 比如 ["1301691029702722","1301691029702733"]，这个信息需要在钉钉管理后台的通讯录当中获取：https://oa.dingtalk.com/contacts.htm#/contacts
 # 哪些用户可以进行对话，如果留空，则表示允许所有用户，如果要限制，则列表中写用户的userid
@@ -533,26 +534,22 @@ sensitive_words: []
 # 帮助信息，放在配置文件，可供自定义
 help: "欢迎使用本工具\n\n你可以查看：[用户指南](https://github.com/eryajf/chatgpt-dingtalk/blob/main/docs/userGuide.md)\n\n这是一个[开源项目](https://github.com/eryajf/chatgpt-dingtalk/)，觉得不错你可以来波素质三连."
 
+
 # Azure OpenAI 配置
-# 例如 curl https://forkway-test.openai.azure.com/openai/deployments/test-dev/chat/completions\?api-version\=2023-03-15-preview \
-# azure_api_version: "2023-03-15-preview"
-# azure_resource_name: "forkway-test"
-# azure_deployment_name: "test-dev"
+# 例如你的示例请求为： curl https://eryajf.openai.azure.com/openai/deployments/gpt-35-turbo/chat/completions?api-version=2023-03-15-preview 那么对应配置如下
 azure_on: false # 如果是true，则会走azure的openai接口
-azure_api_version: "2023-03-15-preview"
-azure_resource_name: "xxxx"
-azure_deployment_name: "xxxx"
-azure_openai_token: "xxxx"
+azure_resource_name: "eryajf" # 对应你的主个性域名
+azure_deployment_name: "gpt-35-turbo" # 对应的是 /deployments/ 后边跟着的这个值
+azure_api_version: "2023-03-15-preview" # 对应的是请求中的 api-version 后边的值
+azure_openai_token: "xxxxxxx"
 
 # 钉钉应用鉴权凭据信息，支持多个应用。通过请求时候鉴权来识别是来自哪个机器人应用的消息
 # 设置credentials 之后，即具备了访问钉钉平台绝大部分 OpenAPI 的能力；例如上传图片到钉钉平台，提升图片体验，结合 Stream 模式简化服务部署
 # client_id 对应钉钉平台 AppKey/SuiteKey；client_secret 对应 AppSecret/SuiteSecret
-# 建议采用 credentials 代替 app_secrets 配置项，以获得钉钉 OpenAPI 访问能力
-credentials:
-  -
-    client_id: "put-your-client-id-here"
-    client_secret: "put-your-client-secret-here"
-
+#credentials:
+#  -
+#    client_id: "put-your-client-id-here"
+#    client_secret: "put-your-client-secret-here"
 ```
 
 ## 常见问题
