@@ -197,7 +197,7 @@ AIGC的热潮正在各行各业掀起巨大的变革，我们看到各大社群�
 - 👹 白名单机制：通过配置指定，支持指定群组名称和用户名称作为白名单，从而实现可控范围与机器人对话
 - 💂‍♀️ 管理员机制：通过配置指定管理员，部分敏感操作，以及一些应用配置，管理员有权限进行操作
 - ㊙️ 敏感词过滤：通过配置指定敏感词，提问时触发，则不允许提问，回答的内容中触发，则以 🚫 代替
-- 🚇 stream模式：指定钉钉的stream模式，当前该模式还在灰度当中，后续钉钉官方会全面开放
+- 🚇 stream模式：指定钉钉的stream模式，目前钉钉已全量开放该功能，项目也默认以此模式启动
 
 ## 使用前提
 
@@ -485,8 +485,8 @@ $ go run main.go
 ```yaml
 # 应用的日志级别，info or debug
 log_level: "info"
-# 运行模式，http 或者 stream ，当前默认为http，等stream全面开放之后，这个模式将会是默认的启动模式
-run_mode: "http"
+# 运行模式，http 或者 stream ，强烈建议你使用stream模式，通过此链接了解：https://open.dingtalk.com/document/isvapp/stream
+run_mode: "stream"
 # openai api_key,如果你是用的是azure，则该配置项可以留空或者直接忽略
 api_key: "xxxxxxxxx"
 # 如果你使用官方的接口地址 https://api.openai.com，则留空即可，如果你想指定请求url的地址，可通过这个参数进行配置，注意需要带上 http 协议，如果你是用的是azure，则该配置项可以留空或者直接忽略
@@ -501,9 +501,9 @@ http_proxy: ""
 default_mode: "单聊"
 # 单人单日请求次数上限，默认为0，即不限制
 max_request: 0
-# 指定服务启动端口，默认为 8090，一般在二进制宿主机部署时，遇到端口冲突时使用
+# 指定服务启动端口，默认为 8090，一般在二进制宿主机部署时，遇到端口冲突时使用，如果run_mode为stream模式，则可以忽略该配置项
 port: "8090"
-# 指定服务的地址，就是当前服务可供外网访问的地址(或者直接理解为你配置在钉钉回调那里的地址)，用于生成图片时给钉钉做渲染，最新版本中将图片上传到了钉钉服务器，理论上你可以忽略该配置项
+# 指定服务的地址，就是当前服务可供外网访问的地址(或者直接理解为你配置在钉钉回调那里的地址)，用于生成图片时给钉钉做渲染，最新版本中将图片上传到了钉钉服务器，理论上你可以忽略该配置项，如果run_mode为stream模式，则可以忽略该配置项
 service_url: "http://xxxxxx"
 # 限定对话类型 0：不限 1：只能单聊 2：只能群聊
 chat_type: "0"
@@ -532,11 +532,10 @@ app_secrets: []
 # 敏感词，提问时触发，则不允许提问，回答的内容中触发，则以 🚫 代替
 sensitive_words: []
 # 帮助信息，放在配置文件，可供自定义
-help: "欢迎使用本工具\n\n你可以查看：[用户指南](https://github.com/eryajf/chatgpt-dingtalk/blob/main/docs/userGuide.md)\n\n这是一个[开源项目](https://github.com/eryajf/chatgpt-dingtalk/)，觉得不错你可以来波素质三连."
-
+help: "### 发送信息\n\n若您想给机器人发送信息，有如下两种方式：\n\n1. **群聊：** 在机器人所在群里 **@机器人** 后边跟着要提问的内容。\n\n2. **私聊：** 点击机器人的 **头像** 后，再点击 **发消息。** \n\n### 系统指令\n\n系统指令是一些特殊的词语，当您向机器人发送这些词语时，会触发对应的功能。\n\n**📢 注意：系统指令，即只发指令，没有特殊标识，也没有内容。**\n\n以下是系统指令详情：\n\n|    指令    |                     描述                     |                             示例                             |\n| :--------: | :------------------------------------------: | :----------------------------------------------------------: |\n|  **单聊**  | 每次对话都是一次新的对话，没有聊天上下文联系 | <details><br /><summary>预览</summary><br /><img src='https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230404_193608.jpg'><br /></details> |\n|  **串聊**  |            带上下文联系的对话模式            | <details><br /><summary>预览</summary><br /><img src='https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230404_193608.jpg'><br /></details> |\n|  **重置**  |        重置上下文模式，回归到默认模式        | <details><br /><summary>预览</summary><br /><img src='https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230404_193608.jpg'><br /></details> |\n|  **余额**  |        查询机器人所用OpenAI账号的余额        | <details><br /><summary>预览</summary><br /><img src='https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230304_222522.jpg'><br /></details> |\n|  **模板**  |           查看应用内置的prompt模板           | <details><br /><summary>预览</summary><br /><img src='https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230404_193827.jpg'><br /></details> |\n|  **图片**  |           查看如何根据提示生成图片           | <details><br /><summary>预览</summary><br /><img src='https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230404_194125.jpg'><br /></details> |\n| **查对话** |            获取指定人员的对话历史            | <details><br /><summary>预览</summary><br /><img src='https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230404_193938.jpg'><br /></details> |\n|  **帮助**  |                 获取帮助信息                 | <details><br /><summary>预览</summary><br /><img src='https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230404_202336.jpg'><br /></details> |\n\n\n### 功能指令\n\n除去系统指令，还有一些功能指令，功能指令是直接与应用交互，达到交互目的的一种指令。\n\n**📢 注意：功能指令，一律以 #+关键字 为开头，通常需要在关键字后边加个空格，然后再写描述或参数。**\n\n以下是功能指令详情\n\n| 指令 | 说明 | 示例 |\n| :--: | :--: | :--: |\n|  **#图片**  |          根据提示咒语生成对应图片          | <details><br /><summary>预览</summary><br /><img src='https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230323_150547.jpg'><br /></details> |\n| **#域名**     | 查询域名相关信息     |  <details><br /><summary>预览</summary><br /><img src='https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230404_202620.jpg'><br /></details>    |\n| **#证书**     | 查询域名证书相关信息     | <details><br /><summary>预览</summary><br /><img src='https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230404_202706.jpg'><br /></details>    |\n| **#Linux命令**     | 根据自然语言描述生成对应命令     | <details><br /><summary>预览</summary><br /><img src='https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230404_214947.jpg'><br /></details>    |\n| **#解释代码**     | 分析一段代码的功能或含义     | <details><br /><summary>预览</summary><br /><img src='https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230404_215242.jpg'><br /></details>    |\n| **#正则**     | 根据自然语言描述生成正则     | <details><br /><summary>预览</summary><br /><img src='https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230404_220222.jpg'><br /></details>    |\n| **#周报**     | 应用周报的prompt     | <details><br /><summary>预览</summary><br /><img src='https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230404_214335.jpg'><br /></details>    |\n| **#生成sql**     | 根据自然语言描述生成sql语句     | <details><br /><summary>预览</summary><br /><img src='https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230404_221325.jpg'><br /></details>    |\n\n如上大多数能力，都是依赖prompt模板实现，如果你有更好的prompt，欢迎提交PR。\n\n### 友情提示\n\n使用 **串聊模式** 会显著加快机器人所用账号的余额消耗速度，因此，若无保留上下文的需求，建议使用 **单聊模式。** \n\n即使有保留上下文的需求，也应适时使用 **重置** 指令来重置上下文。\n\n### 项目地址\n\n本项目已在GitHub开源，[查看源代码](https://github.com/eryajf/chatgpt-dingtalk)。"
 
 # Azure OpenAI 配置
-# 例如你的示例请求为： curl https://eryajf.openai.azure.com/openai/deployments/gpt-35-turbo/chat/completions?api-version=2023-03-15-preview 那么对应配置如下
+# 例如你的示例请求为： curl https://eryajf.openai.azure.com/openai/deployments/gpt-35-turbo/chat/completions?api-version=2023-03-15-preview 那么对应配置如下，如果配置完成之后还是无法正常使用，请新建应用，重新配置回调试试看
 azure_on: false # 如果是true，则会走azure的openai接口
 azure_resource_name: "eryajf" # 对应你的主个性域名
 azure_deployment_name: "gpt-35-turbo" # 对应的是 /deployments/ 后边跟着的这个值
