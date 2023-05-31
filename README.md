@@ -618,6 +618,13 @@ azure_openai_token: "xxxxxxx"
         </a>
     </td>
     <td align="center">
+        <a href="https://github.com/DDMeaqua">
+            <img src="https://avatars.githubusercontent.com/u/110169811?v=4" width="75;" alt="DDMeaqua"/>
+            <br />
+            <sub><b>Null</b></sub>
+        </a>
+    </td>
+    <td align="center">
         <a href="https://github.com/laorange">
             <img src="https://avatars.githubusercontent.com/u/68316902?v=4" width="75;" alt="laorange"/>
             <br />
@@ -644,15 +651,15 @@ azure_openai_token: "xxxxxxx"
             <br />
             <sub><b>Mao Mao</b></sub>
         </a>
-    </td>
+    </td></tr>
+<tr>
     <td align="center">
         <a href="https://github.com/iblogc">
             <img src="https://avatars.githubusercontent.com/u/3283023?v=4" width="75;" alt="iblogc"/>
             <br />
             <sub><b>Iblogc</b></sub>
         </a>
-    </td></tr>
-<tr>
+    </td>
     <td align="center">
         <a href="https://github.com/cnmill">
             <img src="https://avatars.githubusercontent.com/u/21098695?v=4" width="75;" alt="cnmill"/>
