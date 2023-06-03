@@ -664,6 +664,13 @@ azure_openai_token: "xxxxxxx"
         </a>
     </td>
     <td align="center">
+        <a href="https://github.com/little-huang">
+            <img src="https://avatars.githubusercontent.com/u/53588889?v=4" width="75;" alt="little-huang"/>
+            <br />
+            <sub><b>Little_huang</b></sub>
+        </a>
+    </td>
+    <td align="center">
         <a href="https://github.com/cnmill">
             <img src="https://avatars.githubusercontent.com/u/21098695?v=4" width="75;" alt="cnmill"/>
             <br />
