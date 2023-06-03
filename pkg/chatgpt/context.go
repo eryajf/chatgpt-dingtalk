@@ -165,6 +165,10 @@ func (c *ChatGPT) ChatWithContext(question string) (answer string, err error) {
 		return "", OverMaxTextLength
 	}
 	model := public.Config.Model
+	userId := c.userId
+	if public.Config.AzureOn {
+		userId = ""
+	}
 	if model == openai.GPT3Dot5Turbo0301 ||
 		model == openai.GPT3Dot5Turbo ||
 		model == openai.GPT4 || model == openai.GPT40314 ||
@@ -179,7 +183,7 @@ func (c *ChatGPT) ChatWithContext(question string) (answer string, err error) {
 			},
 			MaxTokens:   c.maxAnswerLen,
 			Temperature: 0.6,
-			User:        c.userId,
+			User:        userId,
 		}
 		resp, err := c.client.CreateChatCompletion(c.ctx, req)
 		if err != nil {
