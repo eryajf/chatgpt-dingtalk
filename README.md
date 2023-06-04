@@ -85,48 +85,6 @@
 查看更多内容: https://www.qiniai.com/
 
 
-
-## 🥁 号外号外!
-
-大家好呀！我是[feishu-OpenAI](https://github.com/ConnectAI-E/Feishu-OpenAI)的作者River。非常兴奋地欢迎大家加入我们的[Connect-AI开源马拉松](https://fork-way.feishu.cn/base/LzPObR5YQaHSAssauDAcZdS3nuo?table=tblvKqjRYNfmoLMo&view=vewsekmPW4)活动！
-
-AIGC的热潮正在各行各业掀起巨大的变革，我们看到各大社群以”知识xx“为代表的”割韭菜“行为，不禁感到无奈。身为互联网行业的从业者,与其指点江山激扬文字，不如参与其中，感受发展。为此我们成立了下面10个课题组，并从技术可行性的基础上进行了调研，现并欢迎大家自由选择组队并加入相关的项目推进群。
-
-<p align='center' >
-    <img width="1200" alt="image" src="https://user-images.githubusercontent.com/50035229/232206534-0260de35-b0e0-4777-ae8b-0e87f14c8e9f.png">
-</p>
-
-无论您是设计师、前端工程师、后端工程师、算法工程师还是测试小伙伴，只要您对GPT技术充满热情，就可以参与到我们的开源项目中来。设计师们可以参与多个repo，优化项目的交互体验和设计风格；前端工程师可以参与每个项目的UI搭建；后端和算法工程师们则可以积极学习AI能力的使用。我们还诚邀测试小伙伴参与每次发版前的功能内测。
-
-每个项目都需要招募一个项目负责人，我们会将其指定为repo的owner。如果您愿意深度参与，可以找我报名成为负责人。当然，如果项目表上有队长名称，则代表已经招募完成。其他同学可以在业余时间参与一个或多个项目。
-
-我们的目标是为AI开源社区提供一个可持续性的生态系统，并且鼓励更多的人参与其中，共同推进AI技术的发展。后续遇到企业的定制AI开发需求，我们会优先邀请相关课题的同学参与，这样既可以帮助他们获取不错的收入，也符合开源的精神和原则。我们希望通过这样的方式，让我们的开源项目更有可持续性，让更多人愿意加入我们，共同推进AI技术的发展！
-
-预期奖励内容包括：
-  - A奖励：小队完成度奖励，鼓励小队长参与项目，能够在指定时间内完成课题规定的基本内容，队长应获得一定的奖励。
-  - B奖励：项目优秀度奖励，根据项目复杂度、组内配合度、产品创意度，以及期中和期末用户体验打分，评选出部分优秀项目的队长和核心队员，并给予相应奖励。
-  - C奖励：成员活跃度奖励，考虑到设计和测试身份的特殊性，无法单独带领项目。因此，我们将评选出优秀设计师和优秀测试反馈员，以表彰他们在项目中的积极参与和贡献。
-
- 做出下面奖励安排
-  - A奖励项目完成度：京东E卡300 * 10
-  - B奖励项目优秀度：
-    - 杰出奖: iPhone14 * 1 + 京东E卡300 * 3
-    - 优秀奖: PS5 * 1 + 京东E卡300 * 3
-  - C奖励成员活跃度：京东E卡300 * 4
-
-我们队员有
-- [EX-chatGPT](https://github.com/circlestarzero/EX-chatGPT)和[ChatPaper的维护者](https://github.com/kaixindelele/ChatPaper)-->[cc](https://github.com/circlestarzero)
-- [钉钉GPT的维护者](https://github.com/eryajf/chatgpt-dingtalk)-->[eryajf](https://github.com/eryajf)
-- [飞书GPT的维护者](https://github.com/Leizhenpeng/feishu-chatgpt)-->[river](https://space.bilibili.com/66891783)
-- [上百款在线设计插件的开发者](https://mastergo.com/community/profile/72319417503384?tab=plugin)-->山山
-- 正在心动的你！
-
-
-如果您对Connect-AI开源马拉松感兴趣，请随时加入项目推进群，一起为AI技术的未来贡献力量！
-
-<img width="200" alt="image" src="https://user-images.githubusercontent.com/50035229/233607863-b58f7097-2454-4feb-8cae-822ee41267f9.png">
-
-
 ---
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
