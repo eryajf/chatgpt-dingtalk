@@ -483,17 +483,17 @@ azure_openai_token: "xxxxxxx"
         </a>
     </td>
     <td align="center">
-        <a href="https://github.com/ffinly">
-            <img src="https://avatars.githubusercontent.com/u/29793346?v=4" width="75;" alt="ffinly"/>
-            <br />
-            <sub><b>Finly</b></sub>
-        </a>
-    </td>
-    <td align="center">
         <a href="https://github.com/Leizhenpeng">
             <img src="https://avatars.githubusercontent.com/u/50035229?v=4" width="75;" alt="Leizhenpeng"/>
             <br />
             <sub><b>RiverRay</b></sub>
+        </a>
+    </td>
+    <td align="center">
+        <a href="https://github.com/ffinly">
+            <img src="https://avatars.githubusercontent.com/u/29793346?v=4" width="75;" alt="ffinly"/>
+            <br />
+            <sub><b>Finly</b></sub>
         </a>
     </td>
     <td align="center">
