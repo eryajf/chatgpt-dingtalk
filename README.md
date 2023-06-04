@@ -1,4 +1,43 @@
 <p align='center'>
+<br>
+    🚀 DingDing OpenAI 🚀
+</p>
+<p align='center'>
+   钉钉 ×（GPT-3.5 + DALL·E + Whisper）
+<br>
+
+<p align='center'>
+   www.qiniai.com
+</p>
+</p>
+
+<p align='center'>🌉 基于GO语言实现的钉钉集成ChatGPT机器人 🌉</p>
+
+<div align="center">
+
+[![Auth](https://img.shields.io/badge/Auth-eryajf-ff69b4)](https://github.com/eryajf)
+[![Go Version](https://img.shields.io/github/go-mod/go-version/eryajf/chatgpt-dingtalk)](https://github.com/eryajf/chatgpt-dingtalk)
+[![GitHub Pull Requests](https://img.shields.io/github/issues-pr/eryajf/chatgpt-dingtalk)](https://github.com/eryajf/chatgpt-dingtalk/pulls)
+[![GitHub Pull Requests](https://img.shields.io/github/stars/eryajf/chatgpt-dingtalk)](https://github.com/eryajf/chatgpt-dingtalk/stargazers)
+[![HitCount](https://views.whatilearened.today/views/github/eryajf/chatgpt-dingtalk.svg)](https://github.com/eryajf/chatgpt-dingtalk)
+[![Docker Image Size (latest by date)](https://img.shields.io/docker/image-size/eryajf/chatgpt-dingtalk)](https://hub.docker.com/r/eryajf/chatgpt-dingtalk)
+[![Docker Pulls](https://img.shields.io/docker/pulls/eryajf/chatgpt-dingtalk)](https://hub.docker.com/r/eryajf/chatgpt-dingtalk)
+[![GitHub license](https://img.shields.io/github/license/eryajf/chatgpt-dingtalk)](https://github.com/eryajf/chatgpt-dingtalk/blob/main/LICENSE)
+
+</div>
+
+<img src="https://camo.githubusercontent.com/82291b0fe831bfc6781e07fc5090cbd0a8b912bb8b8d4fec0696c881834f81ac/68747470733a2f2f70726f626f742e6d656469612f394575424971676170492e676966" width="800"  height="3">
+</div><br>
+
+![](https://user-images.githubusercontent.com/33259379/223607306-2ac836a2-7ce5-4a12-a16e-bec40b22d8d6.png)
+
+---
+
+## 商业支持
+
+如果开源版无法满足您公司的需求，推荐您尝试目前正在内测的商业交付版本。
+
+<p align='center'>
     <img src='https://github.com/ConnectAI-E/Feishu-OpenAI/assets/50035229/7178f68e-2e97-46a6-b692-a2c43191b45b' alt='' width='800'/>
 </p>
 
@@ -18,71 +57,12 @@
 </details>
 
 
-<p align='center'>
-   钉钉 ×（GPT-3.5 + DALL·E + Whisper）
-<br>
-<br>
-    🚀 DingDing OpenAI 🚀
-</p>
-
-<p align='center'>
-  😀企联AI共创计划正式开启😀
-</p>
-
-<p align='center'>
-   www.qiniai.com
-</p>
-
-
-</p>
-
-
-## 商业支持
-
-如果开源版无法满足您公司的需求，推荐您尝试的商业共创版
-
 - 内置开箱即用的Azure Openai: 无需部署到海外，即可获得数十倍的性能提升
 - 掌控全局的Admin Panel: AI资源管理、对话日志查询、风险词规避和对话权限管理
 - 专人技术支持: 配备专业部署交付人员与后期一对一维护服务
 - 同时提供在线Saas版/企业级私有部署
-
-查看更多内容: https://www.qiniai.com/
 
 企业咨询：15623677720
-
-<img width="400" src="https://www.qiniai.com/assets/contact-15c00beb.png">
-
-
-<p> 🌉 基于GO语言实现的钉钉集成ChatGPT机器人 🌉</p>
-
-[![Auth](https://img.shields.io/badge/Auth-eryajf-ff69b4)](https://github.com/eryajf)
-[![Go Version](https://img.shields.io/github/go-mod/go-version/eryajf/chatgpt-dingtalk)](https://github.com/eryajf/chatgpt-dingtalk)
-[![GitHub Pull Requests](https://img.shields.io/github/issues-pr/eryajf/chatgpt-dingtalk)](https://github.com/eryajf/chatgpt-dingtalk/pulls)
-[![GitHub Pull Requests](https://img.shields.io/github/stars/eryajf/chatgpt-dingtalk)](https://github.com/eryajf/chatgpt-dingtalk/stargazers)
-[![HitCount](https://views.whatilearened.today/views/github/eryajf/chatgpt-dingtalk.svg)](https://github.com/eryajf/chatgpt-dingtalk)
-[![Docker Image Size (latest by date)](https://img.shields.io/docker/image-size/eryajf/chatgpt-dingtalk)](https://hub.docker.com/r/eryajf/chatgpt-dingtalk)
-[![Docker Pulls](https://img.shields.io/docker/pulls/eryajf/chatgpt-dingtalk)](https://hub.docker.com/r/eryajf/chatgpt-dingtalk)
-[![GitHub license](https://img.shields.io/github/license/eryajf/chatgpt-dingtalk)](https://github.com/eryajf/chatgpt-dingtalk/blob/main/LICENSE)
-
-
-
-<img src="https://camo.githubusercontent.com/82291b0fe831bfc6781e07fc5090cbd0a8b912bb8b8d4fec0696c881834f81ac/68747470733a2f2f70726f626f742e6d656469612f394575424971676170492e676966" width="800"  height="3">
-</div><br>
-
-![](https://user-images.githubusercontent.com/33259379/223607306-2ac836a2-7ce5-4a12-a16e-bec40b22d8d6.png)
-
----
-
-## 商业支持
-
-如果开源版无法满足您公司的需求，推荐您尝试目前正在内测的商业交付版本
-
-- 内置开箱即用的Azure Openai: 无需部署到海外，即可获得数十倍的性能提升
-- 掌控全局的Admin Panel: AI资源管理、对话日志查询、风险词规避和对话权限管理
-- 专人技术支持: 配备专业部署交付人员与后期一对一维护服务
-- 同时提供在线Saas版/企业级私有部署
-
-查看更多内容: https://www.qiniai.com/
 
 
 ---
@@ -98,9 +78,7 @@
   - [第一步，部署应用](#%E7%AC%AC%E4%B8%80%E6%AD%A5%E9%83%A8%E7%BD%B2%E5%BA%94%E7%94%A8)
     - [docker部署](#docker%E9%83%A8%E7%BD%B2)
     - [二进制部署](#%E4%BA%8C%E8%BF%9B%E5%88%B6%E9%83%A8%E7%BD%B2)
-  - [第二步，创建机器人](#%E7%AC%AC%E4%BA%8C%E6%AD%A5%E5%88%9B%E5%BB%BA%E6%9C%BA%E5%99%A8%E4%BA%BA)
-    - [方案一：outgoing类型机器人](#%E6%96%B9%E6%A1%88%E4%B8%80outgoing%E7%B1%BB%E5%9E%8B%E6%9C%BA%E5%99%A8%E4%BA%BA)
-    - [方案二：企业内部应用](#%E6%96%B9%E6%A1%88%E4%BA%8C%E4%BC%81%E4%B8%9A%E5%86%85%E9%83%A8%E5%BA%94%E7%94%A8)
+  - [第二步，添加应用](#%E7%AC%AC%E4%BA%8C%E6%AD%A5%E6%B7%BB%E5%8A%A0%E5%BA%94%E7%94%A8)
 - [亮点特色](#%E4%BA%AE%E7%82%B9%E7%89%B9%E8%89%B2)
   - [与机器人私聊](#%E4%B8%8E%E6%9C%BA%E5%99%A8%E4%BA%BA%E7%A7%81%E8%81%8A)
   - [帮助列表](#%E5%B8%AE%E5%8A%A9%E5%88%97%E8%A1%A8)
@@ -124,7 +102,7 @@
 
 ## 前言
 
-本项目可以助你将GPT机器人集成到钉钉群聊当中。当前默认模型为`gpt-3.5`，支持`gpt-4`。
+本项目可以助你将GPT机器人集成到钉钉群聊当中。当前默认模型为`gpt-3.5`，支持`gpt-4`。同时支持Azure-OpenAI。
 
 >- `📢 注意`：当下部署以及配置流程都已非常成熟，文档和issue中基本都覆盖到了，因此不再回答任何项目安装部署与配置使用上的问题，如果完全不懂，可考虑通过 **[邮箱](mailto:eryajf@163.com)** 联系我进行付费的技术支持。
 >
@@ -165,7 +143,7 @@
 ## 使用前提
 
 * 有Openai账号，并且创建好`api_key`，注册相关事项可以参考[此文章](https://juejin.cn/post/7173447848292253704) 。访问[这里](https://beta.openai.com/account/api-keys)，申请个人秘钥。
-* 在钉钉开发者后台创建机器人，配置应用程序回调。
+* 在钉钉开发者后台创建应用，在应用的消息推送功能块添加机器人，将消息接收模式指定为stream模式。
 
 ## 使用教程
 
@@ -223,41 +201,7 @@ $ vim docker-compose.yml # 编辑 APIKEY 等信息
 $ docker compose up -d
 ```
 
-部署完成之后，通过Nginx代理本服务：
-
-```nginx
-server {
-    listen       80;
-    server_name  chat.eryajf.net;
-
-    client_header_timeout 120s;
-    client_body_timeout 120s;
-
-    location / {
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_set_header X-Forwarded-For $remote_addr;
-        proxy_pass http://localhost:8090;
-    }
-}
-```
-
-部署完成之后，就可以在群里艾特机器人进行体验了。
-
-`📢 注意:` 配置Nginx代理步骤是个可选步骤，你也可以直接通过服务器外网IP:PORT作为回调地址。
-
-Nginx配置完毕之后，可以先手动请求一下，通过服务日志输出判断服务是否正常可用：
-
-```sh
-$ curl -s 'http://chat.eryajf.net/'
-{
-  "msg": "欢迎使用钉钉机器人",
-  "status": "ok"
-}
-```
-
-如果手动请求没有问题，那么就可以在钉钉群里与机器人进行对话了。
+之前部署完成之后还有一个配置Nginx的步骤，现在将模式默认指定为stream模式，因此不再需要配置Nginx。
 
 #### 二进制部署
 
@@ -269,7 +213,7 @@ $ curl -s 'http://chat.eryajf.net/'
 ```sh
 $ tar xf chatgpt-dingtalk-v0.0.4-darwin-arm64.tar.gz
 $ cd chatgpt-dingtalk-v0.0.4-darwin-arm64
-$ cp config.example.yml  config.yml # 然后根据情况调整配置文件内容,宿主机如遇端口冲突,可通过调整config.yml中的port参数自定义服务端口
+$ cp config.example.yml  config.yml
 $ ./chatgpt-dingtalk  # 直接运行
 
 # 如果要守护在后台运行
@@ -278,62 +222,36 @@ $ tail -f run.log
 ```
 
 
-### 第二步，创建机器人
+### 第二步，添加应用
 
-#### 方案一：outgoing类型机器人
+钉钉官方在2023年5月份全面推出了stream模式，因此这里也推荐大家直接使用这个模式，其他HTTP的仍旧支持，只不过不再深入研究，因此下边的文档也以stream模式的配置流程来介绍。
 
-钉钉群内的机器人有一个outgoing模式，当你创建机器人的时候，可以选择启用这个模式，然后直接配置回调地址，免去在管理后台创建应用的步骤，就可以直接投入使用。
 
-官方文档：[自定义机器人接入](https://open.dingtalk.com/document/orgapp/custom-robot-access)
+创建步骤参考文档：[企业内部应用](https://open.dingtalk.com/document/orgapp/create-orgapp)，或者根据如下步骤进行配置。
 
-但是这个模式貌似是部分开放的(目前来看貌似是部分人有创建这个类型的白名单)，所以如果你在钉钉群聊中添加`自定义机器人`的时候，看到和我一样的信息，则说明无法使用这种方式：
-
-<details>
-    <summary>🖼 点我查看示例图</summary>
-    <img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230325_162017.jpg">
-</details>
-
-`📢 注意`
-
-- 如果你的和我一样，那么就只能放弃这种方案，往下看第二种对接方案。
-- 如果使用这种方案，那么就不能与机器人私聊对话，只能局限在群聊当中艾特机器人聊天。
-- 如果使用这种方案，则在群聊当中并不能达到真正的艾特发消息人的效果，因为这种机器人回调过来的关键信息为空。
-
-#### 方案二：企业内部应用
-
-创建步骤参考文档：[企业内部开发机器人](https://open.dingtalk.com/document/robots/enterprise-created-chatbot)，或者根据如下步骤进行配置。
-
-1. 创建机器人。
+1. 创建应用。
     <details>
       <summary>🖼 点我查看示例图</summary>
-      <img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20221209_163616.png">
+      <img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230604_192719.png">
     </details>
 
-   > `📢 注意1：`可能现在创建机器人的时候名字为`chatgpt`会被钉钉限制，请用其他名字命名。
-   >
-   > `📢 注意2：`第四步骤点击创建应用的时候，务必选择使用旧版，从而创建旧版机器人，如果选择新版，则机器人的功能集成在了应用当中的消息推送模块儿。
+   > `📢 注意：`可能现在创建机器人的时候名字为`chatgpt`会被钉钉限制，请用其他名字命名。
 
-   步骤比较简单，这里就不赘述了。
+   在`基础信息` --> `应用信息`当中能够获取到机器人的`AppKey`和`AppSecret`。
 
-2. 配置机器人回调接口。
+2. 配置机器人。
     <details>
       <summary>🖼 点我查看示例图</summary>
-      <img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20221209_163652.png">
+      <img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230604_193103.png">
     </details>
-
-   创建完毕之后，点击机器人开发管理，然后配置将要部署的服务所在服务器的出口IP，以及将要给服务配置的域名。
-
-  > `📢 注意：` 添加消息接收地址的时候，务必确保服务在正常运行且可通过回调地址访问，否则保存时将会失败。
-  >
-  > `📢 如果提示：` 消息接收地址校验失败（请确保公网可访问该地址，如无有效SSL证书，可选择禁用证书校验），那么可以先输入一个`https://`，然后就能看到`禁用https`的选项了，选择禁用，然后再把地址改成`http`就好了。
 
 3. 发布机器人。
     <details>
       <summary>🖼 点我查看示例图</summary>
-      <img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20221209_163709.png">
+      <img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230604_193314.png">
     </details>
 
-   点击版本管理与发布，然后点击上线，这个时候就能在钉钉的群里中添加这个机器人了。
+   点击`版本管理与发布`，然后点击`上线`，这个时候就能在钉钉的群里中添加这个机器人了。
 
 4. 群聊添加机器人。
     <details>
