@@ -7,7 +7,7 @@ require (
 	github.com/gin-gonic/gin v1.9.0
 	github.com/glebarez/sqlite v1.7.0
 	github.com/go-resty/resty/v2 v2.7.0
-	github.com/open-dingtalk/dingtalk-stream-sdk-go v0.0.1
+	github.com/open-dingtalk/dingtalk-stream-sdk-go v0.0.4
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/sashabaranov/go-openai v1.6.1
 	github.com/solywsh/chatgpt v0.0.14

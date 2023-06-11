@@ -16,15 +16,15 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/open-dingtalk/dingtalk-stream-sdk-go/chatbot"
 	"github.com/open-dingtalk/dingtalk-stream-sdk-go/client"
-	loger "github.com/open-dingtalk/dingtalk-stream-sdk-go/logger"
-	"github.com/open-dingtalk/dingtalk-stream-sdk-go/payload"
-	"github.com/open-dingtalk/dingtalk-stream-sdk-go/utils"
 )
 
 func init() {
+	// 初始化加载配置，数据库，模板等
 	public.InitSvc()
+	// 指定日志等级
 	logger.InitLogger(public.Config.LogLevel)
 }
+
 func main() {
 	if public.Config.RunMode == "http" {
 		StartHttp()
@@ -32,26 +32,9 @@ func main() {
 		for _, credential := range public.Config.Credentials {
 			StartStream(credential.ClientID, credential.ClientSecret)
 		}
+		logger.Info("🚀 The Server Is Running On Stream Mode")
 		select {}
 	}
-}
-
-// 启动为 stream 模式
-func StartStream(clientId, clientSecret string) {
-	receiver := NewChatReceiver(clientId, clientSecret)
-	loger.SetLogger(loger.NewStdTestLogger())
-	cli := client.NewStreamClient(
-		client.WithAppCredential(client.NewAppCredentialConfig(clientId, clientSecret)),
-		client.WithUserAgent(client.NewDingtalkGoSDKUserAgent()),
-		client.WithSubscription(utils.SubscriptionTypeKCallback, payload.BotMessageCallbackTopic, chatbot.NewDefaultChatBotFrameHandler(receiver.OnChatReceive).OnEventReceived),
-	)
-	err := cli.Start(context.Background())
-	if err != nil {
-		panic(err)
-	}
-
-	defer cli.Close()
-
 }
 
 type ChatReceiver struct {
@@ -66,7 +49,23 @@ func NewChatReceiver(clientId, clientSecret string) *ChatReceiver {
 	}
 }
 
-func (r *ChatReceiver) OnChatReceive(ctx context.Context, data *chatbot.BotCallbackDataModel) (err error) {
+// 启动为 stream 模式
+func StartStream(clientId, clientSecret string) {
+	receiver := NewChatReceiver(clientId, clientSecret)
+	cli := client.NewStreamClient(client.WithAppCredential(client.NewAppCredentialConfig(clientId, clientSecret)))
+
+	//注册callback类型的处理函数
+	cli.RegisterChatBotCallbackRouter(receiver.OnChatBotMessageReceived)
+
+	err := cli.Start(context.Background())
+	if err != nil {
+		logger.Fatal("strar stream failed: %v\n", err)
+	}
+	defer cli.Close()
+}
+
+// OnChatBotMessageReceived 简单的应答机器人实现
+func (r *ChatReceiver) OnChatBotMessageReceived(ctx context.Context, data *chatbot.BotCallbackDataModel) ([]byte, error) {
 	msgObj := dingbot.ReceiveMsg{
 		ConversationID: data.ConversationId,
 		AtUsers: []struct {
@@ -93,7 +92,7 @@ func (r *ChatReceiver) OnChatReceive(ctx context.Context, data *chatbot.BotCallb
 	c.Set(public.DingTalkClientIdKeyName, clientId)
 	DoRequest(msgObj, &c)
 
-	return nil
+	return []byte(""), nil
 }
 
 func StartHttp() {
