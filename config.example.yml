@@ -60,7 +60,7 @@ azure_openai_token: "xxxxxxx"
 # 钉钉应用鉴权凭据信息，支持多个应用。通过请求时候鉴权来识别是来自哪个机器人应用的消息
 # 设置credentials 之后，即具备了访问钉钉平台绝大部分 OpenAPI 的能力；例如上传图片到钉钉平台，提升图片体验，结合 Stream 模式简化服务部署
 # client_id 对应钉钉平台 AppKey/SuiteKey；client_secret 对应 AppSecret/SuiteSecret
-#credentials:
-#  -
-#    client_id: "put-your-client-id-here"
-#    client_secret: "put-your-client-secret-here"
+credentials:
+  -
+    client_id: "put-your-client-id-here"
+    client_secret: "put-your-client-secret-here"
