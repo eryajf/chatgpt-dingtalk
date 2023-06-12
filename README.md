@@ -38,7 +38,9 @@
 如果开源版无法满足您公司的需求，推荐您尝试目前正在内测的商业交付版本。
 
 <p align='center'>
-    <img src='https://github.com/ConnectAI-E/Feishu-OpenAI/assets/50035229/7178f68e-2e97-46a6-b692-a2c43191b45b' alt='' width='800'/>
+    <a href='https://qiniai.com' target="_blank" rel="noopener noreferrer">
+    <img src='https://user-images.githubusercontent.com/50035229/239670160-7178f68e-2e97-46a6-b692-a2c43191b45b.png' alt='' width='800'/>
+    </a>
 </p>
 
 
