@@ -161,9 +161,20 @@ func (c *ChatGPT) ChatWithContext(question string) (answer string, err error) {
 	promptTable = append(promptTable, "\n"+c.ChatContext.restartSeq+question)
 	prompt := strings.Join(promptTable, "\n")
 	prompt += c.ChatContext.startSeq
-	if tokenizer.MustCalToken(prompt) > c.maxText-c.maxAnswerLen {
-		return "", OverMaxTextLength
+	// 删除对话，直到prompt的长度满足条件
+	for tokenizer.MustCalToken(prompt) > c.maxText {
+		if len(c.ChatContext.old) > 1 { // 至少保留一条记录
+			c.ChatContext.PollConversation() // 删除最旧的一条对话
+			// 重新构建 prompt，计算长度
+			promptTable = promptTable[1:]    // 删除promptTable中对应的对话
+			prompt = strings.Join(promptTable, "\n") + c.ChatContext.startSeq
+		} else {
+			break // 如果已经只剩一条记录，那么跳出循环
+			}
 	}
+//	if tokenizer.MustCalToken(prompt) > c.maxText-c.maxAnswerLen {
+//		return "", OverMaxTextLength
+//	}
 	model := public.Config.Model
 	userId := c.userId
 	if public.Config.AzureOn {
