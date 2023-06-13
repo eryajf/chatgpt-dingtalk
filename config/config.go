@@ -264,5 +264,14 @@ func LoadConfig() *Configuration {
 	if config.ServiceURL == "" {
 		logger.Fatal("config err: service url required")
 	}
+	if config.MaxQuestionLen == 0 {
+		config.MaxQuestionLen = 4096
+	}
+	if config.MaxAnswerLen == 0 {
+		config.MaxAnswerLen = 4096
+	}
+	if config.MaxText == 0 {
+		config.MaxText = 4096
+	}
 	return config
 }
