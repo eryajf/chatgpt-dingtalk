@@ -33,6 +33,12 @@ type Configuration struct {
 	Model string `yaml:"model"`
 	// 会话超时时间
 	SessionTimeout time.Duration `yaml:"session_timeout"`
+	// 最大问题长度
+  	MaxQuestionLen int `yaml:"max_question_len"`
+	// 最大答案长度
+	MaxAnswerLen int `yaml:"max_answer_len"`
+	// 最大文本 = 问题 + 回答, 接口限制
+	MaxText int `yaml:"max_text"`
 	// 默认对话模式
 	DefaultMode string `yaml:"default_mode"`
 	// 代理地址
@@ -121,6 +127,21 @@ func LoadConfig() *Configuration {
 			config.SessionTimeout = time.Duration(duration) * time.Second
 		} else {
 			config.SessionTimeout = time.Duration(config.SessionTimeout) * time.Second
+		}
+		maxQuestionLen := os.Getenv("MAX_QUESTION_LEN")
+		if maxQuestionLen != "" {
+			newLen, _ := strconv.Atoi(maxQuestionLen)
+			config.MaxQuestionLen = newLen
+		}
+		maxAnswerLen := os.Getenv("MAX_ANSWER_LEN")
+		if maxAnswerLen != "" {
+			newLen, _ := strconv.Atoi(maxAnswerLen)
+			config.MaxAnswerLen = newLen
+		}
+		maxText := os.Getenv("MAX_TEXT")
+		if maxText != "" {
+			newLen, _ := strconv.Atoi(maxText)
+			config.MaxText = newLen
 		}
 		defaultMode := os.Getenv("DEFAULT_MODE")
 		if defaultMode != "" {
@@ -242,6 +263,15 @@ func LoadConfig() *Configuration {
 	}
 	if config.ServiceURL == "" {
 		logger.Fatal("config err: service url required")
+	}
+	if config.MaxQuestionLen == 0 {
+		config.MaxQuestionLen = 4096
+	}
+	if config.MaxAnswerLen == 0 {
+		config.MaxAnswerLen = 4096
+	}
+	if config.MaxText == 0 {
+		config.MaxText = 4096
 	}
 	return config
 }

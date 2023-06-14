@@ -60,9 +60,9 @@ func New(userId string) *ChatGPT {
 		client:         openai.NewClientWithConfig(config),
 		ctx:            ctx,
 		userId:         userId,
-		maxQuestionLen: 2048, // 最大问题长度
-		maxAnswerLen:   2048, // 最大答案长度
-		maxText:        4096, // 最大文本 = 问题 + 回答, 接口限制
+		maxQuestionLen: public.Config.MaxQuestionLen, // 最大问题长度
+		maxAnswerLen:   public.Config.MaxAnswerLen, // 最大答案长度
+		maxText:        public.Config.MaxText, // 最大文本 = 问题 + 回答, 接口限制
 		timeOut:        public.Config.SessionTimeout,
 		doneChan:       timeOutChan,
 		cancel: func() {

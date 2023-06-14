@@ -182,6 +182,7 @@ $ docker run -itd --name chatgpt -p 8090:8090 \
   -v ./data:/app/data --add-host="host.docker.internal:host-gateway" \
   -e LOG_LEVEL="info" -e APIKEY=换成你的key -e BASE_URL="" \
   -e MODEL="gpt-3.5-turbo" -e SESSION_TIMEOUT=600 \
+  -e MAX_QUESTION_LENL=4096 -e MAX_ANSWER_LEN=4096 -e MAX_TEXT=4096 \
   -e HTTP_PROXY="http://host.docker.internal:15732" \
   -e DEFAULT_MODE="单聊" -e MAX_REQUEST=0 -e PORT=8090 \
   -e SERVICE_URL="你当前服务外网可访问的URL" -e CHAT_TYPE="0" \
@@ -398,6 +399,12 @@ base_url: ""
 model: "gpt-3.5-turbo"
 # 会话超时时间,默认600秒,在会话时间内所有发送给机器人的信息会作为上下文
 session_timeout: 600
+# 最大问题长度
+max_question_len: 4096
+# 最大回答长度
+max_answer_len: 4096
+# 最大上下文文本长度，通常该参数可设置为与模型Token限制相同
+max_text: 4096
 # 指定请求时使用的代理，如果为空，则不使用代理，注意需要带上 http 协议 或 socks5 协议，如果你是用的是azure，则该配置项可以留空或者直接忽略
 http_proxy: ""
 # 指定默认的对话模式，可根据实际需求进行自定义，如果不设置，默认为单聊，即无上下文关联的对话模式
