@@ -12,6 +12,9 @@ services:
       BASE_URL: ""  # 如果你使用官方的接口地址 https://api.openai.com，则留空即可，如果你想指定请求url的地址，可通过这个参数进行配置，注意需要带上 http 协议
       MODEL: "gpt-3.5-turbo" # 指定模型，默认为 gpt-3.5-turbo , 可选参数有： "gpt-4-0314", "gpt-4", "gpt-3.5-turbo-0301", "gpt-3.5-turbo"，如果使用gpt-4，请确认自己是否有接口调用白名单
       SESSION_TIMEOUT: 600 # 会话超时时间,默认600秒,在会话时间内所有发送给机器人的信息会作为上下文
+      MAX_QUESTION_LEN: 4096 # 最大问题长度，默认4096 token，正常情况默认值即可，如果使用gpt4-8k或gpt4-32k，可根据模型token上限修改。
+      MAX_ANSWER_LEN: 4096 # 最大回答长度，默认4096 token，正常情况默认值即可，如果使用gpt4-8k或gpt4-32k，可根据模型token上限修改。
+      MAX_TEXT: 4096 # 最大文本 = 问题 + 回答, 接口限制，默认4096 token，正常情况默认值即可，如果使用gpt4-8k或gpt4-32k，可根据模型token上限修改。
       HTTP_PROXY: http://host.docker.internal:15777 # 指定请求时使用的代理，如果为空，则不使用代理，注意需要带上 http 协议 或 socks5 协议
       DEFAULT_MODE: "单聊" # 指定默认的对话模式，可根据实际需求进行自定义，如果不设置，默认为单聊，即无上下文关联的对话模式
       MAX_REQUEST: 0 # 单人单日请求次数上限，默认为0，即不限制
