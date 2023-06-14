@@ -184,6 +184,7 @@ $ docker run -itd --name chatgpt -p 8090:8090 \
   -v ./data:/app/data --add-host="host.docker.internal:host-gateway" \
   -e LOG_LEVEL="info" -e APIKEY=换成你的key -e BASE_URL="" \
   -e MODEL="gpt-3.5-turbo" -e SESSION_TIMEOUT=600 \
+  -e MAX_QUESTION_LENL=4096 -e MAX_ANSWER_LEN=4096 -e MAX_TEXT=4096 \
   -e HTTP_PROXY="http://host.docker.internal:15732" \
   -e DEFAULT_MODE="单聊" -e MAX_REQUEST=0 -e PORT=8090 \
   -e SERVICE_URL="你当前服务外网可访问的URL" -e CHAT_TYPE="0" \
