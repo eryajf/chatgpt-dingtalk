@@ -262,7 +262,7 @@ func LoadConfig() *Configuration {
 		logger.Fatal("config err: api key required")
 	}
 	if config.ServiceURL == "" {
-		logger.Fatal("config err: service url required")
+		config.ServiceURL = "http://127.0.0.1:8090"
 	}
 	if config.MaxQuestionLen == 0 {
 		config.MaxQuestionLen = 4096
