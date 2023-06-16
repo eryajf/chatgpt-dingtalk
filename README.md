@@ -7,7 +7,7 @@
 <br>
 
 <p align='center'>
-   www.qiniai.com
+   www.connectai-e.com
 </p>
 </p>
 
@@ -29,7 +29,7 @@
 <img src="https://camo.githubusercontent.com/82291b0fe831bfc6781e07fc5090cbd0a8b912bb8b8d4fec0696c881834f81ac/68747470733a2f2f70726f626f742e6d656469612f394575424971676170492e676966" width="800"  height="3">
 </div><br>
 
-<a href='https://qiniai.com' target="_blank" rel="noopener noreferrer">
+<a href='https://www.connectai-e.com' target="_blank" rel="noopener noreferrer">
     <img src='https://user-images.githubusercontent.com/33259379/223607306-2ac836a2-7ce5-4a12-a16e-bec40b22d8d6.png' alt='' />
 </a>
 
@@ -40,7 +40,7 @@
 如果开源版无法满足您公司的需求，推荐您尝试目前正在内测的商业交付版本。
 
 <p align='center'>
-    <a href='https://qiniai.com' target="_blank" rel="noopener noreferrer">
+    <a href='https://www.connectai-e.com' target="_blank" rel="noopener noreferrer">
     <img src='https://user-images.githubusercontent.com/50035229/239670160-7178f68e-2e97-46a6-b692-a2c43191b45b.png' alt='' width='800'/>
     </a>
 </p>
