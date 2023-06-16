@@ -166,7 +166,8 @@ func StartHttp() {
 
 func DoRequest(msgObj dingbot.ReceiveMsg, c *gin.Context) {
 	// 先校验回调是否合法
-	if public.Config.RunMode == "http" {
+	// 如果是Outgoing机器人，判断是否在allow_outgoing_groups白名单内，如是（JudgeOutgoingGroup返回True）则跳过下面的逻辑，如不是则执行下面的逻辑（会返回失败）
+	if public.Config.RunMode == "http" && (msgObj.RobotCode != "normal" || msgObj.RobotCode == "normal" && !public.JudgeOutgoingGroup(msgObj.ConversationID)) {
 		clientId, checkOk := public.CheckRequestWithCredentials(c.GetHeader("timestamp"), c.GetHeader("sign"))
 		if !checkOk {
 			logger.Warning("该请求不合法，可能是其他企业或者未经允许的应用调用所致，请知悉！")

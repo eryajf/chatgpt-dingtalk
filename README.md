@@ -182,7 +182,7 @@ $ docker run -itd --name chatgpt -p 8090:8090 \
   -v ./data:/app/data --add-host="host.docker.internal:host-gateway" \
   -e LOG_LEVEL="info" -e APIKEY=换成你的key -e BASE_URL="" \
   -e MODEL="gpt-3.5-turbo" -e SESSION_TIMEOUT=600 \
-  -e MAX_QUESTION_LENL=4096 -e MAX_ANSWER_LEN=4096 -e MAX_TEXT=4096 \
+  -e MAX_QUESTION_LENL=2048 -e MAX_ANSWER_LEN=2048 -e MAX_TEXT=4096 \
   -e HTTP_PROXY="http://host.docker.internal:15732" \
   -e DEFAULT_MODE="单聊" -e MAX_REQUEST=0 -e PORT=8090 \
   -e SERVICE_URL="你当前服务外网可访问的URL" -e CHAT_TYPE="0" \
@@ -395,15 +395,15 @@ run_mode: "stream"
 api_key: "xxxxxxxxx"
 # 如果你使用官方的接口地址 https://api.openai.com，则留空即可，如果你想指定请求url的地址，可通过这个参数进行配置，注意需要带上 http 协议，如果你是用的是azure，则该配置项可以留空或者直接忽略
 base_url: ""
-# 指定模型，默认为 gpt-3.5-turbo , 可选参数有： "gpt-4-0314", "gpt-4", "gpt-3.5-turbo-0301", "gpt-3.5-turbo"，如果使用gpt-4，请确认自己是否有接口调用白名单，如果你是用的是azure，则该配置项可以留空或者直接忽略
+# 指定模型，默认为 gpt-3.5-turbo , 可选参数有： "gpt-4-32k-0613", "gpt-4-32k-0314", "gpt-4-32k", "gpt-4-0613", "gpt-4-0314", "gpt-4", "gpt-3.5-turbo-16k-0613", "gpt-3.5-turbo-16k", "gpt-3.5-turbo-0613", "gpt-3.5-turbo-0301", "gpt-3.5-turbo"，如果使用gpt-4，请确认自己是否有接口调用白名单，如果你是用的是azure，则该配置项可以留空或者直接忽略
 model: "gpt-3.5-turbo"
 # 会话超时时间,默认600秒,在会话时间内所有发送给机器人的信息会作为上下文
 session_timeout: 600
 # 最大问题长度
-max_question_len: 4096
+max_question_len: 2048
 # 最大回答长度
-max_answer_len: 4096
-# 最大上下文文本长度，通常该参数可设置为与模型Token限制相同
+max_answer_len: 2048
+# 最大上下文文本长度，通常该参数可设置为与模型Token限制相同（一般为 max_question_len 和 max_answer_len 的和）
 max_text: 4096
 # 指定请求时使用的代理，如果为空，则不使用代理，注意需要带上 http 协议 或 socks5 协议，如果你是用的是azure，则该配置项可以留空或者直接忽略
 http_proxy: ""
