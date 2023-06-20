@@ -272,6 +272,14 @@ func DoRequest(msgObj dingbot.ReceiveMsg, c *gin.Context) {
 				return
 			}
 			return
+		case strings.HasPrefix(msgObj.Text.Content, "#Mj生成"):
+
+			err := process.MjPrompt(&msgObj)
+			if err != nil {
+				logger.Warning(fmt.Errorf("process request: %v", err))
+				return
+			}
+			return
 		default:
 			var err error
 			msgObj.Text.Content, err = process.GeneratePrompt(msgObj.Text.Content)

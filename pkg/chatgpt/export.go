@@ -80,3 +80,26 @@ func ImageQa(ctx context.Context, question, userId string) (answer string, err e
 		retryStrategy...)
 	return
 }
+
+// MjPrompt Mj提示词生成
+func MjPrompt(question, userId string) (answer string, err error) {
+	chat := New(userId)
+	defer chat.Close()
+	// 定义一个重试策略
+	retryStrategy := []retry.Option{
+		retry.Delay(100 * time.Millisecond),
+		retry.Attempts(3),
+		retry.LastErrorOnly(true),
+	}
+	// 使用重试策略进行重试
+	err = retry.Do(
+		func() error {
+			answer, err = chat.ChatWithContext(question)
+			if err != nil {
+				return err
+			}
+			return nil
+		},
+		retryStrategy...)
+	return
+}
