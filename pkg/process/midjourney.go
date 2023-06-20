@@ -27,10 +27,17 @@ func MjPrompt(rmsg *dingbot.ReceiveMsg) error {
 	}
 
 	// 1. 从消息 rmsg.text.content 中提取 版本号 v5 v4 niji testp
-
 	msg := rmsg.Text.Content
 	// 1.1 提取版本号
-	version := strings.Split(msg, "-#")[0]
+	title := strings.Split(msg, "#")[1]
+	version := strings.Split(title, "@")[1]
+	// 1.2 提取问题
+	question := strings.Split(msg, "#")[2]
+	// 去除换行符
+	question = strings.ReplaceAll(question, "\n", "")
+	logger.Info("version: ", version, "question: ", question)
+	rmsg.Text.Content = question
+
 	var reply string
 	if version == "Testp" {
 		reply, err = Testp(rmsg, nil, 35)
