@@ -35,16 +35,17 @@
 
 以下是功能指令详情
 
-| 指令 | 说明 | 示例 | 补充|
-| :--: | :--: | :--: | :--: |
-|  **#图片**  |          根据提示咒语生成对应图片          | <details><br /><summary>点击查看</summary><br /><img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230323_150547.jpg"><br /></details> |      |
-| **#域名**     | 查询域名相关信息     |  <details><br /><summary>点击查看</summary><br /><img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230404_202620.jpg"><br /></details>    |  |
-| **#证书**     | 查询域名证书相关信息     | <details><br /><summary>点击查看</summary><br /><img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230404_202706.jpg"><br /></details>    |  |
-| **#Linux命令**     | 根据自然语言描述生成对应命令     | <details><br /><summary>点击查看</summary><br /><img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230404_214947.jpg"><br /></details>    | 此指令中的Linux开头字幕可以大写 |
-| **#解释代码**     | 分析一段代码的功能或含义     | <details><br /><summary>点击查看</summary><br /><img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230404_215242.jpg"><br /></details>    |  |
-| **#正则**     | 根据自然语言描述生成正则     | <details><br /><summary>点击查看</summary><br /><img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230404_220222.jpg"><br /></details>    |  |
-| **#周报**     | 应用周报的prompt     | <details><br /><summary>点击查看</summary><br /><img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230404_214335.jpg"><br /></details>    |  |
-| **#生成sql**     | 根据自然语言描述生成sql语句     | <details><br /><summary>点击查看</summary><br /><img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230404_221325.jpg"><br /></details>    |  |
+|      指令      |       说明        | 示例 | 补充|
+|:------------:|:---------------:| :--: | :--: |
+|   **#图片**    |  根据提示咒语生成对应图片   | <details><br /><summary>点击查看</summary><br /><img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230323_150547.jpg"><br /></details> |      |
+|   **#域名**    |    查询域名相关信息     |  <details><br /><summary>点击查看</summary><br /><img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230404_202620.jpg"><br /></details>    |  |
+|   **#证书**    |   查询域名证书相关信息    | <details><br /><summary>点击查看</summary><br /><img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230404_202706.jpg"><br /></details>    |  |
+| **#Linux命令** | 根据自然语言描述生成对应命令  | <details><br /><summary>点击查看</summary><br /><img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230404_214947.jpg"><br /></details>    | 此指令中的Linux开头字幕可以大写 |
+|  **#解释代码**   |  分析一段代码的功能或含义   | <details><br /><summary>点击查看</summary><br /><img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230404_215242.jpg"><br /></details>    |  |
+|   **#正则**    |  根据自然语言描述生成正则   | <details><br /><summary>点击查看</summary><br /><img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230404_220222.jpg"><br /></details>    |  |
+|   **#周报**    |   应用周报的prompt   | <details><br /><summary>点击查看</summary><br /><img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230404_214335.jpg"><br /></details>    |  |
+|  **#生成sql**  | 根据自然语言描述生成sql语句 | <details><br /><summary>点击查看</summary><br /><img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230404_221325.jpg"><br /></details>    |  |
+| **#Mj生成-v5** | 生成Midjourney提示词 | <details><br /><summary>点击查看</summary><br /><img src="https://i2.mjj.rip/2023/06/20/277a4b221cbfed5ee1e3c348d15fc683.png"><br /></details>    | 提供 v5 v4 niji  |
 
 如上大多数能力，都是依赖prompt模板实现，如果你有更好的prompt，欢迎提交PR。
 
