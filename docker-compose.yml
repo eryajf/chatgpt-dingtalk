@@ -3,7 +3,7 @@ version: '3'
 services:
   chatgpt:
     container_name: chatgpt
-    image: eryajf/chatgpt-dingtalk:latest
+    image: registry.cn-hangzhou.aliyuncs.com/ali_eryajf/chatgpt-dingtalk
     restart: always
     environment:
       LOG_LEVEL: "info" # 应用的日志级别 info/debug
