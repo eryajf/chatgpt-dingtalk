@@ -27,7 +27,7 @@ func InitSvc() {
 	// 初始化数据库
 	db.InitDB()
 	// 暂时不在初始化时获取余额
-	if Config.Model == openai.GPT3Dot5Turbo0613 || Config.Model == openai.GPT3Dot5Turbo0301 || Config.Model == openai.GPT3Dot5Turbo {
+	if Config.Model == openai.GPT3Dot5Turbo0301 || Config.Model == openai.GPT3Dot5Turbo {
 		_, _ = GetBalance()
 	}
 }
