@@ -47,7 +47,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push
+      - name: Build and push to DockerHub
         uses: docker/build-push-action@v2
         with:
           context: .
@@ -61,33 +61,15 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/chatgpt-dingtalk:${{ env.GITHUB_REF_NAME }}
             ${{ secrets.DOCKERHUB_USERNAME }}/chatgpt-dingtalk:latest
 
-      # 镜像推送到 ghcr
-      # - name: Login to the GitHub Container Registry
-      #   uses: docker/login-action@v2
-      #   with:
-      #     registry: ghcr.io
-      #     username: ${{ github.actor }}
-      #     password: ${{ secrets.GITHUB_TOKEN }}
-
-      # - name: Build and push image:latest
-      #   uses: docker/build-push-action@v3
-      #   with:
-      #     context: .
-      #     push: true
-      #     platforms: linux/amd64,linux/arm64
-      #     tags: |
-      #       ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/chatgpt-dingtalk:${{ env.GITHUB_REF_NAME }}
-      #       ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/chatgpt-dingtalk:latest
-
       # 镜像推送到 阿里云仓库
-      - name: Login to the GitHub Container Registry
+      - name: Login to the Ali Registry
         uses: docker/login-action@v2
         with:
           registry: registry.cn-hangzhou.aliyuncs.com
           username: ${{ secrets.ALIHUB_USERNAME }}
           password: ${{ secrets.ALIHUB_TOKEN }}
 
-      - name: Build and push image:latest
+      - name: Build and push to Ali
         uses: docker/build-push-action@v3
         with:
           context: .
