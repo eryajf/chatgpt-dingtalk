@@ -7,13 +7,12 @@ import (
 	"encoding/gob"
 	"errors"
 	"fmt"
+	"github.com/eryajf/chatgpt-dingtalk/pkg/dingbot"
+	"github.com/pandodao/tokenizer-go"
 	"image/png"
 	"os"
 	"strings"
 	"time"
-
-	"github.com/eryajf/chatgpt-dingtalk/pkg/dingbot"
-	"github.com/pandodao/tokenizer-go"
 
 	"github.com/eryajf/chatgpt-dingtalk/public"
 	openai "github.com/sashabaranov/go-openai"
@@ -167,24 +166,24 @@ func (c *ChatGPT) ChatWithContext(question string) (answer string, err error) {
 		if len(c.ChatContext.old) > 1 { // 至少保留一条记录
 			c.ChatContext.PollConversation() // 删除最旧的一条对话
 			// 重新构建 prompt，计算长度
-			promptTable = promptTable[1:] // 删除promptTable中对应的对话
+			promptTable = promptTable[1:]    // 删除promptTable中对应的对话
 			prompt = strings.Join(promptTable, "\n") + c.ChatContext.startSeq
 		} else {
 			break // 如果已经只剩一条记录，那么跳出循环
-		}
+			}
 	}
-	//	if tokenizer.MustCalToken(prompt) > c.maxText-c.maxAnswerLen {
-	//		return "", OverMaxTextLength
-	//	}
+//	if tokenizer.MustCalToken(prompt) > c.maxText-c.maxAnswerLen {
+//		return "", OverMaxTextLength
+//	}
 	model := public.Config.Model
 	userId := c.userId
 	if public.Config.AzureOn {
 		userId = ""
 	}
-	if model == openai.GPT3Dot5Turbo || model == openai.GPT3Dot5Turbo0301 || model == openai.GPT3Dot5Turbo0613 ||
-		model == openai.GPT3Dot5Turbo16K || model == openai.GPT3Dot5Turbo16K0613 ||
-		model == openai.GPT4 || model == openai.GPT40314 || model == openai.GPT40613 ||
-		model == openai.GPT432K || model == openai.GPT432K0314 || model == openai.GPT432K0613 {
+	if model == openai.GPT3Dot5Turbo0301 ||
+		model == openai.GPT3Dot5Turbo ||
+		model == openai.GPT4 || model == openai.GPT40314 ||
+		model == openai.GPT432K || model == openai.GPT432K0314 {
 		req := openai.ChatCompletionRequest{
 			Model: model,
 			Messages: []openai.ChatCompletionMessage{
@@ -240,10 +239,10 @@ func (c *ChatGPT) ChatWithContext(question string) (answer string, err error) {
 }
 func (c *ChatGPT) GenreateImage(ctx context.Context, prompt string) (string, error) {
 	model := public.Config.Model
-	if model == openai.GPT3Dot5Turbo || model == openai.GPT3Dot5Turbo0301 || model == openai.GPT3Dot5Turbo0613 ||
-		model == openai.GPT3Dot5Turbo16K || model == openai.GPT3Dot5Turbo16K0613 ||
-		model == openai.GPT4 || model == openai.GPT40314 || model == openai.GPT40613 ||
-		model == openai.GPT432K || model == openai.GPT432K0314 || model == openai.GPT432K0613 {
+	if model == openai.GPT3Dot5Turbo0301 ||
+		model == openai.GPT3Dot5Turbo ||
+		model == openai.GPT4 || model == openai.GPT40314 ||
+		model == openai.GPT432K || model == openai.GPT432K0314 {
 		req := openai.ImageRequest{
 			Prompt:         prompt,
 			Size:           openai.CreateImageSize1024x1024,
