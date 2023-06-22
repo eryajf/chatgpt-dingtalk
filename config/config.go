@@ -34,7 +34,7 @@ type Configuration struct {
 	// 会话超时时间
 	SessionTimeout time.Duration `yaml:"session_timeout"`
 	// 最大问题长度
-  	MaxQuestionLen int `yaml:"max_question_len"`
+	MaxQuestionLen int `yaml:"max_question_len"`
 	// 最大答案长度
 	MaxAnswerLen int `yaml:"max_answer_len"`
 	// 最大文本 = 问题 + 回答, 接口限制
@@ -224,11 +224,10 @@ func LoadConfig() *Configuration {
 		if azureOpenaiToken != "" {
 			config.AzureOpenAIToken = azureOpenaiToken
 		}
+
 		credentials := os.Getenv("DINGTALK_CREDENTIALS")
 		if credentials != "" {
-			if config.Credentials == nil {
-				config.Credentials = []Credential{}
-			}
+			config.Credentials = []Credential{}
 			for _, idSecret := range strings.Split(credentials, ",") {
 				items := strings.SplitN(idSecret, ":", 2)
 				if len(items) == 2 {
