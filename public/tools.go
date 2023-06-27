@@ -127,7 +127,7 @@ func GetReadTime(t time.Time) string {
 func CheckRequestWithCredentials(ts, sg string) (clientId string, pass bool) {
 	clientId, pass = "", false
 	credentials := Config.Credentials
-	if credentials == nil || len(credentials) == 0 {
+	if len(credentials) == 0 || len(Config.AllowOutgoingGroups) == 0 {
 		return "", true
 	}
 	for _, credential := range Config.Credentials {
