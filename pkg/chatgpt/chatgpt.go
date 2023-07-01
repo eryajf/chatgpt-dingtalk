@@ -41,7 +41,6 @@ func New(userId string) *ChatGPT {
 			public.Config.AzureOpenAIToken,
 			"https://"+public.Config.AzureResourceName+".openai."+
 				"azure.com/",
-			public.Config.AzureDeploymentName,
 		)
 	} else {
 		if public.Config.HttpProxy != "" {
@@ -61,8 +60,8 @@ func New(userId string) *ChatGPT {
 		ctx:            ctx,
 		userId:         userId,
 		maxQuestionLen: public.Config.MaxQuestionLen, // 最大问题长度
-		maxAnswerLen:   public.Config.MaxAnswerLen, // 最大答案长度
-		maxText:        public.Config.MaxText, // 最大文本 = 问题 + 回答, 接口限制
+		maxAnswerLen:   public.Config.MaxAnswerLen,   // 最大答案长度
+		maxText:        public.Config.MaxText,        // 最大文本 = 问题 + 回答, 接口限制
 		timeOut:        public.Config.SessionTimeout,
 		doneChan:       timeOutChan,
 		cancel: func() {
