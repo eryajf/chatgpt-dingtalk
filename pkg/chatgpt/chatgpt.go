@@ -39,9 +39,12 @@ func New(userId string) *ChatGPT {
 	if public.Config.AzureOn {
 		config = openai.DefaultAzureConfig(
 			public.Config.AzureOpenAIToken,
-			"https://"+public.Config.AzureResourceName+".openai."+
-				"azure.com/",
+			"https://"+public.Config.AzureResourceName+".openai.azure.com",
 		)
+		config.APIVersion = public.Config.AzureApiVersion
+		config.AzureModelMapperFunc = func(model string) string {
+			return public.Config.AzureDeploymentName
+		}
 	} else {
 		if public.Config.HttpProxy != "" {
 			config.HTTPClient.Transport = &http.Transport{
