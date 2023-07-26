@@ -257,11 +257,10 @@ func LoadConfig() *Configuration {
 	if config.ChatType == "" {
 		config.ChatType = "0"
 	}
-	if config.ApiKey == "" {
-		logger.Fatal("config err: api key required")
-	}
-	if config.ServiceURL == "" {
-		logger.Fatal("config err: service url required")
+	if !config.AzureOn {
+		if config.ApiKey == "" {
+			panic("config err: api key required")
+		}
 	}
 	if config.MaxQuestionLen == 0 {
 		config.MaxQuestionLen = 4096
