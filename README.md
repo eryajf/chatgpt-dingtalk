@@ -545,6 +545,13 @@ credentials:
         </a>
     </td>
     <td align="center">
+        <a href="https://github.com/ronething">
+            <img src="https://avatars.githubusercontent.com/u/28869910?v=4" width="75;" alt="ronething"/>
+            <br />
+            <sub><b>Ashing Zheng</b></sub>
+        </a>
+    </td>
+    <td align="center">
         <a href="https://github.com/AydenLii">
             <img src="https://avatars.githubusercontent.com/u/90502440?v=4" width="75;" alt="AydenLii"/>
             <br />
@@ -557,15 +564,15 @@ credentials:
             <br />
             <sub><b>Hugh Gao</b></sub>
         </a>
-    </td>
+    </td></tr>
+<tr>
     <td align="center">
         <a href="https://github.com/fantasticmao">
             <img src="https://avatars.githubusercontent.com/u/20675747?v=4" width="75;" alt="fantasticmao"/>
             <br />
             <sub><b>Mao Mao</b></sub>
         </a>
-    </td></tr>
-<tr>
+    </td>
     <td align="center">
         <a href="https://github.com/wangbooth">
             <img src="https://avatars.githubusercontent.com/u/18130585?v=4" width="75;" alt="wangbooth"/>
@@ -614,7 +621,8 @@ credentials:
             <br />
             <sub><b>Swing</b></sub>
         </a>
-    </td>
+    </td></tr>
+<tr>
     <td align="center">
         <a href="https://github.com/chzealot">
             <img src="https://avatars.githubusercontent.com/u/22822?v=4" width="75;" alt="chzealot"/>
