@@ -1,8 +1,9 @@
 package public
 
 import (
-	"github.com/eryajf/chatgpt-dingtalk/config"
 	"testing"
+
+	"github.com/eryajf/chatgpt-dingtalk/config"
 )
 
 func TestCheckRequestWithCredentials_Pass_WithNilConfig(t *testing.T) {

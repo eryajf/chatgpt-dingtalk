@@ -6,11 +6,12 @@ import (
 	"strings"
 	"time"
 
+	"github.com/solywsh/chatgpt"
+
 	"github.com/eryajf/chatgpt-dingtalk/pkg/db"
 	"github.com/eryajf/chatgpt-dingtalk/pkg/dingbot"
 	"github.com/eryajf/chatgpt-dingtalk/pkg/logger"
 	"github.com/eryajf/chatgpt-dingtalk/public"
-	"github.com/solywsh/chatgpt"
 )
 
 // ProcessRequest 分析处理请求逻辑

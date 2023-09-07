@@ -3,8 +3,9 @@ package cache
 import (
 	"time"
 
-	"github.com/eryajf/chatgpt-dingtalk/config"
 	"github.com/patrickmn/go-cache"
+
+	"github.com/eryajf/chatgpt-dingtalk/config"
 )
 
 // UserServiceInterface 用户业务接口

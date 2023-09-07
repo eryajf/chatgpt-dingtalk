@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/avast/retry-go"
+
 	"github.com/eryajf/chatgpt-dingtalk/pkg/logger"
 	"github.com/eryajf/chatgpt-dingtalk/public"
 )

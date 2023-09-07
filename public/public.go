@@ -1,11 +1,12 @@
 package public
 
 import (
+	"github.com/sashabaranov/go-openai"
+
 	"github.com/eryajf/chatgpt-dingtalk/config"
 	"github.com/eryajf/chatgpt-dingtalk/pkg/cache"
 	"github.com/eryajf/chatgpt-dingtalk/pkg/db"
 	"github.com/eryajf/chatgpt-dingtalk/pkg/dingbot"
-	"github.com/sashabaranov/go-openai"
 )
 
 var UserService cache.UserServiceInterface
