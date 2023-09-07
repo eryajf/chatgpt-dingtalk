@@ -12,11 +12,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/eryajf/chatgpt-dingtalk/pkg/dingbot"
 	"github.com/pandodao/tokenizer-go"
-
-	"github.com/eryajf/chatgpt-dingtalk/public"
 	openai "github.com/sashabaranov/go-openai"
+
+	"github.com/eryajf/chatgpt-dingtalk/pkg/dingbot"
+	"github.com/eryajf/chatgpt-dingtalk/public"
 )
 
 var (

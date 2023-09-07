@@ -5,13 +5,14 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/eryajf/chatgpt-dingtalk/config"
 	"io"
 	"mime/multipart"
 	"net/http"
 	url2 "net/url"
 	"sync"
 	"time"
+
+	"github.com/eryajf/chatgpt-dingtalk/config"
 )
 
 // OpenAPI doc: https://open.dingtalk.com/document/isvapp/upload-media-files

@@ -6,8 +6,9 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/eryajf/chatgpt-dingtalk/public"
 	openai "github.com/sashabaranov/go-openai"
+
+	"github.com/eryajf/chatgpt-dingtalk/public"
 )
 
 type ChatGPT struct {

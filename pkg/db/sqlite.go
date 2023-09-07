@@ -3,9 +3,10 @@ package db
 import (
 	"os"
 
-	"github.com/eryajf/chatgpt-dingtalk/pkg/logger"
 	"github.com/glebarez/sqlite"
 	"gorm.io/gorm"
+
+	"github.com/eryajf/chatgpt-dingtalk/pkg/logger"
 )
 
 // 全局数据库对象
