@@ -14,3 +14,6 @@ build-linux-arm:
 
 lint:
 	env GOGC=25 golangci-lint run --fix -j 8 -v ./...
+
+goimports:
+	@bash ./scripts/goimports-reviser.sh

@@ -2,12 +2,13 @@ package dingbot
 
 import (
 	"bytes"
-	"github.com/eryajf/chatgpt-dingtalk/config"
 	"image"
 	"image/color"
 	"image/png"
 	"os"
 	"testing"
+
+	"github.com/eryajf/chatgpt-dingtalk/config"
 )
 
 func TestUploadMedia_Pass_WithValidConfig(t *testing.T) {

@@ -3,13 +3,14 @@ package process
 import (
 	"context"
 	"fmt"
-	"github.com/eryajf/chatgpt-dingtalk/public"
 	"strings"
+
+	"github.com/solywsh/chatgpt"
 
 	"github.com/eryajf/chatgpt-dingtalk/pkg/db"
 	"github.com/eryajf/chatgpt-dingtalk/pkg/dingbot"
 	"github.com/eryajf/chatgpt-dingtalk/pkg/logger"
-	"github.com/solywsh/chatgpt"
+	"github.com/eryajf/chatgpt-dingtalk/public"
 )
 
 // ImageGenerate openai生成图片

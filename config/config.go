@@ -10,8 +10,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/eryajf/chatgpt-dingtalk/pkg/logger"
 	"gopkg.in/yaml.v2"
+
+	"github.com/eryajf/chatgpt-dingtalk/pkg/logger"
 )
 
 type Credential struct {

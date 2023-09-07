@@ -9,13 +9,14 @@ import (
 	"strings"
 	"time"
 
+	"github.com/gin-gonic/gin"
+	"github.com/open-dingtalk/dingtalk-stream-sdk-go/chatbot"
+	"github.com/open-dingtalk/dingtalk-stream-sdk-go/client"
+
 	"github.com/eryajf/chatgpt-dingtalk/pkg/dingbot"
 	"github.com/eryajf/chatgpt-dingtalk/pkg/logger"
 	"github.com/eryajf/chatgpt-dingtalk/pkg/process"
 	"github.com/eryajf/chatgpt-dingtalk/public"
-	"github.com/gin-gonic/gin"
-	"github.com/open-dingtalk/dingtalk-stream-sdk-go/chatbot"
-	"github.com/open-dingtalk/dingtalk-stream-sdk-go/client"
 )
 
 func init() {
