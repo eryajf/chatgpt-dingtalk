@@ -1,4 +1,4 @@
-本文是chatgpt-dingtalk项目的使用指南，该项目涉及的指令，以及特性，都会在本文呈现。
+本文是 chatgpt-dingtalk 项目的使用指南，该项目涉及的指令，以及特性，都会在本文呈现。
 
 ## 发送信息
 
@@ -15,17 +15,16 @@
 
 以下是系统指令详情：
 
-
-|    指令    |                     描述                     |                             示例                             | 补充 |
-| :--------: | :------------------------------------------: | :----------------------------------------------------------: | :--: |
-|  **单聊**  | 每次对话都是一次新的对话，没有聊天上下文联系 |    <details><br /><summary>点击查看</summary><br /><img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230404_193608.jpg"><br /></details>                                                          |      |
-|  **串聊**  |            带上下文联系的对话模式            |     <details><br /><summary>点击查看</summary><br /><img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230404_193608.jpg"><br /></details>                                                         |      |
-|  **重置**  |        重置上下文模式，回归到默认模式        |        <details><br /><summary>点击查看</summary><br /><img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230404_193608.jpg"><br /></details>                                                      |      |
-|  **余额**  | 查询机器人所用OpenAI账号的余额 |       <details><br /><summary>点击查看</summary><br /><img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230304_222522.jpg"><br /></details>                                                       |      |
-|  **模板**  |           查看应用内置的prompt模板           |      <details><br /><summary>点击查看</summary><br /><img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230404_193827.jpg"><br /></details>                                                        |      |
-|  **图片**  |          查看如何根据提示生成图片          | <details><br /><summary>点击查看</summary><br /><img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230404_194125.jpg"><br /></details> |      |
-| **查对话** |            获取指定人员的对话历史            |      <details><br /><summary>点击查看</summary><br /><img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230404_193938.jpg"><br /></details>                                                        |      |
-|  **帮助**  |                 获取帮助信息                 |     <details><br /><summary>点击查看</summary><br /><img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230404_202336.jpg"><br /></details>                                                         |      |
+|    指令    |                     描述                     |                                                                      示例                                                                       | 补充 |
+| :--------: | :------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------: | :--: |
+|  **单聊**  | 每次对话都是一次新的对话，没有聊天上下文联系 | <details><br /><summary>点击查看</summary><br /><img src="https://cdn.jsdelivr.net/gh/eryajf/tu/img/image_20230404_193608.jpg"><br /></details> |      |
+|  **串聊**  |            带上下文联系的对话模式            | <details><br /><summary>点击查看</summary><br /><img src="https://cdn.jsdelivr.net/gh/eryajf/tu/img/image_20230404_193608.jpg"><br /></details> |      |
+|  **重置**  |        重置上下文模式，回归到默认模式        | <details><br /><summary>点击查看</summary><br /><img src="https://cdn.jsdelivr.net/gh/eryajf/tu/img/image_20230404_193608.jpg"><br /></details> |      |
+|  **余额**  |       查询机器人所用 OpenAI 账号的余额       | <details><br /><summary>点击查看</summary><br /><img src="https://cdn.jsdelivr.net/gh/eryajf/tu/img/image_20230304_222522.jpg"><br /></details> |      |
+|  **模板**  |          查看应用内置的 prompt 模板          | <details><br /><summary>点击查看</summary><br /><img src="https://cdn.jsdelivr.net/gh/eryajf/tu/img/image_20230404_193827.jpg"><br /></details> |      |
+|  **图片**  |           查看如何根据提示生成图片           | <details><br /><summary>点击查看</summary><br /><img src="https://cdn.jsdelivr.net/gh/eryajf/tu/img/image_20230404_194125.jpg"><br /></details> |      |
+| **查对话** |            获取指定人员的对话历史            | <details><br /><summary>点击查看</summary><br /><img src="https://cdn.jsdelivr.net/gh/eryajf/tu/img/image_20230404_193938.jpg"><br /></details> |      |
+|  **帮助**  |                 获取帮助信息                 | <details><br /><summary>点击查看</summary><br /><img src="https://cdn.jsdelivr.net/gh/eryajf/tu/img/image_20230404_202336.jpg"><br /></details> |      |
 
 ## 功能指令
 
@@ -35,18 +34,18 @@
 
 以下是功能指令详情
 
-| 指令 | 说明 | 示例 | 补充|
-| :--: | :--: | :--: | :--: |
-|  **#图片**  |          根据提示咒语生成对应图片          | <details><br /><summary>点击查看</summary><br /><img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230323_150547.jpg"><br /></details> |      |
-| **#域名**     | 查询域名相关信息     |  <details><br /><summary>点击查看</summary><br /><img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230404_202620.jpg"><br /></details>    |  |
-| **#证书**     | 查询域名证书相关信息     | <details><br /><summary>点击查看</summary><br /><img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230404_202706.jpg"><br /></details>    |  |
-| **#Linux命令**     | 根据自然语言描述生成对应命令     | <details><br /><summary>点击查看</summary><br /><img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230404_214947.jpg"><br /></details>    | 此指令中的Linux开头字幕可以大写 |
-| **#解释代码**     | 分析一段代码的功能或含义     | <details><br /><summary>点击查看</summary><br /><img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230404_215242.jpg"><br /></details>    |  |
-| **#正则**     | 根据自然语言描述生成正则     | <details><br /><summary>点击查看</summary><br /><img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230404_220222.jpg"><br /></details>    |  |
-| **#周报**     | 应用周报的prompt     | <details><br /><summary>点击查看</summary><br /><img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230404_214335.jpg"><br /></details>    |  |
-| **#生成sql**     | 根据自然语言描述生成sql语句     | <details><br /><summary>点击查看</summary><br /><img src="https://cdn.staticaly.com/gh/eryajf/tu/main/img/image_20230404_221325.jpg"><br /></details>    |  |
+|      指令       |             说明              |                                                                      示例                                                                       |               补充                |
+| :-------------: | :---------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------: |
+|    **#图片**    |   根据提示咒语生成对应图片    | <details><br /><summary>点击查看</summary><br /><img src="https://cdn.jsdelivr.net/gh/eryajf/tu/img/image_20230323_150547.jpg"><br /></details> |                                   |
+|    **#域名**    |       查询域名相关信息        | <details><br /><summary>点击查看</summary><br /><img src="https://cdn.jsdelivr.net/gh/eryajf/tu/img/image_20230404_202620.jpg"><br /></details> |                                   |
+|    **#证书**    |     查询域名证书相关信息      | <details><br /><summary>点击查看</summary><br /><img src="https://cdn.jsdelivr.net/gh/eryajf/tu/img/image_20230404_202706.jpg"><br /></details> |                                   |
+| **#Linux 命令** | 根据自然语言描述生成对应命令  | <details><br /><summary>点击查看</summary><br /><img src="https://cdn.jsdelivr.net/gh/eryajf/tu/img/image_20230404_214947.jpg"><br /></details> | 此指令中的 Linux 开头字幕可以大写 |
+|  **#解释代码**  |   分析一段代码的功能或含义    | <details><br /><summary>点击查看</summary><br /><img src="https://cdn.jsdelivr.net/gh/eryajf/tu/img/image_20230404_215242.jpg"><br /></details> |                                   |
+|    **#正则**    |   根据自然语言描述生成正则    | <details><br /><summary>点击查看</summary><br /><img src="https://cdn.jsdelivr.net/gh/eryajf/tu/img/image_20230404_220222.jpg"><br /></details> |                                   |
+|    **#周报**    |       应用周报的 prompt       | <details><br /><summary>点击查看</summary><br /><img src="https://cdn.jsdelivr.net/gh/eryajf/tu/img/image_20230404_214335.jpg"><br /></details> |                                   |
+|  **#生成 sql**  | 根据自然语言描述生成 sql 语句 | <details><br /><summary>点击查看</summary><br /><img src="https://cdn.jsdelivr.net/gh/eryajf/tu/img/image_20230404_221325.jpg"><br /></details> |                                   |
 
-如上大多数能力，都是依赖prompt模板实现，如果你有更好的prompt，欢迎提交PR。
+如上大多数能力，都是依赖 prompt 模板实现，如果你有更好的 prompt，欢迎提交 PR。
 
 ## 友情提示
 
@@ -56,4 +55,4 @@
 
 ## 项目地址
 
-本项目已在GitHub开源，[查看源代码](https://github.com/eryajf/chatgpt-dingtalk)。
+本项目已在 GitHub 开源，[查看源代码](https://github.com/eryajf/chatgpt-dingtalk)。
