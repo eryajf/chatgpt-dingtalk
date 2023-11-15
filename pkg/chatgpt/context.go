@@ -181,10 +181,20 @@ func (c *ChatGPT) ChatWithContext(question string) (answer string, err error) {
 	if public.Config.AzureOn {
 		userId = ""
 	}
-	if model == openai.GPT3Dot5Turbo || model == openai.GPT3Dot5Turbo0301 || model == openai.GPT3Dot5Turbo0613 ||
-		model == openai.GPT3Dot5Turbo16K || model == openai.GPT3Dot5Turbo16K0613 ||
-		model == openai.GPT4 || model == openai.GPT40314 || model == openai.GPT40613 ||
-		model == openai.GPT432K || model == openai.GPT432K0314 || model == openai.GPT432K0613 {
+	if model == openai.GPT432K0613 ||
+		model == openai.GPT432K0314 ||
+		model == openai.GPT432K ||
+		model == openai.GPT40613 ||
+		model == openai.GPT40314 ||
+		model == openai.GPT4TurboPreview ||
+		model == openai.GPT4VisionPreview ||
+		model == openai.GPT4 ||
+		model == openai.GPT3Dot5Turbo1106 ||
+		model == openai.GPT3Dot5Turbo0613 ||
+		model == openai.GPT3Dot5Turbo0301 ||
+		model == openai.GPT3Dot5Turbo16K ||
+		model == openai.GPT3Dot5Turbo16K0613 ||
+		model == openai.GPT3Dot5Turbo {
 		req := openai.ChatCompletionRequest{
 			Model: model,
 			Messages: []openai.ChatCompletionMessage{
