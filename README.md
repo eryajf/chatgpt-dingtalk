@@ -545,13 +545,20 @@ credentials:
         </a>
     </td>
     <td align="center">
+        <a href="https://github.com/FrankCheungDev">
+            <img src="https://avatars.githubusercontent.com/u/22819074?v=4" width="75;" alt="FrankCheungDev"/>
+            <br />
+            <sub><b>Frank Cheung</b></sub>
+        </a>
+    </td></tr>
+<tr>
+    <td align="center">
         <a href="https://github.com/luoxufeiyan">
             <img src="https://avatars.githubusercontent.com/u/6621172?v=4" width="75;" alt="luoxufeiyan"/>
             <br />
             <sub><b>Hugh Gao</b></sub>
         </a>
-    </td></tr>
-<tr>
+    </td>
     <td align="center">
         <a href="https://github.com/fantasticmao">
             <img src="https://avatars.githubusercontent.com/u/20675747?v=4" width="75;" alt="fantasticmao"/>
@@ -600,15 +607,15 @@ credentials:
             <br />
             <sub><b>Null</b></sub>
         </a>
-    </td>
+    </td></tr>
+<tr>
     <td align="center">
         <a href="https://github.com/WinMin">
             <img src="https://avatars.githubusercontent.com/u/18380453?v=4" width="75;" alt="WinMin"/>
             <br />
             <sub><b>Swing</b></sub>
         </a>
-    </td></tr>
-<tr>
+    </td>
     <td align="center">
         <a href="https://github.com/chzealot">
             <img src="https://avatars.githubusercontent.com/u/22822?v=4" width="75;" alt="chzealot"/>
