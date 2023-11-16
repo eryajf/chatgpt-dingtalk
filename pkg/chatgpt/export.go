@@ -72,7 +72,7 @@ func ImageQa(ctx context.Context, question, userId string) (answer string, err e
 	// 使用重试策略进行重试
 	err = retry.Do(
 		func() error {
-			answer, err = chat.GenreateImage(ctx, question)
+			answer, err = chat.GenerateImage(ctx, question)
 			if err != nil {
 				return err
 			}
