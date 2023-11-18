@@ -11,6 +11,7 @@ services:
       RUN_MODE: "stream" # 运行模式，http 或者 stream ，强烈建议你使用stream模式，通过此链接了解：https://open.dingtalk.com/document/isvapp/stream
       BASE_URL: "" # 如果你使用官方的接口地址 https://api.openai.com，则留空即可，如果你想指定请求url的地址，可通过这个参数进行配置，注意需要带上 http 协议
       MODEL: "gpt-3.5-turbo" # 指定模型，默认为 gpt-3.5-turbo , 可选参数有： "gpt-4-32k-0613", "gpt-4-32k-0314", "gpt-4-32k", "gpt-4-0613", "gpt-4-0314", "gpt-4", "gpt-3.5-turbo-16k-0613", "gpt-3.5-turbo-16k", "gpt-3.5-turbo-0613", "gpt-3.5-turbo-0301", "gpt-3.5-turbo"，如果使用gpt-4，请确认自己是否有接口调用白名单，如果你是用的是azure，则该配置项可以留空或者直接忽略
+      IMAGE_MODEL: "dall-e-2" # 指定绘画模型，默认为 dall-e-2 , 可选参数有："dall-e-2"， "dall-e-3"
       SESSION_TIMEOUT: 600 # 会话超时时间,默认600秒,在会话时间内所有发送给机器人的信息会作为上下文
       MAX_QUESTION_LEN: 2048 # 最大问题长度，默认4096 token，正常情况默认值即可，如果使用gpt4-8k或gpt4-32k，可根据模型token上限修改。
       MAX_ANSWER_LEN: 2048 # 最大回答长度，默认4096 token，正常情况默认值即可，如果使用gpt4-8k或gpt4-32k，可根据模型token上限修改。

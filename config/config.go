@@ -32,6 +32,8 @@ type Configuration struct {
 	BaseURL string `yaml:"base_url"`
 	// 使用模型
 	Model string `yaml:"model"`
+	// 使用绘画模型
+	ImageModel string `yaml:"image_model"`
 	// 会话超时时间
 	SessionTimeout time.Duration `yaml:"session_timeout"`
 	// 最大问题长度

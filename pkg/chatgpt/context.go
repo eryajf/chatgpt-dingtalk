@@ -7,7 +7,13 @@ import (
 	"encoding/gob"
 	"errors"
 	"fmt"
+
+	"github.com/chai2010/webp"
+	"image"
+	_ "image/gif"
+	_ "image/jpeg"
 	"image/png"
+
 	"os"
 	"strings"
 	"time"
@@ -137,6 +143,22 @@ func (c *ChatContext) SetPreset(preset string) {
 	c.preset = preset
 }
 
+// 通过 base64 编码字符串开头字符判断图像类型
+func getImageTypeFromBase64(base64Str string) string {
+	switch {
+	case strings.HasPrefix(base64Str, "/9j/"):
+		return "JPEG"
+	case strings.HasPrefix(base64Str, "iVBOR"):
+		return "PNG"
+	case strings.HasPrefix(base64Str, "R0lG"):
+		return "GIF"
+	case strings.HasPrefix(base64Str, "UklG"):
+		return "WebP"
+	default:
+		return "Unknown"
+	}
+}
+
 func (c *ChatGPT) ChatWithContext(question string) (answer string, err error) {
 	question = question + "."
 	if tokenizer.MustCalToken(question) > c.maxQuestionLen {
@@ -181,20 +203,7 @@ func (c *ChatGPT) ChatWithContext(question string) (answer string, err error) {
 	if public.Config.AzureOn {
 		userId = ""
 	}
-	if model == openai.GPT432K0613 ||
-		model == openai.GPT432K0314 ||
-		model == openai.GPT432K ||
-		model == openai.GPT40613 ||
-		model == openai.GPT40314 ||
-		model == openai.GPT4TurboPreview ||
-		model == openai.GPT4VisionPreview ||
-		model == openai.GPT4 ||
-		model == openai.GPT3Dot5Turbo1106 ||
-		model == openai.GPT3Dot5Turbo0613 ||
-		model == openai.GPT3Dot5Turbo0301 ||
-		model == openai.GPT3Dot5Turbo16K ||
-		model == openai.GPT3Dot5Turbo16K0613 ||
-		model == openai.GPT3Dot5Turbo {
+	if isModelSupportedChatCompletions(model) {
 		req := openai.ChatCompletionRequest{
 			Model: model,
 			Messages: []openai.ChatCompletionMessage{
@@ -248,14 +257,13 @@ func (c *ChatGPT) ChatWithContext(question string) (answer string, err error) {
 		return resp.Choices[0].Text, nil
 	}
 }
-func (c *ChatGPT) GenreateImage(ctx context.Context, prompt string) (string, error) {
+func (c *ChatGPT) GenerateImage(ctx context.Context, prompt string) (string, error) {
 	model := public.Config.Model
-	if model == openai.GPT3Dot5Turbo || model == openai.GPT3Dot5Turbo0301 || model == openai.GPT3Dot5Turbo0613 ||
-		model == openai.GPT3Dot5Turbo16K || model == openai.GPT3Dot5Turbo16K0613 ||
-		model == openai.GPT4 || model == openai.GPT40314 || model == openai.GPT40613 ||
-		model == openai.GPT432K || model == openai.GPT432K0314 || model == openai.GPT432K0613 {
+	imageModel := public.Config.ImageModel
+	if isModelSupportedChatCompletions(model) {
 		req := openai.ImageRequest{
 			Prompt:         prompt,
+			Model:          imageModel,
 			Size:           openai.CreateImageSize1024x1024,
 			ResponseFormat: openai.CreateImageResponseFormatB64JSON,
 			N:              1,
@@ -271,9 +279,18 @@ func (c *ChatGPT) GenreateImage(ctx context.Context, prompt string) (string, err
 		}
 
 		r := bytes.NewReader(imgBytes)
-		imgData, err := png.Decode(r)
-		if err != nil {
-			return "", err
+
+		// dall-e-3 返回的是 WebP 格式的图片，需要判断处理
+		imgType := getImageTypeFromBase64(respBase64.Data[0].B64JSON)
+		var imgData image.Image
+		var imgErr error
+		if imgType == "WebP" {
+			imgData, imgErr = webp.Decode(r)
+		} else {
+			imgData, _, imgErr = image.Decode(r)
+		}
+		if imgErr != nil {
+			return "", imgErr
 		}
 
 		imageName := time.Now().Format("20060102-150405") + ".png"
