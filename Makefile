@@ -13,7 +13,7 @@ build-linux-arm:
 	CGO_ENABLED=0 GOARCH=arm64 GOOS=linux go build -o chatgpt-dingtalk main.go
 
 lint:
-	env GOGC=25 golangci-lint run --fix -j 8 -v ./...
+	env GOGC=25 golangci-lint run --fix -j 8 --timeout 10m -v ./...
 
 goimports:
 	@bash ./scripts/goimports-reviser.sh

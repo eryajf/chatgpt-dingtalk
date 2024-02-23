@@ -139,7 +139,12 @@ func (c *DingTalkClient) UploadMedia(content []byte, filename, mediaType, mimeTy
 		return nil, err
 	}
 	_, err = part.Write(content)
-	writer.WriteField("type", mediaType)
+	if err != nil {
+		return nil, err
+	}
+	if err = writer.WriteField("type", mediaType); err != nil {
+		return nil, err
+	}
 	err = writer.Close()
 	if err != nil {
 		return nil, err
@@ -166,8 +171,10 @@ func (c *DingTalkClient) UploadMedia(content []byte, filename, mediaType, mimeTy
 	// Parse the response body as JSON and extract the media ID
 	media := &MediaUploadResult{}
 	bodyBytes, err := io.ReadAll(res.Body)
-	json.Unmarshal(bodyBytes, media)
 	if err != nil {
+		return nil, err
+	}
+	if err = json.Unmarshal(bodyBytes, media); err != nil {
 		return nil, err
 	}
 	if media.ErrorCode != 0 {
