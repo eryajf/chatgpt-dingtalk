@@ -8,7 +8,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/chai2010/webp"
+	"golang.org/x/image/webp"
 	"image"
 	_ "image/gif"
 	_ "image/jpeg"

@@ -246,7 +246,7 @@ func LoadConfig() *Configuration {
 		config.LogLevel = "info"
 	}
 	if config.RunMode == "" {
-		config.LogLevel = "http"
+		config.RunMode = "http"
 	}
 	if config.Model == "" {
 		config.Model = "gpt-3.5-turbo"
