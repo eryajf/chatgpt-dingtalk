@@ -476,6 +476,13 @@ credentials:
         </a>
     </td>
     <td align="center">
+        <a href="https://github.com/ronething">
+            <img src="https://avatars.githubusercontent.com/u/28869910?v=4" width="75;" alt="ronething"/>
+            <br />
+            <sub><b>Ashing Zheng</b></sub>
+        </a>
+    </td>
+    <td align="center">
         <a href="https://github.com/laorange">
             <img src="https://avatars.githubusercontent.com/u/68316902?v=4" width="75;" alt="laorange"/>
             <br />
@@ -488,15 +495,15 @@ credentials:
             <br />
             <sub><b>金喜@DingTalk</b></sub>
         </a>
-    </td>
+    </td></tr>
+<tr>
     <td align="center">
         <a href="https://github.com/WinMin">
             <img src="https://avatars.githubusercontent.com/u/18380453?v=4" width="75;" alt="WinMin"/>
             <br />
             <sub><b>Swing</b></sub>
         </a>
-    </td></tr>
-<tr>
+    </td>
     <td align="center">
         <a href="https://github.com/suyunkai">
             <img src="https://avatars.githubusercontent.com/u/82149368?v=4" width="75;" alt="suyunkai"/>
@@ -545,27 +552,20 @@ credentials:
             <br />
             <sub><b>Mao Mao</b></sub>
         </a>
-    </td>
+    </td></tr>
+<tr>
     <td align="center">
         <a href="https://github.com/luoxufeiyan">
             <img src="https://avatars.githubusercontent.com/u/6621172?v=4" width="75;" alt="luoxufeiyan"/>
             <br />
             <sub><b>Hugh Gao</b></sub>
         </a>
-    </td></tr>
-<tr>
+    </td>
     <td align="center">
         <a href="https://github.com/AydenLii">
             <img src="https://avatars.githubusercontent.com/u/90502440?v=4" width="75;" alt="AydenLii"/>
             <br />
             <sub><b>AydenLii</b></sub>
-        </a>
-    </td>
-    <td align="center">
-        <a href="https://github.com/ronething">
-            <img src="https://avatars.githubusercontent.com/u/28869910?v=4" width="75;" alt="ronething"/>
-            <br />
-            <sub><b>Ashing Zheng</b></sub>
         </a>
     </td></tr>
 </table>
