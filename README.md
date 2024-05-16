@@ -133,7 +133,7 @@ $ docker run -itd --name chatgpt -p 8090:8090 \
   -e DINGTALK_CREDENTIALS="your_client_id1:secret1,your_client_id2:secret2" \
   -e HELP="欢迎使用本工具\n\n你可以查看：[用户指南](https://github.com/eryajf/chatgpt-dingtalk/blob/main/docs/userGuide.md)\n\n这是一个[开源项目](https://github.com/eryajf/chatgpt-dingtalk/)
   ，觉得不错你可以来波素质三连."  \
-  --restart=always  registry.cn-hangzhou.aliyuncs.com/ali_eryajf/chatgpt-dingtalk
+  --restart=always  registry.cn-hangzhou.aliyuncs.com/eryajf/chatgpt-dingtalk
 ```
 
 > 运行命令中映射的配置文件参考下边的[配置文件说明](#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%AF%B4%E6%98%8E)。
@@ -149,7 +149,7 @@ $ docker run -itd --name chatgpt -p 8090:8090 \
 $ cp config.example.yml config.yml  # 其中 config.example.yml 从项目的根目录获取
 
 # 运行项目
-$ docker run -itd --name chatgpt -p 8090:8090  -v `pwd`/config.yml:/app/config.yml --restart=always  registry.cn-hangzhou.aliyuncs.com/ali_eryajf/chatgpt-dingtalk
+$ docker run -itd --name chatgpt -p 8090:8090  -v `pwd`/config.yml:/app/config.yml --restart=always  registry.cn-hangzhou.aliyuncs.com/eryajf/chatgpt-dingtalk
 ```
 
 其中配置文件参考下边的配置文件说明。
