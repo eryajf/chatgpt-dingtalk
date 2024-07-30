@@ -2,7 +2,6 @@ package config
 
 import (
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 	"strconv"
@@ -90,7 +89,7 @@ func LoadConfig() *Configuration {
 	once.Do(func() {
 		// 从文件中读取
 		config = &Configuration{}
-		data, err := ioutil.ReadFile("config.yml")
+		data, err := os.ReadFile("config.yml")
 		if err != nil {
 			log.Fatal(err)
 		}
