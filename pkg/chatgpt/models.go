@@ -11,6 +11,7 @@ var ModelsSupportChatCompletions = []string{
 	openai.GPT4TurboPreview,
 	openai.GPT4VisionPreview,
 	openai.GPT4,
+	openai.GPT4oMini,
 	openai.GPT3Dot5Turbo1106,
 	openai.GPT3Dot5Turbo0613,
 	openai.GPT3Dot5Turbo0301,
