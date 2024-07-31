@@ -1,4 +1,4 @@
-FROM golang:1.18.10-alpine3.16 AS builder
+FROM golang:1.22.5-alpine3.20 AS builder
 
 # ENV GOPROXY      https://goproxy.io
 
@@ -7,7 +7,7 @@ ADD . /app/
 WORKDIR /app
 RUN go build -o chatgpt-dingtalk .
 
-FROM alpine:3.16
+FROM alpine:3.20
 
 ARG TZ="Asia/Shanghai"
 
