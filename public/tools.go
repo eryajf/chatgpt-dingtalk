@@ -5,7 +5,6 @@ import (
 	"crypto/sha256"
 	"encoding/base64"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"strings"
 	"time"
@@ -23,7 +22,7 @@ func WriteToFile(path string, data []byte) error {
 	if err != nil {
 		return err
 	}
-	err = ioutil.WriteFile(path, data, 0755)
+	err = os.WriteFile(path, data, 0755)
 	if err != nil {
 		return err
 	}

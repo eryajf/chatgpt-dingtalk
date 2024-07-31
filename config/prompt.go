@@ -1,10 +1,10 @@
 package config
 
 import (
-	"io/ioutil"
 	"log"
+	"os"
 
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 )
 
 type Prompt struct {
@@ -17,7 +17,7 @@ var prompTmp *[]Prompt
 
 // LoadPrompt 加载Prompt
 func LoadPrompt() *[]Prompt {
-	data, err := ioutil.ReadFile("prompt.yml")
+	data, err := os.ReadFile("prompt.yml")
 	if err != nil {
 		log.Fatal(err)
 	}

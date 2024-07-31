@@ -33,6 +33,7 @@ func main() {
 		for _, credential := range public.Config.Credentials {
 			StartStream(credential.ClientID, credential.ClientSecret)
 		}
+		logger.Info("✌️ 当前正在使用的模型是", public.Config.Model)
 		logger.Info("🚀 The Server Is Running On Stream Mode")
 		select {}
 	}
