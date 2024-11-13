@@ -81,8 +81,10 @@ type Configuration struct {
 	Credentials []Credential `yaml:"credentials"`
 }
 
-var config *Configuration
-var once sync.Once
+var (
+	config *Configuration
+	once   sync.Once
+)
 
 // LoadConfig 加载配置
 func LoadConfig() *Configuration {
@@ -237,7 +239,6 @@ func LoadConfig() *Configuration {
 				}
 			}
 		}
-
 	})
 
 	// 一些默认值
