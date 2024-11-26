@@ -84,9 +84,9 @@ width="800"  height="3">
 
 **赞助商**
 
-[![](https://raw.githubusercontent.com/eryajf/tu/main/img/image_20241113_230334.webp)](https://302.ai/)
+[![](https://raw.githubusercontent.com/eryajf/tu/main/img/image_20241113_230334.webp)](https://gpt302.saaslink.net/fGvlvo/)
 
-> [302.AI](https://302.ai) 是一个按需付费的一站式AI应用平台，开放平台，开源生态。
+> [302.AI](https://gpt302.saaslink.net/fGvlvo) 是一个按需付费的一站式AI应用平台，开放平台，开源生态。
 >
 > - [点击注册](https://gpt302.saaslink.net/fGvlvo): 立即获得 1PTC(1PTC=1 美金，约为 7 人民币)代币。
 > - 集合了最新最全的AI模型和品牌，包括但不限于语言模型、图像模型、声音模型、视频模型。
