@@ -82,19 +82,6 @@ width="800"  height="3">
 
 ⚗️ openai 官方提供了一个 **[状态页](https://status.openai.com/)** 来呈现当前 openAI 服务的状态，同时如果有问题发布公告也会在这个页面，如果你感觉它有问题了，可以在这个页面看看。
 
-**赞助商**
-
-[![](https://cdn.jsdelivr.net/gh/eryajf/tu@main/img/image_20241231_214509.webp)](https://gpt302.saaslink.net/fGvlvo/)
-
-> [302.AI](https://gpt302.saaslink.net/fGvlvo) 是一个按需付费的一站式企业级AI应用平台，开放平台，开源生态。
->
-> - [点击注册](https://gpt302.saaslink.net/fGvlvo): 立即获得 1PTC(1PTC=1 美金，约为 7 人民币)代币。
-> - 集合了最新最全的AI模型和品牌，包括但不限于语言模型、图像模型、声音模型、视频模型。
-> - 在基础模型上进行深度应用开发，做到让小白用户都可以零门槛上手使用，无需学习成本。
-> - 零月费，所有功能按需付费，全面开放，做到真正的门槛低，上限高。
-> - 创新的使用模式，管理和使用分离，面向团队和中小企业，一人管理，多人使用。
-> - 所有AI能力均提供API接入，所有应用开源支持自行定制（进行中）。
-> - 强大的开发团队，每周推出2-3个新应用，平台功能每日更新。
 
 ## 功能介绍
 
@@ -592,7 +579,3 @@ credentials:
 </table>
 <!-- readme: collaborators,contributors -end -->
 </div>
-
----
-
-[![Powered by DartNode](https://dartnode.com/branding/DN-Open-Source-sm.png)](https://dartnode.com "Powered by DartNode - Free VPS for Open Source")
