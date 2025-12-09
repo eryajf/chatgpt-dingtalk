@@ -71,3 +71,14 @@ azure_openai_token: "xxxxxxx"
 credentials:
   - client_id: "put-your-client-id-here"
     client_secret: "put-your-client-secret-here"
+
+# ==================== 流式输出配置 (新功能) ====================
+# 启用后，AI 回答将像打字一样逐字显示
+stream_mode: false  # true=启用流式输出, false=使用传统一次性回复
+
+# 钉钉卡片模板ID (可选，用于高级流式卡片模式)
+# 如果不配置，将使用简化流式模式(直接累积后回复)
+# 配置后，将使用钉钉互动卡片实现真正的流式更新
+# 获取方式: 在钉钉开放平台创建卡片模板后获得
+# 详细配置教程: 请查看 STREAM_MODE.md
+card_template_id: ""  # 例如: "4d18414c-aabc-4ec8-9e67-4ceefeada72a.schema"

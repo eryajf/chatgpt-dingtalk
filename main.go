@@ -86,7 +86,7 @@ func (r *ChatReceiver) OnChatBotMessageReceived(ctx context.Context, data *chatb
 		IsInAtList:                data.IsInAtList,
 		SessionWebhook:            data.SessionWebhook,
 		Text:                      dingbot.Text(data.Text),
-		RobotCode:                 "",
+		RobotCode:                 r.clientId, // 使用 clientId 作为 RobotCode
 		Msgtype:                   dingbot.MsgType(data.Msgtype),
 	}
 	clientId := r.clientId

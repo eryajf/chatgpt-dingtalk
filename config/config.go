@@ -79,6 +79,10 @@ type Configuration struct {
 	AzureOpenAIToken    string `yaml:"azure_openai_token"`
 	// 钉钉应用鉴权凭据
 	Credentials []Credential `yaml:"credentials"`
+	// 是否启用流式输出
+	StreamMode bool `yaml:"stream_mode"`
+	// 钉钉卡片模板ID(用于流式输出)
+	CardTemplateID string `yaml:"card_template_id"`
 }
 
 var (

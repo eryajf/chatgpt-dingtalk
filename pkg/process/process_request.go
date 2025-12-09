@@ -93,8 +93,36 @@ func ProcessRequest(rmsg *dingbot.ReceiveMsg) error {
 			}
 		default:
 			if public.FirstCheck(rmsg) {
+				// 检查是否启用流式模式
+				if public.Config.StreamMode {
+					logger.Info("📡 使用串聊流式模式")
+					if public.Config.CardTemplateID != "" {
+						logger.Info("🎴 使用流式卡片输出")
+						// 使用流式卡片输出
+						return DoStreamWithCard("串聊", rmsg, public.Config.CardTemplateID)
+					} else {
+						logger.Info("💬 使用简化流式输出")
+						// 使用流式普通输出
+						return DoStream("串聊", rmsg)
+					}
+				}
+				logger.Info("💭 使用传统串聊模式")
 				return Do("串聊", rmsg)
 			} else {
+				// 检查是否启用流式模式
+				if public.Config.StreamMode {
+					logger.Info("📡 使用单聊流式模式")
+					if public.Config.CardTemplateID != "" {
+						logger.Info("🎴 使用流式卡片输出")
+						// 使用流式卡片输出
+						return DoStreamWithCard("单聊", rmsg, public.Config.CardTemplateID)
+					} else {
+						logger.Info("💬 使用简化流式输出")
+						// 使用流式普通输出
+						return DoStream("单聊", rmsg)
+					}
+				}
+				logger.Info("💭 使用传统单聊模式")
 				return Do("单聊", rmsg)
 			}
 		}
