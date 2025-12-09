@@ -6,10 +6,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/solywsh/chatgpt"
-
 	"github.com/eryajf/chatgpt-dingtalk/pkg/db"
 	"github.com/eryajf/chatgpt-dingtalk/pkg/dingbot"
+	"github.com/eryajf/chatgpt-dingtalk/pkg/llm"
 	"github.com/eryajf/chatgpt-dingtalk/pkg/logger"
 	"github.com/eryajf/chatgpt-dingtalk/public"
 )
@@ -120,7 +119,7 @@ func Do(mode string, rmsg *dingbot.ReceiveMsg) error {
 		if err != nil {
 			logger.Error("往MySQL新增数据失败,错误信息：", err)
 		}
-		reply, err := chatgpt.SingleQa(rmsg.Text.Content, rmsg.GetSenderIdentifier())
+		reply, err := llm.SingleQa(rmsg.Text.Content, rmsg.GetSenderIdentifier())
 		if err != nil {
 			logger.Info(fmt.Errorf("gpt request error: %v", err))
 			if strings.Contains(fmt.Sprintf("%v", err), "maximum question length exceeded") {
@@ -179,7 +178,7 @@ func Do(mode string, rmsg *dingbot.ReceiveMsg) error {
 		if err != nil {
 			logger.Error("往MySQL新增数据失败,错误信息：", err)
 		}
-		cli, reply, err := chatgpt.ContextQa(rmsg.Text.Content, rmsg.GetSenderIdentifier())
+		cli, reply, err := llm.ContextQa(rmsg.Text.Content, rmsg.GetSenderIdentifier())
 		if err != nil {
 			logger.Info(fmt.Sprintf("gpt request error: %v", err))
 			if strings.Contains(fmt.Sprintf("%v", err), "maximum text length exceeded") {

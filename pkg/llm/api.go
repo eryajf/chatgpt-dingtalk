@@ -1,4 +1,4 @@
-package chatgpt
+package llm
 
 import (
 	"context"
@@ -12,18 +12,18 @@ import (
 
 // SingleQa 单聊
 func SingleQa(question, userId string) (answer string, err error) {
-	chat := New(userId)
-	defer chat.Close()
-	// 定义一个重试策略
+	client := NewClient(userId)
+	defer client.Close()
+
 	retryStrategy := []retry.Option{
 		retry.Delay(100 * time.Millisecond),
 		retry.Attempts(3),
 		retry.LastErrorOnly(true),
 	}
-	// 使用重试策略进行重试
+
 	err = retry.Do(
 		func() error {
-			answer, err = chat.ChatWithContext(question)
+			answer, err = client.ChatWithContext(question)
 			if err != nil {
 				return err
 			}
@@ -34,10 +34,10 @@ func SingleQa(question, userId string) (answer string, err error) {
 }
 
 // ContextQa 串聊
-func ContextQa(question, userId string) (chat *ChatGPT, answer string, err error) {
-	chat = New(userId)
+func ContextQa(question, userId string) (client *Client, answer string, err error) {
+	client = NewClient(userId)
 	if public.UserService.GetUserSessionContext(userId) != "" {
-		err := chat.ChatContext.LoadConversation(userId)
+		err := client.ChatContext.LoadConversation(userId)
 		if err != nil {
 			logger.Warning("load station failed: %v\n", err)
 		}
@@ -46,10 +46,10 @@ func ContextQa(question, userId string) (chat *ChatGPT, answer string, err error
 		retry.Delay(100 * time.Millisecond),
 		retry.Attempts(3),
 		retry.LastErrorOnly(true)}
-	// 使用重试策略进行重试
+
 	err = retry.Do(
 		func() error {
-			answer, err = chat.ChatWithContext(question)
+			answer, err = client.ChatWithContext(question)
 			if err != nil {
 				return err
 			}
@@ -61,18 +61,18 @@ func ContextQa(question, userId string) (chat *ChatGPT, answer string, err error
 
 // ImageQa 生成图片
 func ImageQa(ctx context.Context, question, userId string) (answer string, err error) {
-	chat := New(userId)
-	defer chat.Close()
-	// 定义一个重试策略
+	client := NewClient(userId)
+	defer client.Close()
+
 	retryStrategy := []retry.Option{
 		retry.Delay(100 * time.Millisecond),
 		retry.Attempts(3),
 		retry.LastErrorOnly(true),
 	}
-	// 使用重试策略进行重试
+
 	err = retry.Do(
 		func() error {
-			answer, err = chat.GenerateImage(ctx, question)
+			answer, err = client.GenerateImage(ctx, question)
 			if err != nil {
 				return err
 			}

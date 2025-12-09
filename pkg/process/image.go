@@ -5,10 +5,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/solywsh/chatgpt"
-
 	"github.com/eryajf/chatgpt-dingtalk/pkg/db"
 	"github.com/eryajf/chatgpt-dingtalk/pkg/dingbot"
+	"github.com/eryajf/chatgpt-dingtalk/pkg/llm"
 	"github.com/eryajf/chatgpt-dingtalk/pkg/logger"
 	"github.com/eryajf/chatgpt-dingtalk/public"
 )
@@ -34,7 +33,7 @@ func ImageGenerate(ctx context.Context, rmsg *dingbot.ReceiveMsg) error {
 	if err != nil {
 		logger.Error("往MySQL新增数据失败,错误信息：", err)
 	}
-	reply, err := chatgpt.ImageQa(ctx, rmsg.Text.Content, rmsg.GetSenderIdentifier())
+	reply, err := llm.ImageQa(ctx, rmsg.Text.Content, rmsg.GetSenderIdentifier())
 	if err != nil {
 		logger.Info(fmt.Errorf("gpt request error: %v", err))
 		_, err = rmsg.ReplyToDingtalk(string(dingbot.TEXT), fmt.Sprintf("请求openai失败了，错误信息：%v", err))

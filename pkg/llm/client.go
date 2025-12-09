@@ -1,4 +1,4 @@
-package chatgpt
+package llm
 
 import (
 	"context"
@@ -11,21 +11,21 @@ import (
 	"github.com/eryajf/chatgpt-dingtalk/public"
 )
 
-type ChatGPT struct {
+type Client struct {
 	client         *openai.Client
 	ctx            context.Context
 	userId         string
 	maxQuestionLen int
 	maxText        int
 	maxAnswerLen   int
-	timeOut        time.Duration // 超时时间, 0表示不超时
+	timeOut        time.Duration
 	doneChan       chan struct{}
 	cancel         func()
 
-	ChatContext *ChatContext
+	ChatContext *Context
 }
 
-func New(userId string) *ChatGPT {
+func NewClient(userId string) *Client {
 	var ctx context.Context
 	var cancel func()
 
@@ -33,7 +33,7 @@ func New(userId string) *ChatGPT {
 	timeOutChan := make(chan struct{}, 1)
 	go func() {
 		<-ctx.Done()
-		timeOutChan <- struct{}{} // 发送超时信号，或是提示结束，用于聊天机器人场景，配合GetTimeOutChan() 使用
+		timeOutChan <- struct{}{}
 	}()
 
 	config := openai.DefaultConfig(public.Config.ApiKey)
@@ -48,24 +48,25 @@ func New(userId string) *ChatGPT {
 		}
 	} else {
 		if public.Config.HttpProxy != "" {
-			config.HTTPClient.Transport = &http.Transport{
-				// 设置代理
-				Proxy: func(req *http.Request) (*url.URL, error) {
-					return url.Parse(public.Config.HttpProxy)
-				}}
+			proxyURL, _ := url.Parse(public.Config.HttpProxy)
+			config.HTTPClient = &http.Client{
+				Transport: &http.Transport{
+					Proxy: http.ProxyURL(proxyURL),
+				},
+			}
 		}
 		if public.Config.BaseURL != "" {
 			config.BaseURL = public.Config.BaseURL + "/v1"
 		}
 	}
 
-	return &ChatGPT{
+	return &Client{
 		client:         openai.NewClientWithConfig(config),
 		ctx:            ctx,
 		userId:         userId,
-		maxQuestionLen: public.Config.MaxQuestionLen, // 最大问题长度
-		maxAnswerLen:   public.Config.MaxAnswerLen,   // 最大答案长度
-		maxText:        public.Config.MaxText,        // 最大文本 = 问题 + 回答, 接口限制
+		maxQuestionLen: public.Config.MaxQuestionLen,
+		maxAnswerLen:   public.Config.MaxAnswerLen,
+		maxText:        public.Config.MaxText,
 		timeOut:        public.Config.SessionTimeout,
 		doneChan:       timeOutChan,
 		cancel: func() {
@@ -74,15 +75,16 @@ func New(userId string) *ChatGPT {
 		ChatContext: NewContext(),
 	}
 }
-func (c *ChatGPT) Close() {
+
+func (c *Client) Close() {
 	c.cancel()
 }
 
-func (c *ChatGPT) GetDoneChan() chan struct{} {
+func (c *Client) GetDoneChan() chan struct{} {
 	return c.doneChan
 }
 
-func (c *ChatGPT) SetMaxQuestionLen(maxQuestionLen int) int {
+func (c *Client) SetMaxQuestionLen(maxQuestionLen int) int {
 	if maxQuestionLen > c.maxText-c.maxAnswerLen {
 		maxQuestionLen = c.maxText - c.maxAnswerLen
 	}

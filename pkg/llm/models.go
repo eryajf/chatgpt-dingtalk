@@ -1,4 +1,4 @@
-package chatgpt
+package llm
 
 import openai "github.com/sashabaranov/go-openai"
 
@@ -11,6 +11,7 @@ var ModelsSupportChatCompletions = []string{
 	openai.GPT4TurboPreview,
 	openai.GPT4VisionPreview,
 	openai.GPT4,
+	openai.GPT4o,
 	openai.GPT4oMini,
 	openai.GPT3Dot5Turbo1106,
 	openai.GPT3Dot5Turbo0613,
