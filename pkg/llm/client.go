@@ -26,10 +26,7 @@ type Client struct {
 }
 
 func NewClient(userId string) *Client {
-	var ctx context.Context
-	var cancel func()
-
-	ctx, cancel = context.WithTimeout(context.Background(), 600*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 600*time.Second)
 	timeOutChan := make(chan struct{}, 1)
 	go func() {
 		<-ctx.Done()
@@ -37,6 +34,8 @@ func NewClient(userId string) *Client {
 	}()
 
 	config := openai.DefaultConfig(public.Config.ApiKey)
+
+	// Azure配置
 	if public.Config.AzureOn {
 		config = openai.DefaultAzureConfig(
 			public.Config.AzureOpenAIToken,
@@ -47,28 +46,20 @@ func NewClient(userId string) *Client {
 			return public.Config.AzureDeploymentName
 		}
 	} else {
+		// HTTP客户端配置
+		transport := &http.Transport{
+			MaxIdleConns:        100,
+			MaxIdleConnsPerHost: 10,
+			IdleConnTimeout:     90 * time.Second,
+		}
+
 		if public.Config.HttpProxy != "" {
 			proxyURL, _ := url.Parse(public.Config.HttpProxy)
-			config.HTTPClient = &http.Client{
-				Transport: &http.Transport{
-					Proxy:               http.ProxyURL(proxyURL),
-					MaxIdleConns:        100,
-					MaxIdleConnsPerHost: 10,
-					IdleConnTimeout:     90 * time.Second,
-					// 禁用 HTTP/2 可以避免某些流式错误,但会降低性能
-					// ForceAttemptHTTP2: false,
-				},
-			}
-		} else {
-			// 即使没有代理,也优化 HTTP 客户端配置
-			config.HTTPClient = &http.Client{
-				Transport: &http.Transport{
-					MaxIdleConns:        100,
-					MaxIdleConnsPerHost: 10,
-					IdleConnTimeout:     90 * time.Second,
-				},
-			}
+			transport.Proxy = http.ProxyURL(proxyURL)
 		}
+
+		config.HTTPClient = &http.Client{Transport: transport}
+
 		if public.Config.BaseURL != "" {
 			config.BaseURL = public.Config.BaseURL + "/v1"
 		}
@@ -83,10 +74,8 @@ func NewClient(userId string) *Client {
 		maxText:        public.Config.MaxText,
 		timeOut:        public.Config.SessionTimeout,
 		doneChan:       timeOutChan,
-		cancel: func() {
-			cancel()
-		},
-		ChatContext: NewContext(),
+		cancel:         cancel,
+		ChatContext:    NewContext(),
 	}
 }
 

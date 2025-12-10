@@ -7,7 +7,6 @@ require (
 	github.com/alibabacloud-go/dingtalk v1.6.96
 	github.com/alibabacloud-go/tea v1.3.14
 	github.com/alibabacloud-go/tea-utils/v2 v2.0.7
-	github.com/avast/retry-go v3.0.0+incompatible
 	github.com/charmbracelet/log v0.4.0
 	github.com/gin-gonic/gin v1.10.0
 	github.com/glebarez/sqlite v1.11.0
