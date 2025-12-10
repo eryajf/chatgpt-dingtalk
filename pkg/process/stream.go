@@ -290,35 +290,50 @@ func DoStreamWithCard(mode string, rmsg *dingbot.ReceiveMsg, cardTemplateID stri
 		return err
 	}
 
-	// 定时更新卡片内容
-	updateTicker := time.NewTicker(1500 * time.Millisecond) // 每1.5秒更新一次
-	defer updateTicker.Stop()
-
+	// 实时流式更新卡片内容
 	questionHeader := fmt.Sprintf("**%s**\n\n", rmsg.Text.Content)
 	fullContent := questionHeader
 
+	// 使用缓冲机制避免更新过于频繁
+	updateBuffer := ""
+	lastUpdateTime := time.Now()
+	minUpdateInterval := 300 * time.Millisecond // 最小更新间隔300ms
+
 	for {
-		select {
-		case content, ok := <-contentCh:
-			if !ok {
-				// 流结束,发送最后的更新
+		content, ok := <-contentCh
+		if !ok {
+			// 流结束,发送最后的更新(如果有未发送的缓冲内容)
+			if updateBuffer != "" {
+				fullContent += updateBuffer
 				if err := client.UpdateAIStreamCard(trackID, fullContent, true); err != nil {
 					logger.Error(fmt.Errorf("failed to finalize card: %v", err))
 				}
-
-				// 保存到数据库并处理后续逻辑
-				saveStreamResult(mode, rmsg, fullContent[len(questionHeader):], cli)
-				return nil
-			}
-			fullContent += content
-
-		case <-updateTicker.C:
-			// 定时触发更新
-			if fullContent != questionHeader {
-				if err := client.UpdateAIStreamCard(trackID, fullContent, false); err != nil {
-					logger.Warning(fmt.Errorf("failed to update card: %v", err))
+			} else {
+				// 标记为完成
+				if err := client.UpdateAIStreamCard(trackID, fullContent, true); err != nil {
+					logger.Error(fmt.Errorf("failed to finalize card: %v", err))
 				}
 			}
+
+			// 保存到数据库并处理后续逻辑
+			saveStreamResult(mode, rmsg, fullContent[len(questionHeader):], cli)
+			return nil
+		}
+
+		// 累积接收到的内容到缓冲区
+		updateBuffer += content
+
+		// 检查是否应该更新(距离上次更新超过最小间隔)
+		if time.Since(lastUpdateTime) >= minUpdateInterval {
+			fullContent += updateBuffer
+			updateBuffer = ""
+
+			// 立即更新卡片
+			if err := client.UpdateAIStreamCard(trackID, fullContent, false); err != nil {
+				logger.Warning(fmt.Errorf("failed to update card: %v", err))
+			}
+
+			lastUpdateTime = time.Now()
 		}
 	}
 }

@@ -51,7 +51,21 @@ func NewClient(userId string) *Client {
 			proxyURL, _ := url.Parse(public.Config.HttpProxy)
 			config.HTTPClient = &http.Client{
 				Transport: &http.Transport{
-					Proxy: http.ProxyURL(proxyURL),
+					Proxy:               http.ProxyURL(proxyURL),
+					MaxIdleConns:        100,
+					MaxIdleConnsPerHost: 10,
+					IdleConnTimeout:     90 * time.Second,
+					// 禁用 HTTP/2 可以避免某些流式错误,但会降低性能
+					// ForceAttemptHTTP2: false,
+				},
+			}
+		} else {
+			// 即使没有代理,也优化 HTTP 客户端配置
+			config.HTTPClient = &http.Client{
+				Transport: &http.Transport{
+					MaxIdleConns:        100,
+					MaxIdleConnsPerHost: 10,
+					IdleConnTimeout:     90 * time.Second,
 				},
 			}
 		}

@@ -117,7 +117,13 @@ default_mode: "单聊"
   ↓
 发送初始状态 "稍等，让我想一想..."
   ↓
-OpenAI 流式响应（每 1.5秒更新一次卡片）
+OpenAI 流式响应
+  ↓
+接收到内容 → 立即累积到缓冲区
+  ↓
+距离上次更新超过300ms? → 是 → 更新卡片
+  ↓ 否               ↓
+继续接收 ←-----------┘
   ↓
 流式结束，发送最终内容（标记为完成）
 ```
@@ -189,17 +195,23 @@ client.ChatContext.SaveConversation("user123")
 
 ## 性能优化
 
-### 流式更新频率
+### 流式更新策略
 
-高级卡片模式默认每 **1.5 秒**更新一次，这是在用户体验和 API 调用频率之间的平衡。
+高级卡片模式采用**实时流式更新**策略:
 
-可以在 [pkg/process/stream.go](pkg/process/stream.go) 中修改:
+- 从大模型接收到内容后立即更新卡片
+- 使用缓冲机制避免更新过于频繁(默认最小间隔 **300ms**)
+- 这样可以实现真正的实时流式体验,类似 ChatGPT 网页版
+
+可以在 [pkg/process/stream.go](pkg/process/stream.go) 中修改最小更新间隔:
 
 ```go
-updateTicker := time.NewTicker(1500 * time.Millisecond)  // 修改这里
+minUpdateInterval := 300 * time.Millisecond  // 修改这里
 ```
 
-建议范围：1000ms - 3000ms
+建议范围：200ms - 500ms
+- 更小的间隔:更实时,但 API 调用更频繁
+- 更大的间隔:API 调用较少,但流式感觉不明显
 
 ### 流式模式选择建议
 
@@ -260,6 +272,32 @@ updateTicker := time.NewTicker(1500 * time.Millisecond)  // 修改这里
 1. OpenAI API 超时 - 检查网络连接
 2. 钉钉 Access Token 过期 - 会自动刷新
 3. 上下文超过限制 - 减少 `max_text` 配置
+
+### 问题 5: HTTP/2 流式错误 "stream error: INTERNAL_ERROR"
+
+**错误信息**:
+```
+Post "https://api.xxx.com/v1/completions": stream error: stream ID 5; INTERNAL_ERROR; received from peer
+```
+
+**可能原因**:
+1. 上游 API 服务器内部错误或资源不足
+2. 网络不稳定,长连接中断
+3. HTTP/2 连接管理问题
+
+**解决方案**:
+1. **已优化**: 代码已优化 HTTP 客户端配置,增加连接池和超时设置
+2. **部分内容保护**: 如果已接收到部分内容,不会因错误而丢失
+3. **禁用 HTTP/2** (如果问题频繁): 在 [pkg/llm/client.go](pkg/llm/client.go) 中取消注释:
+   ```go
+   Transport: &http.Transport{
+       // ...
+       ForceAttemptHTTP2: false,  // 取消注释这行
+   }
+   ```
+   注意:禁用 HTTP/2 会降低性能,但可能更稳定
+
+4. **检查 API 服务器**: 如果使用中转服务,检查中转服务器的健康状况和资源
 
 ## 智能降级机制
 

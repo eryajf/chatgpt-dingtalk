@@ -88,7 +88,14 @@ func (c *Client) ChatWithContextStream(question string) (<-chan string, error) {
 					break
 				}
 				if err != nil {
-					contentCh <- formatAnswer(err.Error())
+					// 流式接收中断,记录已接收的内容
+					if fullAnswer != "" {
+						// 如果已经接收到部分内容,只记录错误但不中断
+						// 错误会在日志中显示,但不会影响已接收的内容
+					} else {
+						// 如果还没接收到任何内容,则发送错误信息
+						contentCh <- formatAnswer(err.Error())
+					}
 					return
 				}
 

@@ -1,6 +1,7 @@
 package llm
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/pandodao/tokenizer-go"
@@ -50,6 +51,7 @@ func (c *Client) ChatWithContext(question string) (answer string, err error) {
 	if public.Config.AzureOn {
 		userId = ""
 	}
+	fmt.Println("Using model:", model)
 	if isModelSupportedChatCompletions(model) {
 		req := openai.ChatCompletionRequest{
 			Model: model,
