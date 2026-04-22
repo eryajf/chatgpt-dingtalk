@@ -82,6 +82,16 @@ width="800"  height="3">
 
 ⚗️ openai 官方提供了一个 **[状态页](https://status.openai.com/)** 来呈现当前 openAI 服务的状态，同时如果有问题发布公告也会在这个页面，如果你感觉它有问题了，可以在这个页面看看。
 
+## ❤️ 赞助商
+
+[![](https://wsrv.nl/?url=https://raw.githubusercontent.com/eryajf/tu/refs/heads/main/img/image_20260422_094140.png)](https://aiserve.top/)
+
+
+- 是 API 中转站: 适合开发者和有接口接入需求的团队。
+- 也是 AI 镜像站: 适合个人、运营、内容团队，打开网页直接使用。
+
+[**猿人AI**](https://aiserve.top/): Gemini | ChatGPT | Claude 一站式支持平台，提供先进的AI镜像服务，助你在国内优雅的使用 ChatGPT 和 Claude 等模型。
+
 
 ## 功能介绍
 
