@@ -516,8 +516,8 @@ credentials:
         </a>
     </td>
     <td align="center">
-        <a href="https://github.com/WinMin">
-            <img src="https://avatars.githubusercontent.com/u/18380453?v=4" width="75;" alt="WinMin"/>
+        <a href="https://github.com/winmin">
+            <img src="https://avatars.githubusercontent.com/u/18380453?v=4" width="75;" alt="winmin"/>
             <br />
             <sub><b>Swing</b></sub>
         </a>
