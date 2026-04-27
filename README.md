@@ -444,7 +444,7 @@ credentials:
 
 ## Star 历史
 
-[![Star History Chart](https://api.star-history.com/svg?repos=ConnectAI-E/Dingtalk-OpenAI&type=Date)](https://star-history.com/#ConnectAI-E/Dingtalk-OpenAI&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=eryajf/Dingtalk-OpenAI&type=Date)](https://star-history.com/#eryajf/Dingtalk-OpenAI&Date)
 
 ## 贡献者列表
 
