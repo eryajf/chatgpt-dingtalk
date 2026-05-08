@@ -89,10 +89,8 @@ func (r *ChatReceiver) OnChatBotMessageReceived(ctx context.Context, data *chatb
 		RobotCode:                 r.clientId, // 使用 clientId 作为 RobotCode
 		Msgtype:                   dingbot.MsgType(data.Msgtype),
 	}
-	clientId := r.clientId
-	var c gin.Context
-	c.Set(public.DingTalkClientIdKeyName, clientId)
-	DoRequest(msgObj, &c)
+	requestCtx := context.WithValue(context.Background(), public.DingTalkClientIdKeyName, r.clientId)
+	go DoRequest(requestCtx, msgObj)
 
 	return []byte(""), nil
 }
@@ -105,7 +103,16 @@ func StartHttp() {
 		if err != nil {
 			return
 		}
-		DoRequest(msgObj, c)
+		clientId, checkOk := public.CheckRequestWithCredentials(c.GetHeader("timestamp"), c.GetHeader("sign"))
+		if !checkOk {
+			logger.Warning("该请求不合法，可能是其他企业或者未经允许的应用调用所致，请知悉！")
+			c.Status(http.StatusUnauthorized)
+			return
+		}
+
+		requestCtx := context.WithValue(context.Background(), public.DingTalkClientIdKeyName, clientId)
+		go DoRequest(requestCtx, msgObj)
+		c.Status(http.StatusOK)
 	})
 	// 解析生成后的图片
 	app.GET("/images/:filename", func(c *gin.Context) {
@@ -166,17 +173,7 @@ func StartHttp() {
 	logger.Info("Server exiting!")
 }
 
-func DoRequest(msgObj dingbot.ReceiveMsg, c *gin.Context) {
-	// 先校验回调是否合法
-	if public.Config.RunMode == "http" {
-		clientId, checkOk := public.CheckRequestWithCredentials(c.GetHeader("timestamp"), c.GetHeader("sign"))
-		if !checkOk {
-			logger.Warning("该请求不合法，可能是其他企业或者未经允许的应用调用所致，请知悉！")
-			return
-		}
-		// 通过 context 传递 OAuth ClientID，用于后续流程中调用钉钉OpenAPI
-		c.Set(public.DingTalkClientIdKeyName, clientId)
-	}
+func DoRequest(ctx context.Context, msgObj dingbot.ReceiveMsg) {
 	// 再校验回调参数是否有价值
 	if msgObj.Text.Content == "" || msgObj.ChatbotUserID == "" {
 		logger.Warning("从钉钉回调过来的内容为空，根据过往的经验，或许重新创建一下机器人，能解决这个问题")
@@ -246,7 +243,7 @@ func DoRequest(msgObj dingbot.ReceiveMsg, c *gin.Context) {
 		// 除去帮助之外的逻辑分流在这里处理
 		switch {
 		case strings.HasPrefix(msgObj.Text.Content, "#图片"):
-			err := process.ImageGenerate(c, &msgObj)
+			err := process.ImageGenerate(ctx, &msgObj)
 			if err != nil {
 				logger.Warning(fmt.Errorf("process request: %v", err))
 				return
